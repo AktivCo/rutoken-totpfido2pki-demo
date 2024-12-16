@@ -31,21 +31,9 @@ const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin}) => {
         dispatch(hideModal());
     }
 
-    const renderHeader= () => {
+    const renderBody = () => {
         return (
-            <div className='d-flex flex-column align-items-center gap-4'>
-                {
-                    isCreate &&
-                    <div className='step-mfa'>ШАГ 3</div>
-                }
-                <div className='modal-title'>Назовите Рутокен MFA</div>
-            </div>
-        );
-    }
-
-    return (
-        <ModalComponent rootCss={'custom-modal' + (isCreate ? ' fade-modal' : '')} title={renderHeader()}>
-            <div className='modal-edit d-flex flex-column align-items-stretch justify-content-center'>
+            <div className='modal-edit d-flex flex-column align-items-stretch justify-content-center my-6rem'>
                 <div className='d-flex flex-column align-items-stretch'>
                     <Input className={"modal-input form-control " + (error ? 'modal-input-error' : '')} 
                         placeholder="Название" value={mfaName} onChange={handleMfaNameChange}></Input>
@@ -56,18 +44,19 @@ const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin}) => {
                     }
                 </div>
             </div>
-            <div className='modal-pb d-flex flex-column align-items-stretch gap-8'>
-                <button className='add-mfa' onClick={() => registerNewCredential()}>Готово</button>
-                {
-                    !isCreate &&
-                    <div className='d-flex flex-column align-items-center'>
-                        <div className='register-toggle-link fw-bolder cursor-pointer' 
-                            onClick={() => close()}>
-                                Закрыть
-                        </div>
-                    </div>
-                }
-            </div>
+        );
+    }
+
+    return (
+        <ModalComponent
+            className={'custom-modal' + (isCreate ? ' fade-modal' : '')}
+            title={"Назовите Рутокен MFA"}
+            {...(isCreate && {step: 3})}
+            onSubmit={() => registerNewCredential()}
+            submitButtonText='Готово'
+            {...(!isCreate && {footerLinks: [{onClick: () => close(), label: 'Закрыть'}]})}
+        >
+            {renderBody()}            
         </ModalComponent>
     )
 }

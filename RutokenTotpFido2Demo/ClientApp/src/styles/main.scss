@@ -1,7 +1,9 @@
 @import "_global_variables.scss";
 @import "bootstrap/scss/bootstrap.scss";
 
-
+@import "utilities/mixins";
+@import "utilities/functions";
+@import "utilities/spacings";
 @import "utilities/images";
 @import "utilities/fonts";
 @import "utilities/colors";
@@ -16,18 +18,17 @@
     font-family: "Roboto", sans-serif;
 }
 
-
 html, body {
     width: 100%;
     min-width: 350px;
     height: 100vh;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 body {
     overflow-y: scroll;
     margin: 0;
-    background-color: $main-second-background-color;
+    font-size: 18px;
 }
 
 html {
@@ -35,19 +36,20 @@ html {
 }
 
 .register-background {
-    background: $frame-image no-repeat center center fixed; 
+    background: $background-image no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    background-color: rgba(0, 0, 0, .25);
 }
 
 .register-form-container {
     background-color: $white;
     max-width: 406px;
     width: 100%;
-    padding: 24px 48px 24px 48px;
-    border-radius: 16px;
+    padding: 2rem 3rem;
+    border-radius: 1rem;
 }
 
 .btn:disabled, .btn.disabled, fieldset:disabled .btn {
@@ -59,6 +61,7 @@ html {
 .text-link:hover {
     text-decoration: underline;
 }
+
 .text-link {
     @include font-bolder;
     color: $surfie-green;
@@ -88,9 +91,11 @@ html {
     margin-right: auto;
     margin-left: auto;
 }
+
 .modal-body {
     padding: 1.3rem 3.3rem;
 }
+
 @media screen and (max-width: 360px){
     .modal-body {
         padding: 1rem;
@@ -100,53 +105,26 @@ html {
         min-height: 100%;
     }
 }
+
 .modal-content {
     border-radius: 12px;
-}
-
-.pr-2 {
-    padding-right: 2rem;
-}
-
-.gap-4 {
-    gap: 4px !important;
-}
-.gap-8 {
-    gap: 8px;
-}
-.gap-16 {
-    gap: 16px;
-}
-.gap-20 {
-    gap: 20px;
-}
-.gap-32 {
-    gap: 32px;
-}
-.column-gap-4 {
-    column-gap: 4px;
 }
 
 .spinner {
     @include large-icon;
     background-image: $spinner;
 }
-.check-mark-big {
-    @include large-icon;
-    background-image: $check-mark-big;
-}
-.attention-big {
-    @include large-icon;
-    background-image: $attention-big;
-}
+
 .bucket-icon {
     @include normal-icon;
     background-image: $bucket-icon;
 }
+
 .edit-icon {
     @include small-icon;
     background-image: $edit-icon;
 }
+
 .arrow-icon {
     @include tiny-icon;
     background-image: $arrow-icon;
@@ -167,3 +145,37 @@ html {
     }
   }
 
+.text-inside-line {
+    overflow: hidden;
+    text-align: center;
+
+    &::after, &::before {
+        background-color: #D9D9D9;
+        content: "";
+        display: inline-block;
+        height: 1px;
+        position: relative;
+        vertical-align: middle;
+        width: 50%;
+    }
+
+    &::before {
+        right: 0.5em;
+        margin-left: -50%;
+    }
+
+    &::after {
+        left: 0.5em;
+        margin-right: -50%;
+    }
+}
+
+input[type=password]::-ms-reveal,
+input[type=password]::-ms-clear
+{
+    display: none;
+}
+
+.modal-open:not(:has(.modal-backdrop)) {
+    padding-right: 0px !important;
+}

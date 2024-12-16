@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {deleteDeviceFido, showModal, hideModal} from "../actions";
 import InitFido from "./fido/InitFido";
 import EditDeviceNameModal from "./fido/EditDeviceNameModal";
-import DeleteDeviceModal from "./fido/DeleteDeviceModal";
+import DeleteDeviceModal from "./DeleteDeviceModal";
 import {dateToLocale} from "../utils/utils";
 
 import {BucketIcon} from "../controls/BucketIcon"
@@ -34,7 +34,7 @@ const RenderFidoKeysList = ({keys}) => {
     const deleteDevice = (id) => {
         dispatch(showModal(DeleteDeviceModal, {
             title: 'Удаление устройства FIDO2',
-            body: 'Вы уверены, что хотите удалить FIDO2 устройство?',
+            body: <div className="my-3_5rem text-center">Вы уверены, что хотите удалить FIDO2 устройство?</div>,
             action: deleteDeviceCredential,
             id: id
         }));
@@ -84,7 +84,7 @@ const RenderFidoKeysList = ({keys}) => {
                 !visible &&
                 <div className="d-flex flex-column align-items-center">
                     <div className="
-                            register-toggle-link
+                            modal-footer-link
                             fw-bolder
                             cursor-pointer"
                         onClick={() => registerViewToggle()}

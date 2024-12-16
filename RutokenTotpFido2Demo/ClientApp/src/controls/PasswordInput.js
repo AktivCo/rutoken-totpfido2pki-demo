@@ -22,7 +22,7 @@ const PasswordInput = (props) => {
                    type={fieldType}
                    autoComplete="new-password"
             />
-            <FormFeedback>
+            <FormFeedback className="ps-3">
                 {props.feedback}
             </FormFeedback>
             <span

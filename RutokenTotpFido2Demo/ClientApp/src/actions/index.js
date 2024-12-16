@@ -300,6 +300,12 @@ const loginPasswordLess = () => {
     }
 }
 
+const loginRutoken = () => {
+    return (dispatch) => {
+        dispatch(SET_TWO_FACTOR_TYPE("RUTOKEN"));
+    }
+}
+
 const loginWithoutTwoFactor = () => {
     return (dispatch) => {
         dispatch(SET_TWO_FACTOR_TYPE(null));
@@ -412,6 +418,7 @@ export {
 
     loginFido,
     loginPasswordLess,
+    loginRutoken,
     loginWithoutTwoFactor,
 
     showModal,

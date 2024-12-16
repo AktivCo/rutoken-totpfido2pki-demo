@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import RegisterFidoModal from "./RegisterFidoModal";
 import {showModal} from "../../actions";
 import CustomSwitch from "../../controls/Switch/CustomSwitch";
+import { Button } from "reactstrap";
 
 const InitFido = ({setVisible}) => {
     const dispatch = useDispatch();
@@ -21,10 +22,10 @@ const InitFido = ({setVisible}) => {
     }
 
     return (
-        <div className='mfa-step-one gap-16'>
+        <div className='mfa-step-one gap-3'>
             {
                 fidoKeys.length > 0 &&
-                <div className='d-flex align-items-center justify-content-between gap-4'>
+                <div className='d-flex align-items-center justify-content-between gap-0_25rem'>
                     <div className='personal-add-device-header'>Добавить второй фактор защиты</div>
                     <div className='personal-logout personal-logout__text'
                             onClick={() => close()}
@@ -37,7 +38,7 @@ const InitFido = ({setVisible}) => {
                 <div className='step-mfa'>ШАГ 1</div>
                 <div className='personal-add-device-header'>Подключите устройство</div>
             </div>
-            <div className='d-flex flex-column gap-16'>
+            <div className='d-flex flex-column gap-3'>
                 <div className='image-mfa'></div>
                 <div className='brief-mfa'>
                     <div>Подключите Рутокен MFA к компьютеру и нажмите <b>«Добавить»</b>.</div>
@@ -65,8 +66,10 @@ const InitFido = ({setVisible}) => {
                     }
                 </div>
             </div>
-            <div className='d-flex align-items-start'>
-                <button className='add-mfa' onClick={() => registerFidoDevice()}>Добавить Рутокен MFA</button>
+            <div className='align-self-start'>
+                <Button type="submit" color="danger" className="mb-0" onClick={() => registerFidoDevice()}>
+                    Добавить Рутокен MFA
+                </Button>
             </div>
         </div>
     );

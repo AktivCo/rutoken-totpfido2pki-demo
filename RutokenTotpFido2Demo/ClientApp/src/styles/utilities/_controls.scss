@@ -12,19 +12,17 @@
   border-color: $red;
 }
 
-
 .cursor-pointer {
   cursor: pointer;
 }
 
-
-.register-toggle-link {
+.modal-footer-link {
   @include font-bolder;
   color: $surfie-green;
   position:relative;
 }
 
-.register-toggle-link::before {
+.modal-footer-link::before {
   content: '';
   position: absolute;
   width: 100%;
@@ -39,7 +37,7 @@
   transition: transform .3s ease-in-out;
 }
 
-.register-toggle-link:hover::before {
+.modal-footer-link:hover::before {
   transform-origin: center;
   transform: scaleX(1);
 }

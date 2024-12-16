@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {useDispatch} from 'react-redux';
 
 import {hideModal, removeTotp, showModal} from "../actions";
 
-import DeleteDeviceModal from "./fido/DeleteDeviceModal";
+import DeleteDeviceModal from "./DeleteDeviceModal";
 import {BucketIcon} from "../controls/BucketIcon"
 
 const TotpKeyRow = ({totpkey}) => {
@@ -12,7 +12,7 @@ const TotpKeyRow = ({totpkey}) => {
     const deleteDevice = (id) => {
         dispatch(showModal(DeleteDeviceModal, {
             title: 'Удаление устройства OTP',
-            body: 'Вы уверены, что хотите удалить OTP устройство?',
+            body: <div className="my-3_5rem text-center">Вы уверены, что хотите удалить OTP устройство?</div>,
             action: removeDevice,
             id: id
         }));
@@ -25,11 +25,7 @@ const TotpKeyRow = ({totpkey}) => {
     
     return (
         <div className="item-device d-flex align-items-center justify-content-between">
-            <div>
-                <div className="d-flex align-items-center column-gap-2">
-                    <div className="fw-w-600">Рутокен OTP</div>
-                </div>
-            </div>
+            <div className="fw-w-600">Рутокен OTP</div>
             <div className="bucket-block" onClick={() => deleteDevice(totpkey)}>
                 <div className="bucket-icon cursor-pointer">
                     <BucketIcon></BucketIcon>
@@ -47,9 +43,7 @@ const RenderTotpKeysList = ({keys}) => {
                 {keys.map((el, id) => <TotpKeyRow key={id} totpkey={el}></TotpKeyRow>)}
             </div>
         </div>
-
     )
 }
-
 
 export default RenderTotpKeysList;

@@ -1,0 +1,9 @@
+@mixin class-generator($className, $properties, $values, $unit) {
+    @each $value in $values {
+        .#{$className}-#{str-replace('' + $value, '.', '_')}#{if($value == 0 or $unit == '%', '', $unit)} {
+            @each $property in $properties {
+                #{$property}: #{$value}#{if($value == 0, '', $unit)} !important;
+            }
+        }
+    }
+}

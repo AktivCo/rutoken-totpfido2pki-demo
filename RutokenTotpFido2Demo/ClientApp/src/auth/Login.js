@@ -2,9 +2,10 @@ import React, {useState, useMemo} from "react";
 import {useDispatch} from 'react-redux';
 
 
-import {signInOrUp, loginPasswordLess} from "../actions";
+import {signInOrUp, loginPasswordLess, loginRutoken} from "../actions";
 import PasswordInput from "../controls/PasswordInput";
 import {FormFeedback, Input} from "reactstrap";
+import ModalComponent from "../modal/ModalComponent";
 
 
 const Login = () => {
@@ -45,17 +46,10 @@ const Login = () => {
     const handlePasswordChange = (evt) => setPassword(evt.target.value);
     const handleRepeatPasswordChange = (evt) => setRepeatPassword(evt.target.value);
 
-    return (
-        <div className="register-form-container">
-            <h4 className="text-center mb-4">
-                {
-                    isRegisterView
-                        ? 'Регистрация'
-                        : 'Вход в личный кабинет'
-                }
-            </h4>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group mb-3">
+    const renderBody = () => {
+        return (
+            <form className="w-100">
+                <div className="form-group mt-3">
                     <Input 
                         type="text" 
                         maxLength="20"
@@ -66,15 +60,15 @@ const Login = () => {
                         onChange={handleUserNameChange}
                         style={{backgroundImage: "none"}}
                     />
-                    <FormFeedback>
+                    <FormFeedback className="ps-3">
                         {error && error.payload && error.message}
                     </FormFeedback>
                 </div>
-
-                <div className="form-group">
+    
+                <div className="form-group mt-0_75rem">
                     <PasswordInput
                         maxLength="20"
-                        className="form-control pr-2" 
+                        className="form-control pe-2_25rem" 
                         placeholder="Пароль"
                         value={password}
                         style={{backgroundImage: "none"}}
@@ -83,22 +77,21 @@ const Login = () => {
                         feedback={error && error.payload && error.message}
                     />
                 </div>
-
-
+    
                 {
                     !isRegisterView &&
-                    <div className="form-group mb-3">
+                    <div className="form-group my-4">
                         <a className="text-secondary cursor-pointer"
-                           onClick={() => registerViewToggle()}>
+                            onClick={() => registerViewToggle()}>
                             <small>У меня нет учетной записи</small>
                         </a>
                     </div>
                 }
-
+    
                 {
                     isRegisterView &&
                     <>
-                        <div className="form-group mb-3">
+                        <div className="form-group mt-0_75rem">
                             <PasswordInput
                                 maxLength="20"
                                 className="form-control" 
@@ -110,7 +103,7 @@ const Login = () => {
                                 feedback={error && error.payload && error.message}
                             />
                         </div>
-                        <div className="form-group mb-3">
+                        <div className="form-group my-4">
                             <small className="text-secondary">
                                 Через <span className="fw-bolder">48 часов</span> личный
                                 кабинет будет удален,
@@ -118,56 +111,48 @@ const Login = () => {
                             </small>
                         </div>
                     </>
-
-                }
-                {
-                    isRegisterView &&
-                    <>
-                        <button type="submit" className="btn btn-danger" disabled={isContinueDisable}>
-                            Зарегистрироваться
-                        </button>
-                        <div className="text-center d-block">
-											<span className="
-												register-toggle-link
-												fw-bolder
-												cursor-pointer"
-                                                  onClick={() => registerViewToggle()}
-                                            >
-												У меня есть учетная запись
-											</span>
-                        </div>
-                    </>
-                }
-                {
-                    !isRegisterView &&
-                    <>
-                        <button type="submit" className="btn btn-danger" disabled={isContinueDisable}>
-                            Продолжить
-                        </button>
-                        <div className="text-center d-block">
-											<span className="
-												register-toggle-link
-												fw-bolder
-												cursor-pointer"
-                                                  onClick={() => dispatch(loginPasswordLess())}
-                                            >
-												Войти без логина и пароля
-											</span>
-                        </div>
-
-                    </>
-
-                }
-                {
-                    (error && !error.payload) ?
-                        <small className="d-block text-center text-danger">{error.message}</small>
-                        : <></>
+    
                 }
             </form>
-        </div>
+        );
+    }
+
+    const getFooterLinks = () => {
+        if (isRegisterView) return [
+            {
+                onClick: () => registerViewToggle(),
+                label: 'У меня есть учетная запись'
+            }
+        ];
+
+        return [
+            {
+                onClick: () => dispatch(loginPasswordLess()),
+                label: 'Без логина и пароля (MFA)'
+            }, 
+            {
+                onClick: () => dispatch(loginRutoken()),
+                label: 'По сертификату'
+            }
+        ];
+    }
+
+    return (
+        <ModalComponent
+            title={isRegisterView ? 'Регистрация' : 'Вход в личный кабинет'}
+            withLabel
+            onSubmit={handleSubmit}
+            submitButtonText={isRegisterView ? 'Зарегистрироваться' : 'Продолжить'}
+            submitButtonDisabled={isContinueDisable}
+            withDelimeter={!isRegisterView}
+            footerLinks={getFooterLinks()}
+            {...(error && !error.payload && {footerError: error.message})}
+            backdrop={false}
+            fade={false}
+        >
+            {renderBody()}
+        </ModalComponent>
     );
-
 }
-
 
 export default Login;

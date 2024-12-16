@@ -84,7 +84,7 @@ const InitTotpStepFour = ({currentStep}) => {
             <Form className="mt-3" onSubmit={(evt) => onSubmit(evt)}>
                 <div className="d-flex flex-column">
                     <Label for="secret" className="totp-label mr-sm-2">Одноразовый пароль</Label>
-                    <div className="d-flex align-items-center gap-20">
+                    <div className="d-flex align-items-center gap-1_25rem">
                         <FormGroup className="col-md-5 small-fs mb-none">
                             <Input
                                 maxLength={6}
@@ -98,7 +98,7 @@ const InitTotpStepFour = ({currentStep}) => {
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-none d-flex align-items-center">
                             <div className="text-center d-block">
-                                <span className="register-toggle-link fw-bolder cursor-pointer"
+                                <span className="modal-footer-link fw-bolder cursor-pointer"
                                     onClick={() => check()}
                                 >
                                     Проверить

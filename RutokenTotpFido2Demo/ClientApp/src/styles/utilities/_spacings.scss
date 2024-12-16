@@ -1,0 +1,6 @@
+@include class-generator('gap', 'gap', (0.25, 1.25), 'rem');
+@include class-generator('pe', 'padding-right', (2.25), 'rem');
+@include class-generator('my', ('margin-bottom', 'margin-top'), (3.5, 6), 'rem');
+@include class-generator('py', ('padding-bottom', 'padding-top'), (2), 'rem');
+@include class-generator('mb', 'margin-bottom', (4.125), 'rem');
+@include class-generator('mt', 'margin-top', (0.75, 4.375, 5.625), 'rem');
