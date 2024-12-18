@@ -70,6 +70,16 @@ const plugin = (state = {instance: null, loadError: null}, action) => {
     }
 };
 
+const rutokenDevices = (state = { devices: [] }, action) => {
+    if (action.type === 'SET_RUTOKEN_DEVICES') {
+        return {
+            ...state,
+            devices: action.payload
+        }
+    }
+    return state;
+};
+
 const rootReducer = combineReducers({
     loginState,
     userInfo,
@@ -77,6 +87,7 @@ const rootReducer = combineReducers({
     twoFactorType,
     modal,
     plugin,
+    rutokenDevices
 });
 
 export default rootReducer;

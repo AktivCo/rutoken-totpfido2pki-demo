@@ -1,6 +1,7 @@
 import axios from "axios";
 import {coerceToArrayBuffer, coerceToBase64Url} from "../utils/utils";
 import Plugin from '@aktivco-it/rutoken-plugin-bootstrap/src/index';
+import getDevicesAndCerts from "../personal/rutoken/getDevicesAndCerts";
 
 const SET_LOGIN_STATE = (param) => ({
     type: 'SET_LOGIN_STATE',
@@ -408,7 +409,25 @@ const loadPlugin = () => {
                 payload: error,
             })));
     }
-}
+};
+
+const getRutokenDevices = () => {
+    return (dispatch, getState) => {
+        const plugin = getState().plugin.instance;
+        let sequence = Promise.resolve()
+            .then(() => plugin.enumerateDevices());
+
+        sequence = sequence.then(deviceNumbers => {
+            return Promise.all(deviceNumbers.map(deviceNumber => getDevicesAndCerts(deviceNumber, plugin)));
+        });
+
+        sequence = sequence.then(devices => dispatch({
+            type: 'SET_RUTOKEN_DEVICES',
+            payload: devices
+        }));
+        return sequence;
+    }
+};
 
 export {
     signInOrUp,
@@ -439,4 +458,6 @@ export {
     hideModal,
 
     loadPlugin,
+
+    getRutokenDevices
 };

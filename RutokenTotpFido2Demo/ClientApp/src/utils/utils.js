@@ -5,7 +5,13 @@ const dateOptions = {
     hour: 'numeric',
     minute: 'numeric',
     second: 'numeric',
-}
+};
+
+const dateWithoutTimeOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric'
+};
 
 const coerceToArrayBuffer = (thing, name) => {
     if (typeof thing === "string") {
@@ -75,9 +81,14 @@ const dateToLocale = (dateStr) => {
     return new Date(dateStr).toLocaleString('ru', dateOptions);
 };
 
+const dateToLocaleWithoutTime = (dateStr) => {
+    return new Date(dateStr).toLocaleString('ru', dateWithoutTimeOptions);
+};
+
 
 export { 
     coerceToArrayBuffer,
     coerceToBase64Url,
-    dateToLocale
+    dateToLocale,
+    dateToLocaleWithoutTime
 } 

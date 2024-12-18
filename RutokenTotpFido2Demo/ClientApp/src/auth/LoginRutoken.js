@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ModalComponent from "../modal/ModalComponent";
 import { loadPlugin, loginWithoutTwoFactor } from "../actions";
 import RutokenCheckPluginsContent from "../components/rutoken/RutokenCheckPluginsContent";
+import SelectCertificateRutoken from "../personal/rutoken/SelectCertificateRutoken";
 import ErrorContent from "../common/ErrorContent";
 import { NoInstalledPluginError } from "@aktivco-it/rutoken-plugin-bootstrap/src/supportError";
 
@@ -22,8 +23,7 @@ const LoginRutoken = () => {
             intervalId = setInterval(() => {
                 dispatch(loadPlugin());
             }, 1000);
-        }
-        
+        }        
         return () => {
             if (intervalId) clearInterval(intervalId);
         };
@@ -31,10 +31,12 @@ const LoginRutoken = () => {
 
     const getTitle = () => {
         if (plugin.loadError instanceof NoInstalledPluginError) return "Установите компоненты";
+        return "Выберите сертификат";
     }
 
     const renderBody = () => {
         if (plugin.loadError instanceof NoInstalledPluginError) return <RutokenCheckPluginsContent />;
+        if (plugin.instance) return <SelectCertificateRutoken />
         return <ErrorContent />
     }
 
