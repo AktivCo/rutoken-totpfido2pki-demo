@@ -179,3 +179,7 @@ input[type=password]::-ms-clear
 .modal-open:not(:has(.modal-backdrop)) {
     padding-right: 0px !important;
 }
+
+.bg-surfie-green {
+    background-color: $surfie-green;   
+}

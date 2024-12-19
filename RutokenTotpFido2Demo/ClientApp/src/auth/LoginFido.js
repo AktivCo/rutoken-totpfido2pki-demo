@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginFido, loginWithoutTwoFactor } from "../actions";
 import { State } from "../utils/constants";
 import ModalComponent from "../modal/ModalComponent";
-import FidoErrorContent from "../components/fido/FidoErrorContent";
+import ErrorContent from "../common/ErrorContent";
 import FidoSuccessContent from "../components/fido/FidoSuccessContent";
 import FidoLoadingContent from "../components/fido/FidoLoadingContent";
 
@@ -29,7 +29,7 @@ const LoginFIDO = () => {
     }
 
     const renderBody = () => {
-        if (state === State.Error) return <FidoErrorContent onRetry={() => loginFIDO()} onBack={() => dispatch(loginWithoutTwoFactor())} />;
+        if (state === State.Error) return <ErrorContent onRetry={() => loginFIDO()} />;
         if (state === State.Loading) return <FidoLoadingContent />;
         if (state === State.Success) return <FidoSuccessContent />;
     }
@@ -40,6 +40,7 @@ const LoginFIDO = () => {
             withLabel
             backdrop={false}
             fade={false}
+            {...(state === State.Error && {footerLinks: [{onClick: () => dispatch(loginWithoutTwoFactor()), label: 'Назад'}]})}
         >
             {renderBody()}
         </ModalComponent>

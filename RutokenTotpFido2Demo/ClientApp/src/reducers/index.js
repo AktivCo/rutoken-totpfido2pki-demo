@@ -37,7 +37,6 @@ const twoFactorType = (state = null, action) => {
     }
 }
 
-
 const modal = (state = {modal: null, data: {}}, action) => {
     if (action.type === 'SHOW_MODAL') {
         return {
@@ -52,12 +51,32 @@ const modal = (state = {modal: null, data: {}}, action) => {
     return state;
 };
 
+const plugin = (state = {instance: null, loadError: null}, action) => {
+    switch (action.type) {
+        case 'SET_PLUGIN':
+            return {
+                ...state,
+                instance: action.payload,
+                loadError: null,
+            };
+        case 'SET_PLUGIN_LOAD_ERROR':
+            return {
+                ...state,
+                instance: null,
+                loadError: action.payload,
+            };
+        default:
+            return state;
+    }
+};
+
 const rootReducer = combineReducers({
     loginState,
     userInfo,
     totpParams,
     twoFactorType,
-    modal
+    modal,
+    plugin,
 });
 
 export default rootReducer;

@@ -1,5 +1,6 @@
 import axios from "axios";
 import {coerceToArrayBuffer, coerceToBase64Url} from "../utils/utils";
+import Plugin from '@aktivco-it/rutoken-plugin-bootstrap/src/index';
 
 const SET_LOGIN_STATE = (param) => ({
     type: 'SET_LOGIN_STATE',
@@ -395,6 +396,19 @@ const hideModal = () => (dispatch) => {
     return sequense;
 };
 
+const loadPlugin = () => {
+    return (dispatch) => {
+        return (Plugin.init()
+            .then((data) => dispatch({
+                type: 'SET_PLUGIN',
+                payload: data,
+            }))
+            .catch((error) => dispatch({
+                type: 'SET_PLUGIN_LOAD_ERROR',
+                payload: error,
+            })));
+    }
+}
 
 export {
     signInOrUp,
@@ -422,5 +436,7 @@ export {
     loginWithoutTwoFactor,
 
     showModal,
-    hideModal
+    hideModal,
+
+    loadPlugin,
 };

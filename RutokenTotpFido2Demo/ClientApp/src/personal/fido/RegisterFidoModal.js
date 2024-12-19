@@ -5,7 +5,7 @@ import ModalComponent from "../../modal/ModalComponent";
 import EditDeviceNameModal from "./EditDeviceNameModal";
 import {registerFido, showModal, hideModal} from "../../actions";
 import { State } from '../../utils/constants';
-import FidoErrorContent from "../../components/fido/FidoErrorContent";
+import ErrorContent from "../../common/ErrorContent";
 import FidoSuccessContent from "../../components/fido/FidoSuccessContent";
 import FidoLoadingContent from "../../components/fido/FidoLoadingContent";
 
@@ -35,13 +35,18 @@ const RegisterFidoModal = ({isWithoutLogin}) => {
     }
 
     const renderBody = () => {
-        if (state === State.Error) return <FidoErrorContent onRetry={() => register()} onBack={() => close()} backText='Закрыть' />;
+        if (state === State.Error) return <ErrorContent onRetry={() => register()} />;
         if (state === State.Loading) return <FidoLoadingContent />;
         if (state === State.Success) return <FidoSuccessContent />;
     }
 
     return (
-        <ModalComponent className={'custom-modal'} title={'Добавление токена'} step={2}>
+        <ModalComponent
+            className={'custom-modal'}
+            title={'Добавление токена'}
+            step={2}
+            {...(state === State.Error && {footerLinks: [{onClick: () => close(), label: 'Закрыть'}]})}
+        >
             {renderBody()}
         </ModalComponent>
     )
