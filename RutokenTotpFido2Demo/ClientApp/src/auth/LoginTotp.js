@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
 
-import { setLoginState, loginWithoutTwoFactor, verifyTotp } from "../actions";
+import { setLoginState, loginWithoutTwoFactor, verifyTotp } from "../redux/actions";
 import { Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import ModalComponent from "../modal/ModalComponent";
 import { State } from "../utils/constants";

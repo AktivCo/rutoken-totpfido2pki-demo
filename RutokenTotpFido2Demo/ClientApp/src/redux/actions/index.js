@@ -1,7 +1,7 @@
 import axios from "axios";
-import {coerceToArrayBuffer, coerceToBase64Url} from "../utils/utils";
+import {coerceToArrayBuffer, coerceToBase64Url} from "../../utils/utils";
 import Plugin from '@aktivco-it/rutoken-plugin-bootstrap/src/index';
-import getDevicesAndCerts from "../personal/rutoken/getDevicesAndCerts";
+import getDevicesAndCerts from "../../personal/rutoken/getDevicesAndCerts";
 
 const SET_LOGIN_STATE = (param) => ({
     type: 'SET_LOGIN_STATE',
@@ -17,6 +17,7 @@ const SET_TWO_FACTOR_TYPE = (param) => ({
     type: 'SET_TWO_FACTOR_TYPE',
     payload: param
 });
+
 
 const setLoginState = (param) => {
     return (dispatch) => {
@@ -417,8 +418,8 @@ const getRutokenDevices = () => {
         let sequence = Promise.resolve()
             .then(() => plugin.enumerateDevices());
 
-        sequence = sequence.then(deviceNumbers => {
-            return Promise.all(deviceNumbers.map(deviceNumber => getDevicesAndCerts(deviceNumber, plugin)));
+        sequence = sequence.then(deviceIds => {
+            return Promise.all(deviceIds.map(deviceId => getDevicesAndCerts(deviceId, plugin)));
         });
 
         sequence = sequence.then(devices => dispatch({
@@ -428,6 +429,8 @@ const getRutokenDevices = () => {
         return sequence;
     }
 };
+
+
 
 export {
     signInOrUp,
@@ -459,5 +462,5 @@ export {
 
     loadPlugin,
 
-    getRutokenDevices
+    getRutokenDevices,
 };

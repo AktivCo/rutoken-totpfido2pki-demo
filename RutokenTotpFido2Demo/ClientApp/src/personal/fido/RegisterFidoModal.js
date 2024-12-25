@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 
 import ModalComponent from "../../modal/ModalComponent";
 import EditDeviceNameModal from "./EditDeviceNameModal";
-import {registerFido, showModal, hideModal} from "../../actions";
+import {registerFido, showModal, hideModal} from "../../redux/actions";
 import { State } from '../../utils/constants';
 import ErrorContent from "../../common/ErrorContent";
 import FidoSuccessContent from "../../components/fido/FidoSuccessContent";

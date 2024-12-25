@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import StepContainer from "../StepContainer";
 import {useDispatch, useSelector} from "react-redux";
-import {getQrCodeLink} from "../../actions";
+import {getQrCodeLink} from "../../redux/actions";
 
 const QrCodeRenderer = () => {
 

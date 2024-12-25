@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 import RegisterFidoModal from "./RegisterFidoModal";
-import {showModal} from "../../actions";
+import {showModal} from "../../redux/actions";
 import CustomSwitch from "../../controls/Switch/CustomSwitch";
 import { Button } from "reactstrap";
 

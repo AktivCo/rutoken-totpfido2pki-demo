@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import axios from "axios";
 import {useDispatch, useSelector} from 'react-redux';
-import {setLoginState, checkLoginState} from './actions';
+import {setLoginState, checkLoginState} from './redux/actions';
 
 import Personal from "./personal/Personal";
 import Auth from "./auth/Auth";

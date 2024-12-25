@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import StepContainer from "../StepContainer";
 import {Form, FormGroup, Input, Label} from "reactstrap";
 import {useDispatch} from "react-redux";
-import {cacheTotpParams, getSecret} from "../../actions";
+import {cacheTotpParams, getSecret} from "../../redux/actions";
 
 const InitTotpStepTwo = ({currentStep, toNextStep}) => {
     const stepId = 2;

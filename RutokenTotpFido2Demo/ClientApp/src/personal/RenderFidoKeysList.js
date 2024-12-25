@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from "react";
 import {useDispatch} from 'react-redux';
 
-import {deleteDeviceFido, showModal, hideModal} from "../actions";
+import {deleteDeviceFido, showModal, hideModal} from "../redux/actions";
 import InitFido from "./fido/InitFido";
 import EditDeviceNameModal from "./fido/EditDeviceNameModal";
 import DeleteDeviceModal from "./DeleteDeviceModal";

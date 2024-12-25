@@ -46,7 +46,7 @@ export default (deviceId, plugin) => {
         });
 }
 
-const getDeviceInfo = (deviceNumber, plugin) => {
+const getDeviceInfo = (deviceId, plugin) => {
     const tokenInfoRequestTypes = [
         plugin.TOKEN_INFO_MODEL,
         plugin.TOKEN_INFO_LABEL,
@@ -58,9 +58,9 @@ const getDeviceInfo = (deviceNumber, plugin) => {
 
     return Promise
         .all(
-            tokenInfoRequestTypes.map(requestType => plugin.getDeviceInfo(deviceNumber, requestType)))
+            tokenInfoRequestTypes.map(requestType => plugin.getDeviceInfo(deviceId, requestType)))
         .then((values) => ({
-            number: deviceNumber,
+            deviceId: deviceId,
             model: values[0],
             label: values[1],
             serial: values[2],

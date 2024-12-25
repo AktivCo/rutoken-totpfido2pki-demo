@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loginFido, loginWithoutTwoFactor } from "../actions";
+import { loginFido, loginWithoutTwoFactor } from "../redux/actions";
 import { State } from "../utils/constants";
 import ModalComponent from "../modal/ModalComponent";
 import ErrorContent from "../common/ErrorContent";

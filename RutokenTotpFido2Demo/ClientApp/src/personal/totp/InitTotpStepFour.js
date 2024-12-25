@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import StepContainer from "../StepContainer";
 import {Form, FormGroup, Input, Label} from "reactstrap";
 import {useDispatch} from "react-redux";
-import {checkTotp, registerTotp} from "../../actions";
+import {checkTotp, registerTotp} from "../../redux/actions";
 
 
 const RenderError = ({error}) => {

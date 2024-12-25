@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-
+import { rutokenInfo } from './rutokenReducers';
 
 const loginState = (state = null, action) => {
     switch (action.type) {
@@ -80,6 +80,7 @@ const rutokenDevices = (state = { devices: [] }, action) => {
     return state;
 };
 
+
 const rootReducer = combineReducers({
     loginState,
     userInfo,
@@ -87,7 +88,9 @@ const rootReducer = combineReducers({
     twoFactorType,
     modal,
     plugin,
-    rutokenDevices
+    rutokenDevices,
+
+    rutokenInfo
 });
 
 export default rootReducer;

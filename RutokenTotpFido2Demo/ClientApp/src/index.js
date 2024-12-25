@@ -8,7 +8,7 @@ import './styles/main.scss';
 import thunk from 'redux-thunk'
 import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
-import rootReducer from './reducers';
+import rootReducer from './redux/reducers/index';
 import ModalContainer from "./modal/ModalContainer";
 
 

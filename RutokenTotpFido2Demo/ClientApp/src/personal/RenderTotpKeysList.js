@@ -1,7 +1,7 @@
 import React from "react";
 import {useDispatch} from 'react-redux';
 
-import {hideModal, removeTotp, showModal} from "../actions";
+import {hideModal, removeTotp, showModal} from "../redux/actions";
 
 import DeleteDeviceModal from "./DeleteDeviceModal";
 import {BucketIcon} from "../controls/BucketIcon"

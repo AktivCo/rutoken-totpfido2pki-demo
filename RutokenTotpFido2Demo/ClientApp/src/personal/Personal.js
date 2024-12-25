@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import cn from "classnames";
 
-import {getUserInfo, signOut} from "../actions";
+import {getUserInfo, signOut} from "../redux/actions";
 
 import Layout from "../common/Layout";
 import InitFido from "./fido/InitFido";
