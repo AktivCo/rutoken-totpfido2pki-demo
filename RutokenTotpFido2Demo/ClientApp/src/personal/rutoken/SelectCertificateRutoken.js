@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import FidoLoadingContent from "../../components/fido/FidoLoadingContent";
 import NoDevicesFoundSvg from "../../images/NoDevicesFoundSvg";
 
@@ -13,8 +12,6 @@ const SelectCertificateRutoken = () => {
     const dispatch = useDispatch();
 
     const { devices } = useSelector(x => x.rutokenDevices);
-
-
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -30,7 +27,6 @@ const SelectCertificateRutoken = () => {
         };
         dispatch(setRutokenInfo(obj));
     }
-
 
     const noDevicesFound = () => (
         <div className="d-flex flex-column justify-content-center align-items-center pt-5_75rem px-1_5rem pb-6_125rem">

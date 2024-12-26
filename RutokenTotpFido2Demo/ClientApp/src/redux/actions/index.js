@@ -422,6 +422,33 @@ const getRutokenDevices = () => {
             return Promise.all(deviceIds.map(deviceId => getDevicesAndCerts(deviceId, plugin)));
         });
 
+        sequence = sequence.then(devices => {
+            const certsIds = devices.map(device => device.certificates.map(cert => cert.certId)).flat(1);
+            return axios.post('/pki/certs', certsIds)
+                .then(response => {
+                    const certs = response.data;
+                    return devices.map(device => {
+                        const extendedCertificates = device.certificates
+                            .filter(cert => certs[cert.certId])
+                            .map(cert => {
+                                const dbCert = certs[cert.certId];
+                                return {
+                                    ...cert,
+                                    lastLoginDate: dbCert.lastLoginDate
+                                }
+                            })
+                            .sort((a, b) => {
+                                return new Date(b.lastLoginDate) - new Date(a.lastLoginDate);
+                            });
+
+                        return {
+                            ...device,
+                            certificates: extendedCertificates
+                        }
+                    })
+                })
+        });
+
         sequence = sequence.then(devices => dispatch({
             type: 'SET_RUTOKEN_DEVICES',
             payload: devices

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RutokenTotpFido2Demo;
 using RutokenTotpFido2Demo.Exceptions;
 using RutokenTotpFido2Demo.Services;
+using RutokenTotpFido2Demo.Services.Rutoken;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,6 +58,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<MfaService>();
 builder.Services.AddScoped<QrCodeService>();
 builder.Services.AddScoped<TotpService>();
+builder.Services.AddScoped<PkiService>();
 
 builder.Services.AddHostedService<RemoveOldUsersHostedService>();
 

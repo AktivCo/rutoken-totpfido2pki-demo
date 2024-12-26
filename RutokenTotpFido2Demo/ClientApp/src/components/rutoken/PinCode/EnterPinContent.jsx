@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'reactstrap';
 
 import PasswordInput from '../../../controls/PasswordInput';
 import { PinCodeState } from '../EnterPinCodeModal';
 
 import { checkOnlyDigit } from '../../../utils/utils';
+import { loginByCert } from '../../../redux/actions/rutokenActions';
 
 
 const EnterPinContent = ({setCurrentPinCode, changePinCodeState}) => {
@@ -16,6 +17,7 @@ const EnterPinContent = ({setCurrentPinCode, changePinCodeState}) => {
 
     const [pinCode, setPinCode] = useState('');
     const [error, setError] = useState(null);
+    const dispatch = useDispatch();
     
     const handlePinCodeChange = (e) => {
         const inputValue = e.target.value;
@@ -62,8 +64,6 @@ const EnterPinContent = ({setCurrentPinCode, changePinCodeState}) => {
             return;
         }
 
-        console.log(rutokenInfo.deviceId);
-
         let result = await deviceLogin(rutokenInfo.deviceId, pinCode);
 
         switch (result) {
@@ -81,8 +81,8 @@ const EnterPinContent = ({setCurrentPinCode, changePinCodeState}) => {
                 } else {
                     setError(null);
                 }
-                //TODO: Тут код при успешном вводе пин кода (Должна быть авторизация/регистрация)
-                //params: deviceId, certId
+                //TODO: обработать тут же кейс регистрации
+                dispatch(loginByCert());
                 break;
             default:
                 changePinCodeState(PinCodeState.DefaultError)

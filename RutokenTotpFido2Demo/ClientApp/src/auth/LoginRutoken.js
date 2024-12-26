@@ -8,6 +8,7 @@ import ErrorContent from "../common/ErrorContent";
 import { NoInstalledPluginError } from "@aktivco-it/rutoken-plugin-bootstrap/src/supportError";
 
 import EnterPinCodeModal from "../components/rutoken/EnterPinCodeModal";
+import FidoLoadingContent from "../components/fido/FidoLoadingContent";
 
 const LoginRutoken = () => {
     const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const LoginRutoken = () => {
     const renderBody = () => {
         if (plugin.loadError instanceof NoInstalledPluginError) return <RutokenCheckPluginsContent />;
         if (plugin.instance) return <SelectCertificateRutoken/>
-        return <ErrorContent />
+        return <FidoLoadingContent />
     }
 
     return (

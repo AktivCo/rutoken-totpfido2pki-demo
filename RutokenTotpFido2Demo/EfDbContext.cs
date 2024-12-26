@@ -32,7 +32,11 @@ public class EfDbContext : DbContext
         modelBuilder
             .Entity<TotpKey>()
             .HasKey(el => el.Id);
-        
+
+        modelBuilder
+            .Entity<RutokenCert>()
+            .HasKey(el => el.Id);
+
         modelBuilder.Entity<User>()
             .HasMany(e => e.FidoKeys)
             .WithOne(e => e.User)
@@ -44,11 +48,18 @@ public class EfDbContext : DbContext
             .WithOne(e => e.User)
             .HasForeignKey(e => e.UserId)
             .IsRequired();
-        
+
+        modelBuilder.Entity<User>()
+            .HasMany(e => e.RutokenCerts)
+            .WithOne(e => e.User)
+            .HasForeignKey(e => e.UserId)
+            .IsRequired();
+
         base.OnModelCreating(modelBuilder);
     }
 
     public DbSet<User> Users { get; set; }
     public DbSet<TotpKey> TotpKeys { get; set; }
     public DbSet<FidoKey> FidoKeys { get; set; }
+    public DbSet<RutokenCert> RutokenCerts { get; set; }
 }
