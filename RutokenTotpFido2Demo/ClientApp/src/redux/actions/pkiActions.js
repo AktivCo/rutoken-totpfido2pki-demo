@@ -1,6 +1,7 @@
 import Plugin from '@aktivco-it/rutoken-plugin-bootstrap/src/index';
 import { setPluginLoadError, setPKIDevicesLoaded, setPluginLoaded, setPluginLoading, setPKIDevicesLoading, setPKIDevicesLoadError, setLoginState } from '../actionCreators';
 import axios from 'axios';
+import { getRutokenModelName } from '../../utils/getRutokenModelName';
 
 export const loadPlugin = () => {
     return (dispatch) => {
@@ -20,17 +21,30 @@ export const getPKIDevices = () => {
         const tokenInfos = [
             plugin.TOKEN_INFO_SERIAL,
             plugin.TOKEN_INFO_PINS_INFO,
+
+            plugin.TOKEN_INFO_SUPPORTED_MECHANISMS,
+            plugin.TOKEN_INFO_FEATURES,
+            plugin.TOKEN_INFO_SPEED
         ];
 
         return plugin.enumerateDevices()
             .then((deviceIds) => Promise.all(deviceIds.map((deviceId) => {
                 return Promise.all(tokenInfos.map(tokenInfo => plugin.getDeviceInfo(deviceId, tokenInfo)))
-                    .then((tokenInfos) => ({
-                        deviceId: deviceId,
-                        serial: tokenInfos[0],
-                        isPinCached: tokenInfos[1].isPinCached,
-                        pinRetriesLeft: tokenInfos[1].retriesLeft
-                    }))
+                    .then((tokenInfos) => {
+                        const device = {
+                            deviceId: deviceId,
+                            serial: tokenInfos[0],
+                            isPinCached: tokenInfos[1].isPinCached,
+                            pinRetriesLeft: tokenInfos[1].retriesLeft,
+
+                            mechanisms: tokenInfos[2],
+                            features: tokenInfos[3],
+                            speed: tokenInfos[4]
+                        };
+
+                        const modelName = getRutokenModelName(device, plugin);
+                        return {...device, modelName };    
+                    })
                     .then((device) => {
                         return plugin.enumerateCertificates(device.deviceId, plugin.CERT_CATEGORY_USER)
                             .then((certIds) => {

@@ -65,7 +65,7 @@ const PKISelectCertificate = ({ onSelect }) => {
             {devices.map((device) => (
                 <div key={device.serial} className="w-100">
                     <div className="d-flex justify-content-between mb-2">
-                        <span className="text-charcoal fw-600">Рутокен ЭЦП</span>
+                        <span className="text-charcoal fw-600">{device.modelName}</span>
                         <span className="text-charcoal opacity-0_68 fw-600">{device.serial}</span>
                     </div>
                     <div className="d-flex flex-column gap-0_75rem">
