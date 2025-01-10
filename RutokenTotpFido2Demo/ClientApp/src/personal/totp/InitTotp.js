@@ -19,10 +19,7 @@ const InitTotp = () => {
             <InitTotpStepThree currentStep={step} toNextStep={toNextStep}/>
             <InitTotpStepFour currentStep={step} toNextStep={toNextStep}/>
         </>
-
     );
-
 }
-
 
 export default InitTotp;

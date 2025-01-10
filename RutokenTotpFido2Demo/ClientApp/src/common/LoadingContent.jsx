@@ -1,6 +1,6 @@
 import React from "react";
 
-const FidoLoadingContent = () => {
+const LoadingContent = () => {
     return (
         <div className="d-flex flex-column align-items-center mt-5_625rem">
             <div className='spinner'></div>
@@ -12,4 +12,4 @@ const FidoLoadingContent = () => {
     );
 }
 
-export default FidoLoadingContent;
+export default LoadingContent;

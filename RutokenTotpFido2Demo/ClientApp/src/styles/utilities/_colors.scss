@@ -1,3 +1,5 @@
+@include class-generator('opacity', 'opacity', (0.3, 0.68), '');
+
 $gray:#444444;
 $gray-light:#808080;
 $gray-fade: #999999;
@@ -38,3 +40,19 @@ $border-color: $gray-brightest;
 $key-container-red:$red-light;
 $key-container-green:$surfie-green-light;
 $key-container-dark:$surfie-green-dark;
+
+.bg-surfie-green {
+    background-color: $surfie-green;   
+}
+
+.text-surfie {
+    color: $surfie-green;
+}
+
+.text-charcoal {
+    color: #344252;
+}
+
+.text-arsenic {
+    color: #3C3C43; 
+}

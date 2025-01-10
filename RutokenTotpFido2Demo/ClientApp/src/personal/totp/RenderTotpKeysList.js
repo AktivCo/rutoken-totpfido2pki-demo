@@ -1,10 +1,11 @@
 import React from "react";
 import {useDispatch} from 'react-redux';
 
-import {hideModal, removeTotp, showModal} from "../redux/actions";
+import {removeTotp} from "../../redux/actions";
 
-import DeleteDeviceModal from "./DeleteDeviceModal";
-import {BucketIcon} from "../controls/BucketIcon"
+import DeleteDeviceModal from "../DeleteDeviceModal";
+import {BucketIcon} from "../../controls/BucketIcon"
+import { hideModal, showModal } from "../../redux/actionCreators";
 
 const TotpKeyRow = ({totpkey}) => {
     const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const TotpKeyRow = ({totpkey}) => {
     
     return (
         <div className="item-device d-flex align-items-center justify-content-between">
-            <div className="fw-w-600">Рутокен OTP</div>
+            <div className="fw-600">Рутокен OTP</div>
             <div className="bucket-block" onClick={() => deleteDevice(totpkey)}>
                 <div className="bucket-icon cursor-pointer">
                     <BucketIcon></BucketIcon>

@@ -7,21 +7,26 @@ import {getUserInfo, signOut} from "../redux/actions";
 import Layout from "../common/Layout";
 import InitFido from "./fido/InitFido";
 import InitTotp from "./totp/InitTotp";
-import RenderFidoKeysList from "./RenderFidoKeysList";
-import RenderTotpKeysList from "./RenderTotpKeysList";
+import RenderFidoKeysList from "./fido/RenderFidoKeysList";
+import RenderTotpKeysList from "./totp/RenderTotpKeysList";
 import {LogoutIcon} from "../controls/LogoutIcon"
+import { Factor } from "../utils/constants";
+import PKIDevices from "./pki/PKIDevices";
+import PKIBindInit from "./pki/PKIBindInit";
 
 
-const RenderTwoFactor = ({fidoKeys, totpKeys}) => {
-
+const RenderTwoFactor = ({fidoKeys, totpKeys, rutokenKeys}) => {
     const renderStatus = () => cn({
         "personal-two-factor__value ": true,
-        "personal-two-factor__value--on": fidoKeys.length || totpKeys.length
+        "personal-two-factor__value--on": fidoKeys.length || totpKeys.length || rutokenKeys?.length
     });
 
-    let status = 'Выключена';
-    if (fidoKeys.length) status = 'Включена (Рутокен MFA)';
-    if (totpKeys.length) status = 'Включена (Рутокен OTP)';
+    const getStatus = () => {
+        if (fidoKeys.length) return 'Включена (Рутокен MFA)';
+        if (totpKeys.length) return 'Включена (Рутокен OTP)';
+        if (rutokenKeys?.length) return 'Включена (Рутокен ЭЦП 3.0)';
+        return 'Выключена';
+    }
 
     return (
         <div className="personal-two-factor">
@@ -30,29 +35,43 @@ const RenderTwoFactor = ({fidoKeys, totpKeys}) => {
             </div>
 
             <div className={renderStatus()}>
-                {status}
+                {getStatus()}
             </div>
         </div>
     );
 }
 
-const RenderDeviceInit = ({selectedInitType}) => {
-    if (selectedInitType === 'FIDO') return <InitFido/>;
-    if (selectedInitType === 'TOTP') return <InitTotp/>;
+const RenderDeviceInit = ({factor}) => {
+    if (factor === Factor.FIDO) return <InitFido/>;
+    if (factor === Factor.TOTP) return <InitTotp/>;
+    if (factor === Factor.PKI) return <PKIBindInit/>;
     return null;
 }
 
 const RenderTwoFactorInit = () => {
-    const [selectedInitType, selectToggle] = useState(null);
+    const [selectedFactor, setSelectedFactor] = useState(null);
+
+    const renderFactorBlock = (factor) => {
+        return (
+            <div
+                key={factor}
+                className="personal-two-factor-block cursor-pointer"
+                onClick={() => setSelectedFactor(factor)}
+            >
+                {factor}
+                {factor == selectedFactor && <span className="personal-two-factor-block--done"/>}
+            </div>
+        )
+    }
 
     return (
         <>
             <div className="d-flex align-items-center justify-content-between mb-2">
                 <div className="personal-two-factor-heading">Добавить второй фактор защиты</div>
                 {
-                    selectedInitType && (
+                    selectedFactor && (
                         <div className="personal-logout personal-logout__text"
-                                onClick={() => selectToggle(null)}
+                                onClick={() => setSelectedFactor(null)}
                         >
                             Отменить
                         </div>
@@ -61,38 +80,15 @@ const RenderTwoFactorInit = () => {
             </div>
 
             <div className="personal-two-factor-blocks">
-                <div
-                    className="personal-two-factor-block cursor-pointer"
-                    onClick={() => selectToggle("TOTP")}
-                >
-                    OTP
-                    {
-                        selectedInitType === 'TOTP'
-                            ? <span className="personal-two-factor-block--done"/>
-                            : null
-                    }
-                </div>
-                <div
-                    className="personal-two-factor-block cursor-pointer"
-                    onClick={() => selectToggle("FIDO")}
-                >
-                    MFA
-                    {
-                        selectedInitType === 'FIDO'
-                            ? <span className="personal-two-factor-block--done"/>
-                            : null
-                    }
-                </div>
+                {Object.values(Factor).map(factor => renderFactorBlock(factor))}
             </div>
 
-            <RenderDeviceInit selectedInitType={selectedInitType}></RenderDeviceInit>
+            <RenderDeviceInit factor={selectedFactor}></RenderDeviceInit>
         </>
     );
 }
 
-const DevicesContainer = ({fidoKeys, totpKeys}) => {
-
-
+const DevicesContainer = ({fidoKeys, totpKeys, rutokenKeys}) => {
     if (fidoKeys.length) {
         return <RenderFidoKeysList keys={fidoKeys}/>;
     }
@@ -101,12 +97,15 @@ const DevicesContainer = ({fidoKeys, totpKeys}) => {
         return <RenderTotpKeysList keys={totpKeys}/>;
     }
 
+    if (rutokenKeys?.length) {
+        return <PKIDevices keys={rutokenKeys}/>;
+    }
+
     return <RenderTwoFactorInit></RenderTwoFactorInit>;
 }
 
 const Personal = () => {
     const userInfo = useSelector(state => state.userInfo);
-    
 
     const dispatch = useDispatch();
 
@@ -117,7 +116,7 @@ const Personal = () => {
     if (!userInfo) return <></>;
 
     const renderDateLeft = () => {
-        if(userInfo.hoursLeft == 0) return `${userInfo.minutesLeft} м.`;
+        if (userInfo.hoursLeft == 0) return `${userInfo.minutesLeft} м.`;
         return `${userInfo.hoursLeft} ч. ${userInfo.minutesLeft} м.`;
     }
     

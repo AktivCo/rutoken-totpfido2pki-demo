@@ -1,13 +1,14 @@
 import React, {useEffect, useState, useRef} from "react";
 import {useDispatch} from 'react-redux';
 
-import {deleteDeviceFido, showModal, hideModal} from "../redux/actions";
-import InitFido from "./fido/InitFido";
-import EditDeviceNameModal from "./fido/EditDeviceNameModal";
-import DeleteDeviceModal from "./DeleteDeviceModal";
-import {dateToLocale} from "../utils/utils";
+import {deleteDeviceFido} from "../../redux/actions";
+import InitFido from "./InitFido";
+import EditDeviceNameModal from "./EditDeviceNameModal";
+import DeleteDeviceModal from "../DeleteDeviceModal";
+import {dateToLocale} from "../../utils/utils";
 
-import {BucketIcon} from "../controls/BucketIcon"
+import {BucketIcon} from "../../controls/BucketIcon"
+import { hideModal, showModal } from "../../redux/actionCreators";
 
 const RenderFidoKeysList = ({keys}) => {
     const dispatch = useDispatch();
@@ -60,7 +61,7 @@ const RenderFidoKeysList = ({keys}) => {
                 <div className="item-device d-flex align-items-center justify-content-between" key={item.id}>
                     <div>
                         <div className="d-flex align-items-center column-gap-2">
-                            <div className="fw-w-600">{item.label}</div>
+                            <div className="fw-600">{item.label}</div>
                             <div className="edit-icon cursor-pointer" onClick={() => renameDevice(item.id)}></div>
                         </div>
                         <div>

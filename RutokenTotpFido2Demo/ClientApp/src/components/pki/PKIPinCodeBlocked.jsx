@@ -1,10 +1,9 @@
 import React from 'react';
-import ErrorIcon from '../../../images/ErrorIcon'
+import ErrorIcon from '../../images/ErrorIcon';
 
-
-const BlockPinContent = () => {
+const PKIPinCodeBlocked = () => {
     return (
-        <div className='mt-4_375rem w-100'>
+        <div className='my-3_5rem w-100'>
             <div className='d-flex flex-column align-items-center mb-4_375rem'>
                 <ErrorIcon />
                 <div className='mt-0_75rem text-secondary'>
@@ -17,4 +16,4 @@ const BlockPinContent = () => {
     );
 }
 
-export default BlockPinContent;
+export default PKIPinCodeBlocked;

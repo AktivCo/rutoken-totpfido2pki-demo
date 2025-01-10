@@ -4,12 +4,12 @@ import { useDispatch } from 'react-redux';
 import { setLoginState, loginWithoutTwoFactor, verifyTotp } from "../redux/actions";
 import { Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import ModalComponent from "../modal/ModalComponent";
-import { State } from "../utils/constants";
+import { Status } from "../utils/constants";
 
 const LoginTOTP = () => {
     const dispatch = useDispatch();
 
-    const [state, setState] = useState(null);
+    const [status, setStatus] = useState(null);
     const [errorMsg, setErrorMsg] = useState(false);
     const [isVerified, setIsVerified] = useState(null);
     const [code, setCode] = useState("");
@@ -24,7 +24,7 @@ const LoginTOTP = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setState(State.Loading);
+        setStatus(Status.Loading);
 
         dispatch(verifyTotp(code))
             .then((response) => {
@@ -36,9 +36,9 @@ const LoginTOTP = () => {
             })
             .catch((error) => {
                 setErrorMsg(error?.response?.data?.message);
-                setState(State.Error);
+                setStatus(Status.Error);
             })
-            .finally(() => setState(null));
+            .finally(() => setStatus(null));
     }
 
     const renderBody = () => {
@@ -48,7 +48,7 @@ const LoginTOTP = () => {
                     <small>Нажмите кнопку на корпусе Рутокен<br />OTP и введите отобразившиеся<br />цифры в поле</small>
                 </div>
                 <Form className="w-100">
-                    {state == State.Error && !errorMsg && <div className='invalid-feedback d-block mb-2 mx-3'>Внутренняя ошибка.<br/>Повторите запрос позже</div>}
+                    {status == Status.Error && !errorMsg && <div className='invalid-feedback d-block mb-2 mx-3'>Внутренняя ошибка.<br/>Повторите запрос позже</div>}
                     <FormGroup>
                         <Label for="totpCode" className="ps-3 text-secondary">
                             <small>Одноразовый пароль</small>
@@ -64,7 +64,7 @@ const LoginTOTP = () => {
                             onFocus={() => setIsVerified(null)}
                             invalid={isVerified === false}
                             style={{backgroundImage: "none"}}
-                            disabled={state}
+                            disabled={status}
                         />
                         {
                             (errorMsg) ?

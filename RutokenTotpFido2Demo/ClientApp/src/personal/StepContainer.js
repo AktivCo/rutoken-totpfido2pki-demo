@@ -1,5 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
+import CommonButton from '../common/CommonButton';
+import Step from '../common/Step';
 
 const StepContainer = ({currentStep, stepId, header, toNextStep, btnTitle, children}) => {
 
@@ -10,7 +12,7 @@ const StepContainer = ({currentStep, stepId, header, toNextStep, btnTitle, child
 
     return (
         <div className="mt-4">
-            <div className="personal-add-device-step">ШАГ {stepId}</div>
+            <Step step={stepId} />
             <div className={renderClass()}>{header}</div>
             {
                 currentStep >= stepId &&
@@ -38,13 +40,9 @@ const StepButton = ({currentStep, stepId, toNextStep, btnTitle}) => {
     }
     return (
         <div className="col-sm-5 mt-4">
-            <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => onClick()}
-            >
+            <CommonButton onClick={onClick}>
                 {btnTitle ?? "Продолжить"}
-            </button>
+            </CommonButton>
         </div>
     );
 }

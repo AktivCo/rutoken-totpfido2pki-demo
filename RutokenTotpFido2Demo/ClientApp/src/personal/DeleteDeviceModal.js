@@ -2,7 +2,7 @@ import React from "react";
 import {useDispatch} from "react-redux";
 
 import ModalComponent from "../modal/ModalComponent";
-import {hideModal} from "../redux/actions";
+import { hideModal } from "../redux/actionCreators";
 
 const DeleteDeviceModal = ({title, body, action, id}) => {
     const dispatch = useDispatch();

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 import RegisterFidoModal from "./RegisterFidoModal";
-import {showModal} from "../../redux/actions";
 import CustomSwitch from "../../controls/Switch/CustomSwitch";
-import { Button } from "reactstrap";
+import CommonButton from "../../common/CommonButton";
+import Step from "../../common/Step";
+import { showModal } from "../../redux/actionCreators";
 
 const InitFido = ({setVisible}) => {
     const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const InitFido = ({setVisible}) => {
                 </div>
             }
             <div className='d-flex flex-column'>
-                <div className='step-mfa'>ШАГ 1</div>
+                <Step step={1} />
                 <div className='personal-add-device-header'>Подключите устройство</div>
             </div>
             <div className='d-flex flex-column gap-3'>
@@ -67,9 +68,9 @@ const InitFido = ({setVisible}) => {
                 </div>
             </div>
             <div className='align-self-start'>
-                <Button type="submit" color="danger" className="mb-0" onClick={() => registerFidoDevice()}>
+                <CommonButton onClick={registerFidoDevice}>
                     Добавить Рутокен MFA
-                </Button>
+                </CommonButton>
             </div>
         </div>
     );

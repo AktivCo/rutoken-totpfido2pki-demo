@@ -3,7 +3,8 @@ import {useDispatch} from "react-redux";
 import {Input} from 'reactstrap';
 
 import ModalComponent from "../../modal/ModalComponent";
-import {confirmRegisterFido, renameDeviceFido, hideModal} from "../../redux/actions";
+import {confirmRegisterFido, renameDeviceFido} from "../../redux/actions";
+import { hideModal } from '../../redux/actionCreators';
 
 const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin}) => {
     const dispatch = useDispatch();

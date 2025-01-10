@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import { rutokenInfo } from './rutokenReducers';
+import { plugin, pkiDevices, pkiAuthData } from './pkiReducers';
 
 const loginState = (state = null, action) => {
     switch (action.type) {
@@ -51,35 +51,6 @@ const modal = (state = {modal: null, data: {}}, action) => {
     return state;
 };
 
-const plugin = (state = {instance: null, loadError: null}, action) => {
-    switch (action.type) {
-        case 'SET_PLUGIN':
-            return {
-                ...state,
-                instance: action.payload,
-                loadError: null,
-            };
-        case 'SET_PLUGIN_LOAD_ERROR':
-            return {
-                ...state,
-                instance: null,
-                loadError: action.payload,
-            };
-        default:
-            return state;
-    }
-};
-
-const rutokenDevices = (state = { devices: [] }, action) => {
-    if (action.type === 'SET_RUTOKEN_DEVICES') {
-        return {
-            ...state,
-            devices: action.payload
-        }
-    }
-    return state;
-};
-
 
 const rootReducer = combineReducers({
     loginState,
@@ -87,10 +58,10 @@ const rootReducer = combineReducers({
     totpParams,
     twoFactorType,
     modal,
-    plugin,
-    rutokenDevices,
 
-    rutokenInfo
+    plugin,
+    pkiDevices,
+    pkiAuthData,
 });
 
 export default rootReducer;

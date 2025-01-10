@@ -13,7 +13,6 @@
 @import "personal/personal";
 @import "personal/fido";
 @import "personal/totp";
-@import "personal/rutoken";
 
 * {
     font-family: "Roboto", sans-serif;
@@ -66,14 +65,6 @@ html {
 .text-link {
     @include font-bolder;
     color: $surfie-green;
-}
-
-.text-surfie {
-    color: $surfie-green;
-}
-
-.text-charcoal {
-    color: #344252;
 }
 
 .rotate-180 {
@@ -189,8 +180,10 @@ input[type=password]::-ms-clear
     padding-right: 0px !important;
 }
 
-.bg-surfie-green {
-    background-color: $surfie-green;   
+.w-fit-content {
+    width: fit-content;
 }
 
-@include class-generator('opacity', 'opacity', (0.68), '');
+.scrollbar-hidden {
+    scrollbar-width: none;
+}

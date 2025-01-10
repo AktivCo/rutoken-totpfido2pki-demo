@@ -1,4 +1,6 @@
-@include class-generator('fs', 'font-size', (0.75, 0.875, 1, 1.125, 1.5), 'rem');
+@include class-generator('fs', 'font-size', (0.75, 0.875, 1, 1.125, 1.5, 1.75), 'rem');
+@include class-generator('lh', 'line-height', (1.25), 'rem');
+@include class-generator('fw', 'font-weight', (600), '');
 
 @font-face {
     font-family: 'Roboto';
@@ -51,10 +53,6 @@
 
 .fw-bolder {
     @include font-bolder();
-}
-
-.fw-w-600 {
-    @include font-w-600();
 }
 
 .fw-normal {

@@ -3,6 +3,7 @@ import StepContainer from "../StepContainer";
 import {Form, FormGroup, Input, Label} from "reactstrap";
 import {useDispatch} from "react-redux";
 import {checkTotp, registerTotp} from "../../redux/actions";
+import CommonButton from "../../common/CommonButton";
 
 
 const RenderError = ({error}) => {
@@ -110,7 +111,7 @@ const InitTotpStepFour = ({currentStep}) => {
             </Form>
             {
                 error && (
-                    <>
+                    <div className="mt-0_375rem">
                         <RenderError error={error}></RenderError>
                         <div className="d-block mt-2">
                             <a className="fw-bolder cursor-pointer"
@@ -120,26 +121,19 @@ const InitTotpStepFour = ({currentStep}) => {
                                 Подробнее о возможных ошибках
                             </a>
                         </div>
-                    </>
+                    </div>
                 )
             }
             {
                 verified && (
-                    <span className="text-success">
+                    <small className="text-success d-block ps-3 mt-0_375rem">
                         Одноразовый пароль верный
-                    </span>
+                    </small>
                 )
             }
-            <div className="col-sm-5 mt-4 small-btn">
-                <button
-                    disabled={error || !verified}
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => register()}
-                >
-                    Добавить Рутокен OTP
-                </button>
-            </div>
+            <CommonButton onClick={register} disabled={error || !verified} className="mt-4">
+                Добавить Рутокен OTP
+            </CommonButton>
         </StepContainer>
 
     );

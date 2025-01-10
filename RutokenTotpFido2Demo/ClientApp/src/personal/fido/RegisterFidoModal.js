@@ -3,30 +3,31 @@ import {useDispatch} from "react-redux";
 
 import ModalComponent from "../../modal/ModalComponent";
 import EditDeviceNameModal from "./EditDeviceNameModal";
-import {registerFido, showModal, hideModal} from "../../redux/actions";
-import { State } from '../../utils/constants';
+import {registerFido} from "../../redux/actions";
+import { Status } from '../../utils/constants';
 import ErrorContent from "../../common/ErrorContent";
 import FidoSuccessContent from "../../components/fido/FidoSuccessContent";
-import FidoLoadingContent from "../../components/fido/FidoLoadingContent";
+import LoadingContent from "../../common/LoadingContent";
+import { hideModal, showModal } from '../../redux/actionCreators';
 
 const RegisterFidoModal = ({isWithoutLogin}) => {
     const dispatch = useDispatch();
 
-    const [state, setState] = useState(null);
+    const [status, setStatus] = useState(null);
 
     useEffect(() => register(), []);
 
     const register = () => {
-        setState(State.Loading);
+        setStatus(Status.Loading);
         dispatch(registerFido(isWithoutLogin))
             .then((response) => {
-                setState(State.Success);
+                setStatus(Status.Success);
                 setTimeout(() => {
                     dispatch(showModal(EditDeviceNameModal, {isCreate: true, credential: response, isWithoutLogin: isWithoutLogin}))
                 }, 1000);
             })
             .catch(err => {
-                setState(State.Error);
+                setStatus(Status.Error);
             });
     }
 
@@ -35,9 +36,9 @@ const RegisterFidoModal = ({isWithoutLogin}) => {
     }
 
     const renderBody = () => {
-        if (state === State.Error) return <ErrorContent onRetry={() => register()} />;
-        if (state === State.Loading) return <FidoLoadingContent />;
-        if (state === State.Success) return <FidoSuccessContent />;
+        if (status === Status.Error) return <ErrorContent />;
+        if (status === Status.Loading) return <LoadingContent />;
+        if (status === Status.Success) return <FidoSuccessContent />;
     }
 
     return (
@@ -45,7 +46,8 @@ const RegisterFidoModal = ({isWithoutLogin}) => {
             className={'custom-modal'}
             title={'Добавление токена'}
             step={2}
-            {...(state === State.Error && {footerLinks: [{onClick: () => close(), label: 'Закрыть'}]})}
+            {...(status === Status.Error && {onSubmit: register, submitButtonText: 'Повторить'})}
+            {...(status === Status.Error && {footerLinks: [{onClick: close, label: 'Закрыть'}]})}
         >
             {renderBody()}
         </ModalComponent>

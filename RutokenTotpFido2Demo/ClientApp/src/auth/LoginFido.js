@@ -2,36 +2,36 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loginFido, loginWithoutTwoFactor } from "../redux/actions";
-import { State } from "../utils/constants";
+import { Status } from "../utils/constants";
 import ModalComponent from "../modal/ModalComponent";
 import ErrorContent from "../common/ErrorContent";
 import FidoSuccessContent from "../components/fido/FidoSuccessContent";
-import FidoLoadingContent from "../components/fido/FidoLoadingContent";
+import LoadingContent from "../common/LoadingContent";
 
 const LoginFIDO = () => {
     const dispatch = useDispatch();
     const twoFactorType = useSelector(state => state.twoFactorType);
 
-    const [state, setState] = useState(null);
+    const [status, setStatus] = useState(null);
 
     useEffect(() => loginFIDO(), [twoFactorType]);
 
     const loginFIDO = () => {
-        setState(State.Loading);
+        setStatus(Status.Loading);
 
         dispatch(loginFido())
             .then((response) => {
-                setState(State.Success);
+                setStatus(Status.Success);
             })
             .catch(err => {
-                setState(State.Error);
+                setStatus(Status.Error);
             });
     }
 
     const renderBody = () => {
-        if (state === State.Error) return <ErrorContent onRetry={() => loginFIDO()} />;
-        if (state === State.Loading) return <FidoLoadingContent />;
-        if (state === State.Success) return <FidoSuccessContent />;
+        if (status === Status.Error) return <ErrorContent />;
+        if (status === Status.Loading) return <LoadingContent />;
+        if (status === Status.Success) return <FidoSuccessContent />;
     }
 
     return (
@@ -40,7 +40,8 @@ const LoginFIDO = () => {
             withLabel
             backdrop={false}
             fade={false}
-            {...(state === State.Error && {footerLinks: [{onClick: () => dispatch(loginWithoutTwoFactor()), label: 'Назад'}]})}
+            {...(status === Status.Error && {onSubmit: () => loginFIDO(), submitButtonText: 'Повторить'})}
+            {...(status === Status.Error && {footerLinks: [{onClick: () => dispatch(loginWithoutTwoFactor()), label: 'Назад'}]})}
         >
             {renderBody()}
         </ModalComponent>

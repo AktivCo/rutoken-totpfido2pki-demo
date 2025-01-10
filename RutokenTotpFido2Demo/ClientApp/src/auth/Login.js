@@ -49,7 +49,7 @@ const Login = () => {
     const renderBody = () => {
         return (
             <form className="w-100">
-                <div className="form-group mt-3">
+                <div className="form-group">
                     <Input 
                         type="text" 
                         maxLength="20"
@@ -80,7 +80,7 @@ const Login = () => {
     
                 {
                     !isRegisterView &&
-                    <div className="form-group my-4">
+                    <div className="form-group mt-4">
                         <a className="text-secondary cursor-pointer"
                             onClick={() => registerViewToggle()}>
                             <small>У меня нет учетной записи</small>
@@ -103,7 +103,7 @@ const Login = () => {
                                 feedback={error && error.payload && error.message}
                             />
                         </div>
-                        <div className="form-group my-4">
+                        <div className="form-group mt-4">
                             <small className="text-secondary">
                                 Через <span className="fw-bolder">48 часов</span> личный
                                 кабинет будет удален,

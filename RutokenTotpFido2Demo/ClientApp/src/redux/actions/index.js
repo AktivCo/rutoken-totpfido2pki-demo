@@ -1,32 +1,6 @@
 import axios from "axios";
 import {coerceToArrayBuffer, coerceToBase64Url} from "../../utils/utils";
-import Plugin from '@aktivco-it/rutoken-plugin-bootstrap/src/index';
-import getDevicesAndCerts from "../../personal/rutoken/getDevicesAndCerts";
-
-const SET_LOGIN_STATE = (param) => ({
-    type: 'SET_LOGIN_STATE',
-    payload: param
-});
-
-const SET_USER_INFO = (param) => ({
-    type: 'SET_USER_INFO',
-    payload: param
-});
-
-const SET_TWO_FACTOR_TYPE = (param) => ({
-    type: 'SET_TWO_FACTOR_TYPE',
-    payload: param
-});
-
-
-const setLoginState = (param) => {
-    return (dispatch) => {
-        return Promise.resolve()
-            .then(() => {
-                dispatch(SET_LOGIN_STATE(param));
-            });
-    }
-}
+import { setLoginState, setTotpParams, setTwoFactorType, setUserInfo } from "../actionCreators";
 
 
 const checkLoginState = () => {
@@ -39,14 +13,13 @@ const checkLoginState = () => {
         });
 
         sequense = sequense
-            .then(() => dispatch(SET_LOGIN_STATE(true)))
+            .then(() => dispatch(setLoginState(true)))
             .catch(() => {
             });
 
         return sequense;
     };
 }
-
 
 const signInOrUp = (toSingUp, userName, password, repeatPassword) => {
     return (dispatch, getState) => {
@@ -67,14 +40,14 @@ const signInOrUp = (toSingUp, userName, password, repeatPassword) => {
             sequense = sequense
                 .then(({data: result}) => {
                     if (result.twoFactorType) {
-                        dispatch(SET_TWO_FACTOR_TYPE(result.twoFactorType));
+                        dispatch(setTwoFactorType(result.twoFactorType));
                     }
                 });
         }
 
         sequense = sequense.then(() => {
             if (getState().twoFactorType) return;
-            dispatch(SET_LOGIN_STATE(true));
+            dispatch(setLoginState(true));
         });
 
 
@@ -85,7 +58,6 @@ const signInOrUp = (toSingUp, userName, password, repeatPassword) => {
         return sequense;
     };
 }
-
 
 const signOut = () => {
     return () => {
@@ -107,7 +79,7 @@ const getUserInfo = () => {
         sequense = sequense.then(() => axios.get('/user/info'));
 
         sequense = sequense
-            .then((response) => dispatch(SET_USER_INFO(response.data)));
+            .then((response) => dispatch(setUserInfo(response.data)));
 
         return sequense;
     };
@@ -189,13 +161,7 @@ const checkTotp = (totpPassword) => {
 }
 
 const cacheTotpParams = (params) => (dispatch) => {
-    const sequense = Promise.resolve().then(() => {
-        dispatch({
-            type: 'TOTP_PARAMS',
-            payload: params
-        });
-    });
-    return sequense;
+    return Promise.resolve(dispatch(setTotpParams(params)));
 }
 
 const verifyTotp = (code) => {
@@ -241,7 +207,6 @@ const registerFido = (isWithoutLogin) => {
     };
 }
 
-
 const loginFido = () => {
     return (dispatch) => {
         let sequense = axios.get('/mfa/assertionoptions');
@@ -285,7 +250,7 @@ const loginFido = () => {
 
         sequense = sequense.then((result) => {
 
-            setTimeout(() => dispatch(SET_LOGIN_STATE(true)), 1000);
+            setTimeout(() => dispatch(setLoginState(true)), 1000);
         });
 
         sequense = sequense.catch((error) => {
@@ -299,19 +264,19 @@ const loginFido = () => {
 
 const loginPasswordLess = () => {
     return (dispatch) => {
-        dispatch(SET_TWO_FACTOR_TYPE("FIDO"));
+        dispatch(setTwoFactorType("FIDO"));
     }
 }
 
 const loginRutoken = () => {
     return (dispatch) => {
-        dispatch(SET_TWO_FACTOR_TYPE("RUTOKEN"));
+        dispatch(setTwoFactorType("RUTOKEN"));
     }
 }
 
 const loginWithoutTwoFactor = () => {
     return (dispatch) => {
-        dispatch(SET_TWO_FACTOR_TYPE(null));
+        dispatch(setTwoFactorType(null));
     }
 }
 
@@ -374,91 +339,6 @@ const deleteDeviceFido = (id) => {
     };
 }
 
-const showModal = (modal, data) => (dispatch) => {
-
-    const sequense = Promise.resolve().then(() => {
-        dispatch({
-            type: 'SHOW_MODAL',
-            payload: {
-                modal,
-                data,
-            },
-        });
-    });
-    return sequense;
-};
-
-const hideModal = () => (dispatch) => {
-    const sequense = Promise.resolve().then(() => {
-        dispatch({
-            type: 'HIDE_MODAL',
-            payload: null,
-        });
-    });
-    return sequense;
-};
-
-const loadPlugin = () => {
-    return (dispatch) => {
-        return (Plugin.init()
-            .then((data) => dispatch({
-                type: 'SET_PLUGIN',
-                payload: data,
-            }))
-            .catch((error) => dispatch({
-                type: 'SET_PLUGIN_LOAD_ERROR',
-                payload: error,
-            })));
-    }
-};
-
-const getRutokenDevices = () => {
-    return (dispatch, getState) => {
-        const plugin = getState().plugin.instance;
-        let sequence = Promise.resolve()
-            .then(() => plugin.enumerateDevices());
-
-        sequence = sequence.then(deviceIds => {
-            return Promise.all(deviceIds.map(deviceId => getDevicesAndCerts(deviceId, plugin)));
-        });
-
-        sequence = sequence.then(devices => {
-            const certsIds = devices.map(device => device.certificates.map(cert => cert.certId)).flat(1);
-            return axios.post('/pki/certs', certsIds)
-                .then(response => {
-                    const certs = response.data;
-                    return devices.map(device => {
-                        const extendedCertificates = device.certificates
-                            .filter(cert => certs[cert.certId])
-                            .map(cert => {
-                                const dbCert = certs[cert.certId];
-                                return {
-                                    ...cert,
-                                    lastLoginDate: dbCert.lastLoginDate
-                                }
-                            })
-                            .sort((a, b) => {
-                                return new Date(b.lastLoginDate) - new Date(a.lastLoginDate);
-                            });
-
-                        return {
-                            ...device,
-                            certificates: extendedCertificates
-                        }
-                    })
-                })
-        });
-
-        sequence = sequence.then(devices => dispatch({
-            type: 'SET_RUTOKEN_DEVICES',
-            payload: devices
-        }));
-        return sequence;
-    }
-};
-
-
-
 export {
     signInOrUp,
     signOut,
@@ -483,11 +363,4 @@ export {
     loginPasswordLess,
     loginRutoken,
     loginWithoutTwoFactor,
-
-    showModal,
-    hideModal,
-
-    loadPlugin,
-
-    getRutokenDevices,
 };
