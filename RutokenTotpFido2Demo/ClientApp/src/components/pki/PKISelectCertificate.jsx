@@ -61,7 +61,7 @@ const PKISelectCertificate = ({ onSelect }) => {
         return <PKINoDevicesFound />;
 
     return (
-        <div className="d-flex flex-column gap-4 w-100">
+        <div className="d-flex flex-column gap-4">
             {devices.map((device) => (
                 <div key={device.serial} className="w-100">
                     <div className="d-flex justify-content-between mb-2">
