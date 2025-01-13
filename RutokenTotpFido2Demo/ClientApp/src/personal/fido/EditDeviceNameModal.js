@@ -36,7 +36,7 @@ const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin}) => {
         return (
             <div className='modal-edit d-flex flex-column align-items-stretch justify-content-center my-6rem'>
                 <div className='d-flex flex-column align-items-stretch'>
-                    <Input className={"modal-input form-control " + (error ? 'modal-input-error' : '')} 
+                    <Input maxLength={78} className={"modal-input form-control " + (error ? 'modal-input-error' : '')} 
                         placeholder="Название" value={mfaName} onChange={handleMfaNameChange}></Input>
                     {
                         error 

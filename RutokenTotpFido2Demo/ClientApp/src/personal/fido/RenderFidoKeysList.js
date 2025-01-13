@@ -61,8 +61,8 @@ const RenderFidoKeysList = ({keys}) => {
                 <div className="item-device d-flex align-items-center justify-content-between" key={item.id}>
                     <div>
                         <div className="d-flex align-items-center column-gap-2">
-                            <div className="fw-600">{item.label}</div>
-                            <div className="edit-icon cursor-pointer" onClick={() => renameDevice(item.id)}></div>
+                            <div className="fw-600" style={{overflowWrap: "anywhere"}}>{item.label}</div>
+                            <div className="edit-icon cursor-pointer align-self-start" onClick={() => renameDevice(item.id)}></div>
                         </div>
                         <div>
                             <span className="personal-expiration__text">Последняя активность: </span>
