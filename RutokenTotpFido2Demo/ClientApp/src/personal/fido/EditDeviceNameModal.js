@@ -55,7 +55,7 @@ const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin}) => {
             {...(isCreate && {step: 3})}
             onSubmit={() => registerNewCredential()}
             submitButtonText='Готово'
-            {...(!isCreate && {footerLinks: [{onClick: () => close(), label: 'Закрыть'}]})}
+            {...({footerLinks: [{onClick: () => close(), label: 'Закрыть'}]})}
         >
             {renderBody()}            
         </ModalComponent>
