@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import RutokenLabel from '../images/RutokenLabel';
 import cn from 'classnames';
 import Step from '../common/Step';

@@ -4,7 +4,6 @@ using Org.BouncyCastle.Security;
 using RutokenTotpFido2Demo.Entities;
 using RutokenTotpFido2Demo.Exceptions;
 using RutokenTotpFido2Demo.Models;
-using System.Diagnostics;
 using System.Text;
 
 namespace RutokenTotpFido2Demo.Services.Rutoken
@@ -107,6 +106,16 @@ namespace RutokenTotpFido2Demo.Services.Rutoken
             await UpdateCertLastLoginDate(cmsRequest.CertId);
 
             return cert.UserId;
+        }
+
+        public async Task Delete(int userId, string certId)
+        {
+            var cert = await _dbContext.RutokenCerts
+                .FirstOrDefaultAsync(cert => cert.UserId == userId && cert.Id == certId)
+                    ?? throw new RTFDException("Сертификат не найден");
+
+            _dbContext.RutokenCerts.Remove(cert);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

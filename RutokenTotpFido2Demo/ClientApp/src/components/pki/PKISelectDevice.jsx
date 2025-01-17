@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../utils/constants";
 import Rutoken3Image from "../../images/Rutoken3Image";
 import LoadingContent from "../../common/LoadingContent";
 import ErrorContent from "../../common/ErrorContent";
-import { getPKIDevices } from "../../redux/actions/pkiActions";
-import { setPKIAuthData } from "../../redux/actionCreators";
+import { getPkiDevices } from "../../redux/actions/pkiActions";
+import { setPkiAuthData } from "../../redux/actionCreators";
 import PKINoDevicesFound from "./PKINoDevicesFound";
 
 const PKISelectDevice = ({ onSelect }) => {
     const dispatch = useDispatch();
-    const { devices, status } = useSelector(state => state.pkiDevices)
+    const { operationStatus, devices } = useSelector(state => state.plugin);
 
     useEffect(() => {
-        dispatch(getPKIDevices());
+        dispatch(getPkiDevices());
     }, []);
 
     useEffect(() => {
@@ -24,12 +24,12 @@ const PKISelectDevice = ({ onSelect }) => {
 
     const handleSelect = (id) => {
         onSelect?.();
-        dispatch(setPKIAuthData(id));
+        dispatch(setPkiAuthData(id));
     }
 
-    if (status === Status.Loading) return <LoadingContent />
+    if (operationStatus === Status.Loading) return <LoadingContent />
 
-    if (status === Status.Error) return <ErrorContent />
+    if (operationStatus === Status.Error) return <ErrorContent />
 
     if (devices.length === 0) return <PKINoDevicesFound />
 

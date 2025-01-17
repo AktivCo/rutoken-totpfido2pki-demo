@@ -15,16 +15,16 @@ import PKIDevices from "./pki/PKIDevices";
 import PKIBindInit from "./pki/PKIBindInit";
 
 
-const RenderTwoFactor = ({fidoKeys, totpKeys, rutokenKeys}) => {
+const RenderTwoFactor = ({fidoKeys, totpKeys, pkiKeys}) => {
     const renderStatus = () => cn({
         "personal-two-factor__value ": true,
-        "personal-two-factor__value--on": fidoKeys.length || totpKeys.length || rutokenKeys?.length
+        "personal-two-factor__value--on": fidoKeys.length || totpKeys.length || pkiKeys.length
     });
 
     const getStatus = () => {
         if (fidoKeys.length) return 'Включена (Рутокен MFA)';
         if (totpKeys.length) return 'Включена (Рутокен OTP)';
-        if (rutokenKeys?.length) return 'Включена (Рутокен ЭЦП 3.0)';
+        if (pkiKeys.length) return 'Включена (Рутокен ЭЦП 3.0)';
         return 'Выключена';
     }
 
@@ -88,7 +88,7 @@ const RenderTwoFactorInit = () => {
     );
 }
 
-const DevicesContainer = ({fidoKeys, totpKeys, rutokenKeys}) => {
+const DevicesContainer = ({fidoKeys, totpKeys, pkiKeys}) => {
     if (fidoKeys.length) {
         return <RenderFidoKeysList keys={fidoKeys}/>;
     }
@@ -97,8 +97,8 @@ const DevicesContainer = ({fidoKeys, totpKeys, rutokenKeys}) => {
         return <RenderTotpKeysList keys={totpKeys}/>;
     }
 
-    if (rutokenKeys?.length) {
-        return <PKIDevices keys={rutokenKeys}/>;
+    if (pkiKeys.length) {
+        return <PKIDevices />;
     }
 
     return <RenderTwoFactorInit></RenderTwoFactorInit>;

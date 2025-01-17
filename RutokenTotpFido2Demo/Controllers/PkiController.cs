@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RutokenTotpFido2Demo.Extensions;
 using RutokenTotpFido2Demo.Models;
 using RutokenTotpFido2Demo.Services.Rutoken;
@@ -44,6 +45,15 @@ public class PkiController : ControllerBase
     {
         var certs = await _pkiService.GetCertsByIds(certsIds);
         return Ok(certs);
+    }
+
+    [HttpDelete]
+    [Route("certs/{certId}")]
+    [Authorize(Policy = "twoFactor")]
+    public async Task<IActionResult> Delete(string certId)
+    {
+        await _pkiService.Delete(HttpContext.User.UserId(), certId);
+        return Ok();
     }
 }
 

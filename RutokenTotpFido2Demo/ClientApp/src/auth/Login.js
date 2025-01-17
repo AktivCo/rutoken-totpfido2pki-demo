@@ -2,7 +2,7 @@ import React, {useState, useMemo} from "react";
 import {useDispatch} from 'react-redux';
 
 
-import {signInOrUp, loginPasswordLess, loginRutoken} from "../redux/actions";
+import {signInOrUp, loginPasswordLess, loginPki} from "../redux/actions";
 import PasswordInput from "../controls/PasswordInput";
 import {FormFeedback, Input} from "reactstrap";
 import ModalComponent from "../modal/ModalComponent";
@@ -131,7 +131,7 @@ const Login = () => {
                 label: 'Без логина и пароля (MFA)'
             }, 
             {
-                onClick: () => dispatch(loginRutoken()),
+                onClick: () => dispatch(loginPki()),
                 label: 'По сертификату'
             }
         ];

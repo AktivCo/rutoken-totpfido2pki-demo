@@ -69,8 +69,9 @@ public class UserController : ControllerBase
 
         var fidoKeys = userInfo.FidoKeys.Any();
         var totpKeys = userInfo.TotpKeys.Any();
+        var pkiKeys = userInfo.PkiKeys.Any();
 
-        if (fidoKeys || totpKeys)
+        if (fidoKeys || totpKeys || pkiKeys)
         {
             await HttpContext.SignInByUserHandleAsync(user.Id);
         }
@@ -88,6 +89,11 @@ public class UserController : ControllerBase
         if (totpKeys)
         {
             return Ok(new { twoFactorType = "TOTP" });
+        }
+
+        if (pkiKeys)
+        {
+            return Ok(new { twoFactorType = "PKI" });
         }
 
 

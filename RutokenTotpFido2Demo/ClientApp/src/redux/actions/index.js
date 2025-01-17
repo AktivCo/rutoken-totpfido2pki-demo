@@ -268,9 +268,9 @@ const loginPasswordLess = () => {
     }
 }
 
-const loginRutoken = () => {
+const loginPki = () => {
     return (dispatch) => {
-        dispatch(setTwoFactorType("RUTOKEN"));
+        dispatch(setTwoFactorType("PKI"));
     }
 }
 
@@ -361,6 +361,6 @@ export {
 
     loginFido,
     loginPasswordLess,
-    loginRutoken,
+    loginPki,
     loginWithoutTwoFactor,
 };

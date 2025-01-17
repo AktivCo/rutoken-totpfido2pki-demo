@@ -1,7 +1,5 @@
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using OtpNet;
 using RutokenTotpFido2Demo.Entities;
 using RutokenTotpFido2Demo.Exceptions;
 using RutokenTotpFido2Demo.Extensions;
@@ -115,6 +113,7 @@ public class UserService
                     UserName = x.UserName,
                     FidoKeys = x.FidoKeys,
                     TotpKeys = x.TotpKeys,
+                    PkiKeys = x.RutokenCerts,
                     RegisterDate = x.RegisterDate
                 })
                 .FirstOrDefaultAsync();
@@ -139,6 +138,7 @@ public class UserService
             UserName = user.UserName,
             FidoKeys = user.FidoKeys,
             TotpKeys = user.TotpKeys,
+            PkiKeys = user.PkiKeys,
             HoursLeft = hours,
             MinutesLeft = minutes
         };

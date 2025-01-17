@@ -1,110 +1,206 @@
 import Plugin from '@aktivco-it/rutoken-plugin-bootstrap/src/index';
-import { setPluginLoadError, setPKIDevicesLoaded, setPluginLoaded, setPluginLoading, setPKIDevicesLoading, setPKIDevicesLoadError, setLoginState } from '../actionCreators';
+import {
+    setPluginLoadError,
+    setPluginLoadSuccess,
+    setPluginLoadStart,
+    setLoginState,
+    setPkiAuthData,
+    setPluginOperationStart,
+    setPluginOperationSuccess,
+    setPluginOperationError,
+    setPluginDevicesLoadSuccess
+} from '../actionCreators';
 import axios from 'axios';
+import { getUserInfo } from '.';
 import { getRutokenModelName } from '../../utils/getRutokenModelName';
 
-export const loadPlugin = () => {
-    return (dispatch) => {
-        dispatch(setPluginLoading())
+export const loadPlugin = (rethrow = true) => {
+    return (dispatch, getState) => {
+        const plugin = getState().plugin.instance;
+        if (plugin) return Promise.resolve(plugin);
 
+        dispatch(setPluginLoadStart());
         return (Plugin.init()
-            .then((data) => dispatch(setPluginLoaded(data)))
-            .catch((error) => dispatch(setPluginLoadError(error))));
+            .then((plugin) => {
+                dispatch(setPluginLoadSuccess(plugin));
+                return plugin;
+            })
+            .catch((error) => {
+                dispatch(setPluginLoadError(error));
+                if (rethrow) throw error;
+            }));
     }
 };
 
-export const getPKIDevices = () => {
-    return (dispatch, getState) => {
-        dispatch(setPKIDevicesLoading());
-        const plugin = getState().plugin.instance;
+export const getPkiDevices = () => {
+    return (dispatch) => {
+        dispatch(setPluginOperationStart());
 
-        const tokenInfos = [
-            plugin.TOKEN_INFO_SERIAL,
-            plugin.TOKEN_INFO_PINS_INFO,
+        return dispatch(loadPlugin())
+            .then((plugin) => {
+                const tokenInfos = [
+                    plugin.TOKEN_INFO_SERIAL,
+                    plugin.TOKEN_INFO_SUPPORTED_MECHANISMS,
+                    plugin.TOKEN_INFO_FEATURES,
+                    plugin.TOKEN_INFO_SPEED,
+                ];
 
-            plugin.TOKEN_INFO_SUPPORTED_MECHANISMS,
-            plugin.TOKEN_INFO_FEATURES,
-            plugin.TOKEN_INFO_SPEED
-        ];
+                return plugin.enumerateDevices()
+                    .then((deviceIds) => Promise.all(deviceIds.map((deviceId) => {
+                        return Promise.all(tokenInfos.map(tokenInfo => plugin.getDeviceInfo(deviceId, tokenInfo)))
+                            .then((tokenInfos) => {
+                                const device = {
+                                    deviceId: deviceId,
+                                    serial: tokenInfos[0],
+                                    mechanisms: tokenInfos[1],
+                                    features: tokenInfos[2],
+                                    speed: tokenInfos[3]
+                                };
 
-        return plugin.enumerateDevices()
-            .then((deviceIds) => Promise.all(deviceIds.map((deviceId) => {
-                return Promise.all(tokenInfos.map(tokenInfo => plugin.getDeviceInfo(deviceId, tokenInfo)))
-                    .then((tokenInfos) => {
-                        const device = {
-                            deviceId: deviceId,
-                            serial: tokenInfos[0],
-                            isPinCached: tokenInfos[1].isPinCached,
-                            pinRetriesLeft: tokenInfos[1].retriesLeft,
-
-                            mechanisms: tokenInfos[2],
-                            features: tokenInfos[3],
-                            speed: tokenInfos[4]
-                        };
-
-                        const modelName = getRutokenModelName(device, plugin);
-                        return {...device, modelName };    
-                    })
-                    .then((device) => {
-                        return plugin.enumerateCertificates(device.deviceId, plugin.CERT_CATEGORY_USER)
-                            .then((certIds) => {
-                                return Promise.all(certIds.map((certId) =>
-                                    plugin.parseCertificate(deviceId, certId)
-                                        .then((certificate) => ({
-                                            ...certificate,
-                                            certId: certId,
-                                            issuerProp: Object.assign({}, ...certificate.issuer.map(is => ({ [is.rdn]: is.value }))),
-                                            subjectProp: Object.assign({}, ...certificate.subject.map(is => ({ [is.rdn]: is.value }))),
-                                        }))
-                                ))
+                                const modelName = getRutokenModelName(device, plugin);
+                                return {...device, modelName };    
                             })
-                            .then((certs) => ({ ...device, certs }))
-                    })
-                })
-            ))
-            .then(devices => {
-                const certsIds = devices.map(device => device.certs.map(cert => cert.certId)).flat(1);
-                return axios.post('/pki/certs', certsIds)
-                    .then(({ data: dbCerts }) => {
-                        return devices.map(device => ({
-                            ...device, 
-                            certs: device.certs
-                                .map(cert => ({
-                                    ...cert,
-                                    lastLoginDate: dbCerts[cert.certId]?.lastLoginDate ?? null
+                            .then((device) => {
+                                return plugin.enumerateCertificates(device.deviceId, plugin.CERT_CATEGORY_USER)
+                                    .then((certIds) => {
+                                        return Promise.all(certIds.map((certId) =>
+                                            plugin.parseCertificate(deviceId, certId)
+                                                .then((certificate) => ({
+                                                    ...certificate,
+                                                    certId: certId,
+                                                    subjectProp: Object.assign({}, ...certificate.subject.map(is => ({ [is.rdn]: is.value }))),
+                                                }))
+                                        ))
+                                    })
+                                    .then((certs) => ({ ...device, certs }))
+                            })
+                        })
+                    ))
+                    .then(devices => {
+                        const certsIds = devices.map(device => device.certs.map(cert => cert.certId)).flat(1);
+                        return axios.post('/pki/certs', certsIds)
+                            .then(({ data: dbCerts }) => {
+                                return devices.map(device => ({
+                                    ...device, 
+                                    certs: device.certs
+                                        .filter(cert => dbCerts[cert.certId])
+                                        .map(cert => ({
+                                            ...cert,
+                                            lastLoginDate: dbCerts[cert.certId]?.lastLoginDate ?? null
+                                        }))
+                                        .toSorted((a, b) => new Date(b.lastLoginDate) - new Date(a.lastLoginDate))
                                 }))
-                                .toSorted((a, b) => new Date(b.lastLoginDate) - new Date(a.lastLoginDate))
-                        }))
+                            })
                     })
+                    .then((devices) => dispatch(setPluginDevicesLoadSuccess(devices)))
             })
-            .then((devices) => dispatch(setPKIDevicesLoaded(devices)))
-            .catch((error) => dispatch(setPKIDevicesLoadError(error)))
+            .catch((error) => dispatch(setPluginOperationError(error)));
     }
 };
 
 export const loginByCert = () => {
     return (dispatch, getState) => {
+        dispatch(setPluginOperationStart());
         const { deviceId, certId } = getState().pkiAuthData;
-        const { instance: plugin } = getState().plugin;
 
-        axios.get('/pki/random')
-            .then((response) => {
-                const random = response.data;
-                const options = {
-                    detached: false,
-                    addUserCertificate: true,
-                    useHardwareHash: false,
-                };
-
-                return plugin.sign(deviceId, certId, random, plugin.DATA_FORMAT_PLAIN, options);
+        return dispatch(loadPlugin())
+            .then((plugin) => {
+                return axios.get('/pki/random')
+                    .then(({data: random}) => {
+                        const options = {
+                            detached: false,
+                            addUserCertificate: true,
+                            useHardwareHash: false,
+                        };
+        
+                        return plugin.sign(deviceId, certId, random, plugin.DATA_FORMAT_PLAIN, options);
+                    })
+                    .then(sign => {
+                        const certLoginModel = {
+                            cms: sign,
+                            certId: certId
+                        };
+                        return axios.post('/pki/login', certLoginModel);
+                    })
+                    .then(() => dispatch(setLoginState(true)))
+                    .then(() => dispatch(setPluginOperationSuccess()))
+                    .catch((error) => dispatch(setPluginOperationError(error)));
             })
-            .then(sign => {
-                const certLoginModel = {
-                    cms: sign,
-                    certId: certId
-                };
-                return axios.post('/pki/login', certLoginModel);
-            })
-            .then(() => dispatch(setLoginState(true)));
     }
 };
+
+export const bindPki = (onSuccess) => {
+    return (dispatch, getState) => {
+        dispatch(setPluginOperationStart());
+        const { deviceId } = getState().pkiAuthData;
+        const { userName } = getState().userInfo;
+
+        return dispatch(loadPlugin())
+            .then((plugin) => {
+                const date = new Date();
+
+                const [year, month, day] = [
+                    ('0' + date.getFullYear()).slice(-2),
+                    ('0' + date.getMonth() + 1).slice(-2),
+                    ('0' + date.getDate()).slice(-2),
+                ];
+                
+                const [hour, minutes, seconds, milliseconds] = [
+                    ('0' + date.getHours()).slice(-2),
+                    ('0' + date.getMinutes()).slice(-2),
+                    ('0' + date.getSeconds()).slice(-2),
+                    ('00' + date.getMilliseconds()).slice(-3),
+                ];
+        
+                const name = `DemoAuth${year}${month}${day}${hour}${minutes}${seconds}${milliseconds}`;
+        
+                const id = name.split('').map((x) => x.charCodeAt(0).toString(16)).join(':');
+
+                const options = {
+                    id: id,
+                    publicKeyAlgorithm: plugin.PUBLIC_KEY_ALGORITHM_GOST3410_2012_256,
+                    signatureSize: 512,
+                    paramset: 'A',
+                    keyType: plugin.KEY_TYPE_COMMON,
+                };
+
+                return plugin.generateKeyPair(deviceId, undefined, '', options)
+                    .then((keyId) => {
+                        const subject = [
+                            {
+                                rdn: 'commonName',
+                                value: userName,
+                            },
+                        ];
+                
+                        const extensions = {
+                            keyUsage: [
+                                'digitalSignature',
+                                'nonRepudiation',
+                            ]
+                        };
+        
+                        const options = {
+                            "hashAlgorithm": plugin.HASH_TYPE_GOST3411_12_256,
+                        };
+        
+                        return plugin.createPkcs10(deviceId, keyId, subject, extensions, options);
+                    })
+                    .then((pkcs10Request) => axios.post('/pki/register', { cms: pkcs10Request }))
+                    .then((cert) => plugin.importCertificate(deviceId, cert, plugin.CERT_CATEGORY_USER))
+                    .then((certId) => dispatch(setPkiAuthData(deviceId, certId)))
+                    .then(() => dispatch(loginByCert()))
+                    .then(() => dispatch(getUserInfo()))
+                    .then(() => dispatch(setPluginOperationSuccess()))
+                    .then(onSuccess);
+            })
+            .catch((error) => dispatch(setPluginOperationError(error)));
+    }
+};
+
+export const deletePki = (id) => {
+    return async (dispatch) => {
+        await axios.delete(`pki/certs/${id}`);
+        return dispatch(getUserInfo());
+    }
+}

@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import { plugin, pkiDevices, pkiAuthData } from './pkiReducers';
+import { plugin, pkiAuthData } from './pkiReducers';
 
 const loginState = (state = null, action) => {
     switch (action.type) {
@@ -60,7 +60,6 @@ const rootReducer = combineReducers({
     modal,
 
     plugin,
-    pkiDevices,
     pkiAuthData,
 });
 

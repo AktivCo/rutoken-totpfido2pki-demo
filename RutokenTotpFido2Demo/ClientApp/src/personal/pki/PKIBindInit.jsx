@@ -1,17 +1,20 @@
 import React, { useEffect } from "react";
 import CommonButton from "../../common/CommonButton";
 import Step from "../../common/Step";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PKIBindModal from "./PKIBindModal";
 import PKICheckPlugins from "../../components/pki/PKICheckPlugins";
-import { showModal } from "../../redux/actionCreators";
+import { hideModal, showModal } from "../../redux/actionCreators";
 import { loadPlugin } from "../../redux/actions/pkiActions";
+import { NoInstalledPluginError } from "@aktivco-it/rutoken-plugin-bootstrap/src/supportError";
+import { Status } from "../../utils/constants";
 
 const PKIBindInit = () => {
     const dispatch = useDispatch();
+    const { loadStatus, loadError } = useSelector(state => state.plugin);
 
     useEffect(() => {
-        dispatch(loadPlugin())
+        dispatch(loadPlugin(false));
     }, []);
 
     return (
@@ -27,7 +30,11 @@ const PKIBindInit = () => {
                 </div>
             </div>
             <PKICheckPlugins />
-            <CommonButton className={'mt-0_5rem'} onClick={() => dispatch(showModal(PKIBindModal))}>
+            <CommonButton
+                className={'mt-0_5rem'}
+                onClick={() => dispatch(showModal(PKIBindModal, {onSuccess: () => dispatch(hideModal())}))}
+                disabled={loadStatus === Status.Error && loadError instanceof NoInstalledPluginError}
+            >
                 Добавить Рутокен
             </CommonButton>
         </>

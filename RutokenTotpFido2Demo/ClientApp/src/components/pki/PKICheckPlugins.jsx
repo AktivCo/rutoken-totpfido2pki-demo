@@ -8,15 +8,15 @@ import { loadPlugin } from "../../redux/actions/pkiActions";
 
 const PKICheckPlugins = ({ onInstalled }) => {
     const dispatch = useDispatch();
-    const { instance: plugin, error } = useSelector(state => state.plugin);
+    const { instance: plugin, loadError } = useSelector(state => state.plugin);
 
     useEffect(() => {
         let intervalId;
 
         if (plugin) onInstalled?.();
-        else if (error instanceof NoInstalledPluginError) {
+        else if (loadError instanceof NoInstalledPluginError) {
             intervalId = setInterval(() => {
-                dispatch(loadPlugin());
+                dispatch(loadPlugin(false));
             }, 1000);
         }        
         return () => {
@@ -24,9 +24,9 @@ const PKICheckPlugins = ({ onInstalled }) => {
         };
     }, [plugin]);
 
-    const isSomethingNotInstalled = error instanceof NoInstalledPluginError;
-    const isExtensionNotInstalled = isSomethingNotInstalled && error.needExtension;
-    const isPluginNotInstalled = isSomethingNotInstalled && !error.needExtension;
+    const isSomethingNotInstalled = loadError instanceof NoInstalledPluginError;
+    const isExtensionNotInstalled = isSomethingNotInstalled && loadError.needExtension;
+    const isPluginNotInstalled = isSomethingNotInstalled && !loadError.needExtension;
     
     return (
         <div className='d-flex flex-column mb-3 gap-0_75rem '>

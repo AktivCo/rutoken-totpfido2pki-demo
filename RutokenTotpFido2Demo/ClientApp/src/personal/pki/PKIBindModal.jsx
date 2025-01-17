@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import ModalComponent from "../../modal/ModalComponent";
 import { hideModal } from '../../redux/actionCreators';
 import PKISelectDevice from '../../components/pki/PKISelectDevice';
 import PKIEnterPinCode from '../../components/pki/PKIEnterPinCode';
 import PKIChangePinCode from '../../components/pki/PKIChangePinCode';
+import { bindPki } from '../../redux/actions/pkiActions';
+import LoadingContent from '../../common/LoadingContent';
+import ErrorContent from '../../common/ErrorContent';
+import { Status } from '../../utils/constants';
 
-const PKIBindModal = () => {
+const PKIBindModal = ({ onSuccess }) => {
     const dispatch = useDispatch();
+    const { operationStatus } = useSelector(state => state.plugin);
 
     const [step, setStep] = useState(2);
+
+    const handleCorrectNotDefaultPinCode = () => {
+        setStep(5);
+        dispatch(bindPki(onSuccess));
+    }
 
     const getTitle = () => {
         if (step === 2) return 'Выберите Рутокен';
@@ -20,14 +30,11 @@ const PKIBindModal = () => {
 
     const renderBody = () => {
         if (step === 2) return <PKISelectDevice onSelect={() => setStep(3)} />;
-        if (step === 3) return <PKIEnterPinCode onSuccess={(isDefaultPin) => isDefaultPin ? setStep(4) : generateCertRequest()}/>;
-        if (step === 4) return <PKIChangePinCode onSuccess={() => generateCertRequest()} />;
-        if (step === -1) return 'In develop...' //TOOD Delete
-    }
+        if (step === 3) return <PKIEnterPinCode onSuccess={(isDefaultPin) => isDefaultPin ? setStep(4) : handleCorrectNotDefaultPinCode()}/>;
+        if (step === 4) return <PKIChangePinCode onSuccess={() => handleCorrectNotDefaultPinCode()} />;
 
-    const generateCertRequest = () => {
-        //TODO
-        setStep(-1);
+        if (step === 5 && operationStatus === Status.Loading) return <LoadingContent />;
+        if (step === 5 && operationStatus === Status.Error) return <ErrorContent />;
     }
 
     return (

@@ -31,14 +31,14 @@ const setTotpParams = (params) => ({
     payload: params
 });
 
-const setPluginLoaded = (plugin) => ({
-    type: 'SET_PLUGIN_LOADED',
-    payload: plugin
+const setPluginLoadStart = () => ({
+    type: 'SET_PLUGIN_LOAD_START',
+    payload: null
 });
 
-const setPluginLoading = () => ({
-    type: 'SET_PLUGIN_LOADING',
-    payload: null
+const setPluginLoadSuccess = (plugin) => ({
+    type: 'SET_PLUGIN_LOAD_SUCCESS',
+    payload: plugin
 });
 
 const setPluginLoadError = (error) => ({
@@ -46,22 +46,27 @@ const setPluginLoadError = (error) => ({
     payload: error
 });
 
-const setPKIDevicesLoaded = (devices) => ({
-    type: 'SET_PKI_DEVICES_LOADED',
-    payload: devices
-});
-
-const setPKIDevicesLoading = () => ({
-    type: 'SET_PKI_DEVICES_LOADING',
+const setPluginOperationStart = () => ({
+    type: 'SET_PLUGIN_OPERATION_START',
     payload: null
 });
 
-const setPKIDevicesLoadError = (error) => ({
-    type: 'SET_PKI_DEVICES_LOAD_ERROR',
+const setPluginOperationSuccess = () => ({
+    type: 'SET_PLUGIN_OPERATION_SUCCESS',
+    payload: null
+});
+
+const setPluginOperationError = (error) => ({
+    type: 'SET_PLUGIN_OPERATION_ERROR',
     payload: error
 });
 
-const setPKIAuthData = (deviceId, certId = null) => ({
+const setPluginDevicesLoadSuccess = (devices) => ({
+    type: 'SET_PLUGIN_DEVICES_LOAD_SUCCESS',
+    payload: devices
+});
+
+const setPkiAuthData = (deviceId, certId = null) => ({
     type: 'SET_PKI_AUTH_DATA',
     payload: {
         deviceId,
@@ -76,11 +81,12 @@ export {
     showModal,
     hideModal,
     setTotpParams,
-    setPluginLoaded,
-    setPluginLoading,
+    setPluginLoadStart,
+    setPluginLoadSuccess,
     setPluginLoadError,
-    setPKIDevicesLoaded,
-    setPKIDevicesLoading,
-    setPKIDevicesLoadError,
-    setPKIAuthData,
+    setPluginOperationStart,
+    setPluginOperationSuccess,
+    setPluginOperationError,
+    setPluginDevicesLoadSuccess,
+    setPkiAuthData,
 }
