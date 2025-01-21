@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Cms;
+using Org.BouncyCastle.Crypto.Digests;
+using Org.BouncyCastle.Crypto.Signers;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
 using RutokenTotpFido2Demo.Entities;
 using RutokenTotpFido2Demo.Exceptions;
@@ -52,12 +55,6 @@ namespace RutokenTotpFido2Demo.Services.Rutoken
             return result.ToString();
         }
 
-        public byte[] VerifySignature(CmsSignedData cms)
-        {
-            // TODO
-            return new byte[] { };
-        }
-
         public async Task<RutokenCert?> GetCertById(string certId)
         {
             return await _dbContext.RutokenCerts.FirstOrDefaultAsync(x => x.Id == certId);   
@@ -86,26 +83,38 @@ namespace RutokenTotpFido2Demo.Services.Rutoken
 
         public async Task<int> VerifyLoginRequest(CmsRequestDTO cmsRequest, byte[] originalString)
         {
-            //var cms = _rutokenService.GetCMS(loginRequest.Cms);
+            var cms = GetCMS(cmsRequest.Cms);
+            var cert = await GetCertById(cmsRequest.CertId)
+                ?? throw new RTFDException("Сертификат не найден");
 
             byte[] randomArrayFromCms;
 
-            try
-            {
-                //randomArrayFromCms = _rutokenService.VerifySignature(cms);
-            }
-            catch (Exception err)
-            {
-                throw new RTFDException("Ошибка в проверке подлинности подписи");
-            }
-
-            // TODO
-            //if (!randomArrayFromSession.SequenceEqual(randomArrayFromCms)) return BadRequest();
-            var cert = await GetCertById(cmsRequest.CertId) ?? throw new RTFDException("Сертификат не найден");
+            VerifySignature(cms, originalString, cert.PublicKey);
 
             await UpdateCertLastLoginDate(cmsRequest.CertId);
 
             return cert.UserId;
+        }
+
+        public void VerifySignature(CmsSignedData cms, byte[] originalData, string publicKeyInfoBase64)
+        {
+            var signer = new Gost3410DigestSigner(new ECGost3410Signer(), new Gost3411_2012_256Digest());
+
+            AsymmetricKeyParameter publicKeyParameter = PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKeyInfoBase64));
+
+            var signers = cms.GetSignerInfos();
+
+            foreach (var s in signers.GetSigners())
+            {
+                signer.Init(false, publicKeyParameter);
+                signer.BlockUpdate(originalData, 0, originalData.Length);
+                var result = signer.VerifySignature(s.GetSignature());
+
+                if (!result)
+                {
+                    throw new RTFDException("Ошибка в проверке подлинности подписи");
+                }
+            }
         }
 
         public async Task Delete(int userId, string certId)
