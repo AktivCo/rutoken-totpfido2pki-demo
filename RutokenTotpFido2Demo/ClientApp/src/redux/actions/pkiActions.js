@@ -14,6 +14,15 @@ import axios from 'axios';
 import { getUserInfo } from '.';
 import { getRutokenModelName } from '../../utils/getRutokenModelName';
 
+const hexToBigIntString = (hexString) => {
+    const hex = hexString.replaceAll(':', '');
+    if (hex.length % 2) { hex = '0' + hex; }
+
+    const bn = BigInt('0x' + hex);
+
+    return bn.toString(10);
+}
+
 export const loadPlugin = (rethrow = true) => {
     return (dispatch, getState) => {
         const plugin = getState().plugin.instance;
@@ -65,11 +74,14 @@ export const getPkiDevices = () => {
                                     .then((certIds) => {
                                         return Promise.all(certIds.map((certId) =>
                                             plugin.parseCertificate(deviceId, certId)
-                                                .then((certificate) => ({
+                                                .then((certificate) => {
+                                                  return  {
                                                     ...certificate,
                                                     certId: certId,
+                                                    serial: hexToBigIntString(certificate.serialNumber),
                                                     subjectProp: Object.assign({}, ...certificate.subject.map(is => ({ [is.rdn]: is.value }))),
-                                                }))
+                                                }
+                                            })
                                         ))
                                     })
                                     .then((certs) => ({ ...device, certs }))
@@ -77,16 +89,16 @@ export const getPkiDevices = () => {
                         })
                     ))
                     .then(devices => {
-                        const certsIds = devices.map(device => device.certs.map(cert => cert.certId)).flat(1);
-                        return axios.post('/pki/certs', certsIds)
+                        const serialNumbers = devices.map(device => device.certs.map(cert => cert.serial)).flat(1);
+                        return axios.post('/pki/certs', serialNumbers)
                             .then(({ data: dbCerts }) => {
                                 return devices.map(device => ({
                                     ...device, 
                                     certs: device.certs
-                                        .filter(cert => dbCerts[cert.certId])
+                                        .filter(cert => dbCerts.hasOwnProperty(cert.serial))
                                         .map(cert => ({
                                             ...cert,
-                                            lastLoginDate: dbCerts[cert.certId]?.lastLoginDate ?? null
+                                            lastLoginDate: dbCerts[cert.serial]
                                         }))
                                         .toSorted((a, b) => new Date(b.lastLoginDate) - new Date(a.lastLoginDate))
                                 }))
@@ -115,13 +127,7 @@ export const loginByCert = () => {
         
                         return plugin.sign(deviceId, certId, random, plugin.DATA_FORMAT_PLAIN, options);
                     })
-                    .then(sign => {
-                        const certLoginModel = {
-                            cms: sign,
-                            certId: certId
-                        };
-                        return axios.post('/pki/login', certLoginModel);
-                    })
+                    .then(cms => axios.post('/pki/login', {cms} ))
                     .then(() => dispatch(setLoginState(true)))
                     .then(() => dispatch(setPluginOperationSuccess()))
                     .catch((error) => dispatch(setPluginOperationError(error)));
@@ -198,9 +204,9 @@ export const bindPki = (onSuccess) => {
     }
 };
 
-export const deletePki = (id) => {
+export const deletePki = (certSerial) => {
     return async (dispatch) => {
-        await axios.delete(`pki/certs/${id}`);
+        await axios.delete(`pki/certs/${certSerial}`);
         return dispatch(getUserInfo());
     }
 }

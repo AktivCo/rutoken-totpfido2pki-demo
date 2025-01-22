@@ -17,34 +17,32 @@ const PKIDevices = () => {
         if (devices.length === 0) dispatch(getPkiDevices());
     }, []);
 
-    const showDeleteDeviceModal = (id) => {
+    const showDeleteDeviceModal = (serial) => {
         dispatch(showModal(DeleteDeviceModal, {
             title: 'Удаление устройства Рутокен',
             body: <div className="my-3_5rem text-center">Вы уверены, что хотите удалить Рутокен устройство?</div>,
             action: deleteDevice,
-            id: id
+            serial
         }));
     }
 
-    const deleteDevice = (id) => {
-        dispatch(deletePki(id))
+    const deleteDevice = (certSerial) => {
+        dispatch(deletePki(certSerial))
             .then(() => dispatch(hideModal()));
     }
 
     const getBindedDevices = () => {
         const bindedDevices = [];
-
+        
         for (let device of devices) {
             for (let cert of device.certs) {
-                if (pkiKeys.some(pkiKey => pkiKey.id === cert.certId)) {
-                    bindedDevices.push({
-                        serial: device.serial,
-                        name: cert.subjectProp.commonName,
-                        modelName: device.modelName,
-                        certId: cert.certId,
-                        validNotAfter: cert.validNotAfter,
-                    });
-                }
+                bindedDevices.push({
+                    serial: device.serial,
+                    name: cert.subjectProp.commonName,
+                    modelName: device.modelName,
+                    certId: cert.certId,
+                    validNotAfter: cert.validNotAfter,
+                });
             }
         }
 
@@ -64,7 +62,7 @@ const PKIDevices = () => {
                         <span>{device.modelName}</span>
                         <span className="text-charcoal opacity-0_68">{device.serial}</span>
                     </div>
-                    <div className="bucket-block ms-auto" onClick={() => showDeleteDeviceModal(device.certId)}>
+                    <div className="bucket-block ms-auto" onClick={() => showDeleteDeviceModal(device.serial)}>
                         <div className="bucket-icon cursor-pointer">
                             <BucketIcon></BucketIcon>
                         </div>

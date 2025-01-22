@@ -8,5 +8,5 @@ public class User
     public DateTime RegisterDate { get; set; }
     public ICollection<TotpKey> TotpKeys { get; } = new List<TotpKey>();
     public ICollection<FidoKey> FidoKeys { get; } = new List<FidoKey>();
-    public ICollection<RutokenCert> RutokenCerts { get; } = new List<RutokenCert>();
+    public ICollection<CertificateData> CertificateData { get; } = new List<CertificateData>();
 }

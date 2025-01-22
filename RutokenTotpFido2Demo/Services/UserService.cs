@@ -113,7 +113,7 @@ public class UserService
                     UserName = x.UserName,
                     FidoKeys = x.FidoKeys,
                     TotpKeys = x.TotpKeys,
-                    PkiKeys = x.RutokenCerts,
+                    PkiKeys = x.CertificateData,
                     RegisterDate = x.RegisterDate
                 })
                 .FirstOrDefaultAsync();

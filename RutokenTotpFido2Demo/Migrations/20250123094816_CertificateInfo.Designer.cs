@@ -12,8 +12,8 @@ using RutokenTotpFido2Demo;
 namespace RutokenTotpFido2Demo.Migrations
 {
     [DbContext(typeof(EfDbContext))]
-    [Migration("20241227132632_AddRutokenCerts")]
-    partial class AddRutokenCerts
+    [Migration("20250123094816_CertificateInfo")]
+    partial class CertificateInfo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,35 @@ namespace RutokenTotpFido2Demo.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("RutokenTotpFido2Demo.Entities.CertificateData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("LastLoginDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PublicKeyInfo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CertificateData");
+                });
 
             modelBuilder.Entity("RutokenTotpFido2Demo.Entities.FidoKey", b =>
                 {
@@ -65,28 +94,6 @@ namespace RutokenTotpFido2Demo.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("FidoKeys");
-                });
-
-            modelBuilder.Entity("RutokenTotpFido2Demo.Entities.RutokenCert", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("LastLoginDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("PublicKey")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RutokenCerts");
                 });
 
             modelBuilder.Entity("RutokenTotpFido2Demo.Entities.TotpKey", b =>
@@ -168,10 +175,10 @@ namespace RutokenTotpFido2Demo.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RutokenTotpFido2Demo.Entities.FidoKey", b =>
+            modelBuilder.Entity("RutokenTotpFido2Demo.Entities.CertificateData", b =>
                 {
                     b.HasOne("RutokenTotpFido2Demo.Entities.User", "User")
-                        .WithMany("FidoKeys")
+                        .WithMany("CertificateData")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -179,10 +186,10 @@ namespace RutokenTotpFido2Demo.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RutokenTotpFido2Demo.Entities.RutokenCert", b =>
+            modelBuilder.Entity("RutokenTotpFido2Demo.Entities.FidoKey", b =>
                 {
                     b.HasOne("RutokenTotpFido2Demo.Entities.User", "User")
-                        .WithMany("RutokenCerts")
+                        .WithMany("FidoKeys")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -219,9 +226,9 @@ namespace RutokenTotpFido2Demo.Migrations
 
             modelBuilder.Entity("RutokenTotpFido2Demo.Entities.User", b =>
                 {
-                    b.Navigation("FidoKeys");
+                    b.Navigation("CertificateData");
 
-                    b.Navigation("RutokenCerts");
+                    b.Navigation("FidoKeys");
 
                     b.Navigation("TotpKeys");
                 });

@@ -1,15 +1,16 @@
 ﻿namespace RutokenTotpFido2Demo.Entities
 {
-    public class RutokenCert
+    public class CertificateData
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
+        public string SerialNumber { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
 
         /// <summary>
-        /// Full public key info as base64 string
+        /// Full bc subject public key info as base64 string
         /// </summary>
-        public string PublicKey { get; set; }
+        public string PublicKeyInfo { get; set; }
         public DateTime? LastLoginDate { get; set; }
     }
 }

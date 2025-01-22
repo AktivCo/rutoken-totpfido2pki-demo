@@ -8,6 +8,9 @@ using RutokenTotpFido2Demo.Entities;
 using RutokenTotpFido2Demo.Exceptions;
 using RutokenTotpFido2Demo.Models;
 using System.Text;
+using Org.BouncyCastle.X509;
+using Org.BouncyCastle.Asn1.X509;
+using Org.BouncyCastle.Asn1;
 
 namespace RutokenTotpFido2Demo.Services.Rutoken
 {
@@ -55,75 +58,76 @@ namespace RutokenTotpFido2Demo.Services.Rutoken
             return result.ToString();
         }
 
-        public async Task<RutokenCert?> GetCertById(string certId)
+        public async Task<CertificateData> GetCertBySerialNumber(string serial)
         {
-            return await _dbContext.RutokenCerts.FirstOrDefaultAsync(x => x.Id == certId);   
+            return await _dbContext.CertificateData
+                .FirstOrDefaultAsync(x => x.SerialNumber == serial)
+                ?? throw new RTFDException("Сертификат не найден");
         }
 
-        public async Task UpdateCertLastLoginDate(string certId)
+        public async Task UpdateCertLastLoginDate(string serial)
         {
-            var cert = await _dbContext.RutokenCerts.FirstOrDefaultAsync(x => x.Id == certId)
+            var cert = await _dbContext.CertificateData.FirstOrDefaultAsync(x => x.SerialNumber == serial)
                 ?? throw new RTFDException("Сертификат не найден");
 
             cert.LastLoginDate = DateTime.UtcNow;
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Dictionary<string, CertDTO>> GetCertsByIds(List<string> certsIds)
+        public async Task<Dictionary<string, DateTime?>> GetCertsByCertSerialNumber(List<string> certSerials)
         {
-            return await _dbContext.RutokenCerts
-                .Where(x => certsIds.Contains(x.Id))
-                .Select(x => new CertDTO
-                {
-                    CertId = x.Id,
-                    LastLoginDate = x.LastLoginDate
-                })
-                .ToDictionaryAsync(x => x.CertId, x => x);
+            return await _dbContext.CertificateData
+                .Where(x => certSerials.Contains(x.SerialNumber))
+                .ToDictionaryAsync(x => x.SerialNumber, x => x.LastLoginDate);
         }
 
         public async Task<int> VerifyLoginRequest(CmsRequestDTO cmsRequest, byte[] originalString)
         {
             var cms = GetCMS(cmsRequest.Cms);
-            var cert = await GetCertById(cmsRequest.CertId)
-                ?? throw new RTFDException("Сертификат не найден");
 
             byte[] randomArrayFromCms;
 
-            VerifySignature(cms, originalString, cert.PublicKey);
+            var cert = await VerifySignature(cms, originalString);
 
-            await UpdateCertLastLoginDate(cmsRequest.CertId);
+            await UpdateCertLastLoginDate(cert.SerialNumber);
 
             return cert.UserId;
         }
 
-        public void VerifySignature(CmsSignedData cms, byte[] originalData, string publicKeyInfoBase64)
+        public async Task<CertificateData> VerifySignature(CmsSignedData cms, byte[] originalData)
         {
-            var signer = new Gost3410DigestSigner(new ECGost3410Signer(), new Gost3411_2012_256Digest());
-
-            AsymmetricKeyParameter publicKeyParameter = PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKeyInfoBase64));
+            var gostSigner = new Gost3410DigestSigner(new ECGost3410Signer(), new Gost3411_2012_256Digest());
 
             var signers = cms.GetSignerInfos();
 
-            foreach (var s in signers.GetSigners())
-            {
-                signer.Init(false, publicKeyParameter);
-                signer.BlockUpdate(originalData, 0, originalData.Length);
-                var result = signer.VerifySignature(s.GetSignature());
+            if(signers.Count != 1)
+                throw new RTFDException("Ошибка в проверке подлинности подписи");
 
-                if (!result)
-                {
-                    throw new RTFDException("Ошибка в проверке подлинности подписи");
-                }
+            var first = signers.GetSigners().First();
+
+            var cert = await GetCertBySerialNumber(first.SignerID.SerialNumber.ToString());
+
+            AsymmetricKeyParameter publicKeyParameter = PublicKeyFactory.CreateKey(Convert.FromBase64String(cert.PublicKeyInfo));
+       
+            gostSigner.Init(false, publicKeyParameter);
+            gostSigner.BlockUpdate(originalData, 0, originalData.Length);
+            bool result = gostSigner.VerifySignature(first.GetSignature());
+
+            if (!result)
+            {
+                throw new RTFDException("Ошибка в проверке подлинности подписи");
             }
+
+            return cert;
         }
 
-        public async Task Delete(int userId, string certId)
+        public async Task Delete(int userId, string certSerial)
         {
-            var cert = await _dbContext.RutokenCerts
-                .FirstOrDefaultAsync(cert => cert.UserId == userId && cert.Id == certId)
+            var cert = await _dbContext.CertificateData
+                .FirstOrDefaultAsync(cert => cert.UserId == userId && cert.SerialNumber == certSerial)
                     ?? throw new RTFDException("Сертификат не найден");
 
-            _dbContext.RutokenCerts.Remove(cert);
+            _dbContext.CertificateData.Remove(cert);
             await _dbContext.SaveChangesAsync();
         }
     }

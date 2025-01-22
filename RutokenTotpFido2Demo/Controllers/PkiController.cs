@@ -41,18 +41,18 @@ public class PkiController : ControllerBase
 
     [HttpPost]
     [Route("certs")]
-    public async Task<IActionResult> GetCertsByIds(List<string> certsIds)
+    public async Task<IActionResult> GetCertsByIds(List<string> certSerials)
     {
-        var certs = await _pkiService.GetCertsByIds(certsIds);
+        var certs = await _pkiService.GetCertsByCertSerialNumber(certSerials);
         return Ok(certs);
     }
 
     [HttpDelete]
-    [Route("certs/{certId}")]
+    [Route("certs/{certSerial}")]
     [Authorize(Policy = "twoFactor")]
-    public async Task<IActionResult> Delete(string certId)
+    public async Task<IActionResult> Delete(string certSerial)
     {
-        await _pkiService.Delete(HttpContext.User.UserId(), certId);
+        await _pkiService.Delete(HttpContext.User.UserId(), certSerial);
         return Ok();
     }
 }

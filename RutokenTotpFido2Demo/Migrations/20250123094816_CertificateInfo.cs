@@ -1,30 +1,33 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace RutokenTotpFido2Demo.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRutokenCerts : Migration
+    public partial class CertificateInfo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "RutokenCerts",
+                name: "CertificateData",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SerialNumber = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    PublicKey = table.Column<string>(type: "text", nullable: false),
+                    PublicKeyInfo = table.Column<string>(type: "text", nullable: false),
                     LastLoginDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RutokenCerts", x => x.Id);
+                    table.PrimaryKey("PK_CertificateData", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RutokenCerts_Users_UserId",
+                        name: "FK_CertificateData_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -32,8 +35,8 @@ namespace RutokenTotpFido2Demo.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RutokenCerts_UserId",
-                table: "RutokenCerts",
+                name: "IX_CertificateData_UserId",
+                table: "CertificateData",
                 column: "UserId");
         }
 
@@ -41,7 +44,7 @@ namespace RutokenTotpFido2Demo.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RutokenCerts");
+                name: "CertificateData");
         }
     }
 }

@@ -3,6 +3,5 @@
     public class CmsRequestDTO
     {
         public string Cms { get; set; }
-        public string CertId { get; set; }
     }
 }

@@ -34,7 +34,7 @@ public class EfDbContext : DbContext
             .HasKey(el => el.Id);
 
         modelBuilder
-            .Entity<RutokenCert>()
+            .Entity<CertificateData>()
             .HasKey(el => el.Id);
 
         modelBuilder.Entity<User>()
@@ -50,7 +50,7 @@ public class EfDbContext : DbContext
             .IsRequired();
 
         modelBuilder.Entity<User>()
-            .HasMany(e => e.RutokenCerts)
+            .HasMany(e => e.CertificateData)
             .WithOne(e => e.User)
             .HasForeignKey(e => e.UserId)
             .IsRequired();
@@ -61,5 +61,5 @@ public class EfDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<TotpKey> TotpKeys { get; set; }
     public DbSet<FidoKey> FidoKeys { get; set; }
-    public DbSet<RutokenCert> RutokenCerts { get; set; }
+    public DbSet<CertificateData> CertificateData { get; set; }
 }

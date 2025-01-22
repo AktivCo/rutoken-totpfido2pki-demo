@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import ModalComponent from "../modal/ModalComponent";
 import { hideModal } from "../redux/actionCreators";
 
-const DeleteDeviceModal = ({title, body, action, id}) => {
+const DeleteDeviceModal = ({title, body, action, serial}) => {
     const dispatch = useDispatch();
 
     const close = () => {
@@ -12,7 +12,7 @@ const DeleteDeviceModal = ({title, body, action, id}) => {
     }
 
     const confirm = () => {
-        action(id);
+        action(serial);
     }
 
     return (
