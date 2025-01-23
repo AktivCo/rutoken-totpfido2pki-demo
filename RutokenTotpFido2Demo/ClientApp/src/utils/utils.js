@@ -85,13 +85,10 @@ const dateToLocaleWithoutTime = (dateStr) => {
     return new Date(dateStr).toLocaleString('ru', dateWithoutTimeOptions);
 };
 
-const checkOnlyDigit = (value) => { return /^\d*$/.test(value) }
-
 
 export { 
     coerceToArrayBuffer,
     coerceToBase64Url,
     dateToLocale,
-    dateToLocaleWithoutTime,
-    checkOnlyDigit
+    dateToLocaleWithoutTime
 } 

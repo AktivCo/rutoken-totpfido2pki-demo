@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import CommonButton from '../../common/CommonButton';
-import { checkOnlyDigit } from '../../utils/utils';
 import PasswordInput from '../../controls/PasswordInput';
 import PKIPinCodeBlocked from './PKIPinCodeBlocked';
 import ErrorContent from '../../common/ErrorContent';
@@ -18,9 +17,7 @@ const PKIEnterPinCode = ({ onSuccess }) => {
     const handlePinCodeChange = (e) => {
         const inputValue = e.target.value;
 
-        if (checkOnlyDigit(inputValue)) {
-            setPinCode(inputValue);
-        }
+        setPinCode(inputValue);
     };
 
     const getPinRetriesLeft = () => {
@@ -74,7 +71,7 @@ const PKIEnterPinCode = ({ onSuccess }) => {
     return (
         <div className='d-flex flex-column gap-3'>
             <PasswordInput
-                maxLength='20'
+                maxLength='32'
                 className='form-control pe-2_25rem'
                 placeholder='PIN-код'
                 value={pinCode}

@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 import CommonButton from '../../common/CommonButton';
 import PasswordInput from '../../controls/PasswordInput';
-import { checkOnlyDigit } from '../../utils/utils';
 import ErrorContent from '../../common/ErrorContent';
 
 const DEFAULT_PIN_CODE = '12345678';
@@ -21,10 +20,8 @@ const PKIChangePinCode = ({ onSuccess }) => {
     const handlePinChange = (e, setCallback, validateCallback) => {
         const value = e.target.value;
 
-        if (checkOnlyDigit(value)) {
-            setCallback(value);
-            validateCallback(value);
-        }
+        setCallback(value);
+        validateCallback(value);
     }
 
     const validateNewPin = (value) => {
@@ -70,7 +67,7 @@ const PKIChangePinCode = ({ onSuccess }) => {
     return (
         <div className='d-flex flex-column gap-0_25rem'>
             <PasswordInput
-                maxLength='10'
+                maxLength='32'
                 className='form-control pe-2_25rem w-100' 
                 placeholder='PIN-код'
                 value={newPin}
@@ -80,7 +77,7 @@ const PKIChangePinCode = ({ onSuccess }) => {
                 feedback={errorNewPin}
             />
             <PasswordInput
-                maxLength='10'
+                maxLength='32'
                 className='form-control pe-2_25rem w-100' 
                 placeholder='Повторите PIN-код'
                 value={repeatPin}
