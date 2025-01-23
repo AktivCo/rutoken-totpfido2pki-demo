@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RutokenTotpFido2Demo;
 using RutokenTotpFido2Demo.Exceptions;
 using RutokenTotpFido2Demo.Services;
-using RutokenTotpFido2Demo.Services.Rutoken;
+using RutokenTotpFido2Demo.Services.Pki;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,6 +61,12 @@ builder.Services.AddScoped<TotpService>();
 builder.Services.AddScoped<PkiService>();
 
 builder.Services.AddHostedService<RemoveOldUsersHostedService>();
+
+builder.Services
+    .AddHttpClient<ICAApiService, CAApiService>(httpClient =>
+    {
+        httpClient.BaseAddress = builder.Configuration.GetValue<Uri>("CAConfig:URL");
+    });
 
 var app = builder.Build();
 using var scope = app.Services.CreateScope();

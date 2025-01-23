@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Utilities.IO.Pem;
+using Org.BouncyCastle.X509;
 using RutokenTotpFido2Demo.Extensions;
 using RutokenTotpFido2Demo.Models;
-using RutokenTotpFido2Demo.Services.Rutoken;
+using RutokenTotpFido2Demo.Services.Pki;
 
 namespace RutokenTotpFido2Demo.Controllers;
 
@@ -16,8 +18,8 @@ public class PkiController : ControllerBase
         _pkiService = pkiService;
     }
 
-    [Route("login")]
     [HttpPost]
+    [Route("login")]
     public async Task<IActionResult> LoginByCert([FromBody] CmsRequestDTO loginRequest)
     {
         var randomArrayFromSession = HttpContext.Session.Get("RandomString");
@@ -27,6 +29,17 @@ public class PkiController : ControllerBase
 
         await HttpContext.SignInTwoFactorAsync(userId);
         return Ok();
+    }
+                                       
+    [HttpPost]
+    [Route("register")]
+    public async Task<IActionResult> Register([FromBody] PemContainerDTO certificateRequest)
+    {
+        var userId = User.UserId();
+
+        var certPem = await _pkiService.IssueCertificate(certificateRequest, userId);
+
+        return Ok(certPem);
     }
 
     [HttpGet]

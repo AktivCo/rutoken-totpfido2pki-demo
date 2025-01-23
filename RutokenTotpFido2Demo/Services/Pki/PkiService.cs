@@ -12,16 +12,36 @@ using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Asn1;
 
-namespace RutokenTotpFido2Demo.Services.Rutoken
+namespace RutokenTotpFido2Demo.Services.Pki
 {
 
     public class PkiService
     {
         private readonly EfDbContext _dbContext;
 
-        public PkiService(EfDbContext dbContext)
+        private readonly ICAApiService _caApiService;
+
+        public PkiService(EfDbContext dbContext, ICAApiService caApiService)
         {
             _dbContext = dbContext;
+            _caApiService = caApiService;
+        }
+
+        public async Task<string> IssueCertificate(PemContainerDTO certificateRequest, int userId)
+        {
+            var pemCertContainer = await _caApiService.CreateCertAsync(certificateRequest);
+
+            var cert = PemHelper.FromPem<X509Certificate>(pemCertContainer.Pem);
+
+            _dbContext.CertificateData.Add(new CertificateData
+            {
+                SerialNumber = cert.SerialNumber.ToString(),
+                UserId = userId,
+                PublicKeyInfo = Convert.ToBase64String(cert.CertificateStructure.SubjectPublicKeyInfo.GetEncoded())
+            });
+            await _dbContext.SaveChangesAsync();
+
+            return pemCertContainer.Pem;
         }
 
         public CmsSignedData GetCMS(string signature)
