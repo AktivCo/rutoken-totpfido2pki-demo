@@ -193,11 +193,12 @@ export const bindPki = (onSuccess) => {
                         return plugin.createPkcs10(deviceId, keyId, subject, extensions, options);
                     })
                     .then((pkcs10Request) => axios.post('/pki/register', { pem: pkcs10Request }))
-                    .then((cert) => plugin.importCertificate(deviceId, cert, plugin.CERT_CATEGORY_USER))
+                    .then((resp) => plugin.importCertificate(deviceId, resp.data, plugin.CERT_CATEGORY_USER))
                     .then((certId) => dispatch(setPkiAuthData(deviceId, certId)))
                     .then(() => dispatch(loginByCert()))
                     .then(() => dispatch(getUserInfo()))
                     .then(() => dispatch(setPluginOperationSuccess()))
+                    .then(() => dispatch(getPkiDevices()))
                     .then(onSuccess);
             })
             .catch((error) => dispatch(setPluginOperationError(error)));

@@ -40,7 +40,7 @@ const PKIDevices = () => {
                     serial: device.serial,
                     name: cert.subjectProp.commonName,
                     modelName: device.modelName,
-                    certId: cert.certId,
+                    certSerial: cert.serial,
                     validNotAfter: cert.validNotAfter,
                 });
             }
@@ -62,7 +62,7 @@ const PKIDevices = () => {
                         <span>{device.modelName}</span>
                         <span className="text-charcoal opacity-0_68">{device.serial}</span>
                     </div>
-                    <div className="bucket-block ms-auto" onClick={() => showDeleteDeviceModal(device.serial)}>
+                    <div className="bucket-block ms-auto" onClick={() => showDeleteDeviceModal(device.certSerial)}>
                         <div className="bucket-icon cursor-pointer">
                             <BucketIcon></BucketIcon>
                         </div>
