@@ -24,7 +24,7 @@ const RenderTwoFactor = ({fidoKeys, totpKeys, pkiKeys}) => {
     const getStatus = () => {
         if (fidoKeys.length) return 'Включена (Рутокен MFA)';
         if (totpKeys.length) return 'Включена (Рутокен OTP)';
-        if (pkiKeys.length) return 'Включена (Рутокен ЭЦП 3.0)';
+        if (pkiKeys.length) return 'Включена (Рутокен ЭЦП)';
         return 'Выключена';
     }
 

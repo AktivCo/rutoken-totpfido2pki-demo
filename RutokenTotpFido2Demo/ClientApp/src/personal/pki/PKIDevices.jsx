@@ -22,7 +22,7 @@ const PKIDevices = () => {
             title: 'Удаление устройства Рутокен',
             body: <div className="my-3_5rem text-center">Вы уверены, что хотите удалить Рутокен устройство?</div>,
             action: deleteDevice,
-            serial
+            id: serial
         }));
     }
 
@@ -36,13 +36,15 @@ const PKIDevices = () => {
         
         for (let device of devices) {
             for (let cert of device.certs) {
-                bindedDevices.push({
-                    serial: device.serial,
-                    name: cert.subjectProp.commonName,
-                    modelName: device.modelName,
-                    certSerial: cert.serial,
-                    validNotAfter: cert.validNotAfter,
-                });
+                if (pkiKeys.some(pkiKey => pkiKey.serialNumber === cert.serial)) {
+                    bindedDevices.push({
+                        serial: device.serial,
+                        name: cert.subjectProp.commonName,
+                        modelName: device.modelName,
+                        certSerial: cert.serial,
+                        validNotAfter: cert.validNotAfter,
+                    });
+                }
             }
         }
 

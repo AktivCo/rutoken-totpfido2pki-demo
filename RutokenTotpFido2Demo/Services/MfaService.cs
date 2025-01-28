@@ -224,7 +224,7 @@ public class MfaService
 
     public void ValidateLabelFidoKey(int userId, string label)
     {
-        var findFidoKey = _context.FidoKeys.FirstOrDefault(x => x.UserId == userId && x.Label.Equals(label));
+        var findFidoKey = _context.FidoKeys.FirstOrDefault(x => x.UserId == userId && x.Label.Equals(label.Trim()));
 
         var errorMsg = string.Empty;
         if (findFidoKey != null) errorMsg = "Ключ с таким названием уже создан";

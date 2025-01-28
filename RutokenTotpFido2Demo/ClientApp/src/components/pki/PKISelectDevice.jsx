@@ -41,7 +41,7 @@ const PKISelectDevice = ({ onSelect }) => {
                         <div className="d-flex gap-0_75rem">
                             <Rutoken3Image />
                             <div className="d-flex flex-column justify-content-center">
-                                <span className="fw-600 text-charcoal">Рутокен ЭЦП</span>
+                                <span className="fw-600 text-charcoal">{device.modelName}</span>
                                 <span className="text-charcoal opacity-0_68 fs-1rem">{device.serial}</span>
                             </div>
                         </div>
