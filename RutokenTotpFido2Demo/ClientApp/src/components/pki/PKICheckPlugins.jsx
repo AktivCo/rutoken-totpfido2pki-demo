@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NoInstalledPluginError } from "@aktivco-it/rutoken-plugin-bootstrap/src/supportError";
 import cn from 'classnames';
 import { loadPlugin } from "../../redux/actions/pkiActions";
+import { getExtensionDownloadLink, getPluginDownloadLink } from "./pluginDownloadLinks";
 
 const PKICheckPlugins = ({ onInstalled }) => {
     const dispatch = useDispatch();
@@ -27,7 +28,10 @@ const PKICheckPlugins = ({ onInstalled }) => {
     const isSomethingNotInstalled = loadError instanceof NoInstalledPluginError;
     const isExtensionNotInstalled = isSomethingNotInstalled && loadError.needExtension;
     const isPluginNotInstalled = isSomethingNotInstalled && !loadError.needExtension;
-    
+
+    const pluginLink = getPluginDownloadLink(loadError?.os?.name)
+    const extensionLink = getExtensionDownloadLink(loadError?.browser?.name)
+
     return (
         <div className='d-flex flex-column mb-3 gap-0_75rem '>
             <div className="d-flex flex-column border rounded p-4">
@@ -40,7 +44,7 @@ const PKICheckPlugins = ({ onInstalled }) => {
                 <span className="text-secondary mt-0_375rem">Расширение для браузера</span>
                 {
                     isExtensionNotInstalled &&
-                        <span>Установите <a href="https://chrome.google.com/webstore/detail/адаптер-рутокен-плагин/ohedcglhbbfdgaogjhcclacoccbagkjg" target="_blank" className="text-link mt-0_375rem">расширение</a> или убедитесь, что оно включено</span>
+                        <span>Установите <a href={extensionLink} target="_blank" className="text-link mt-0_375rem">расширение</a> или убедитесь, что оно включено</span>
                 }
                 
             </div>
@@ -54,7 +58,7 @@ const PKICheckPlugins = ({ onInstalled }) => {
                 <span className="text-secondary mt-0_375rem">Приложение для компьютера</span>
                 {
                     isPluginNotInstalled &&
-                        <span>Установите <a href="https://download.rutoken.ru/Rutoken_Plugin/Current/Windows/RutokenPlugin.msi" target="_blank" className="text-link mt-0_375rem">приложение</a></span>
+                        <span>Установите <a href={pluginLink} target="_blank" className="text-link mt-0_375rem">приложение</a></span>
                 }
             </div>
         </div>
