@@ -270,7 +270,7 @@ const loginPasswordLess = () => {
 
 const loginPki = () => {
     return (dispatch) => {
-        dispatch(setTwoFactorType("PKI"));
+        dispatch(setTwoFactorType("PKINoLoginBefore"));
     }
 }
 

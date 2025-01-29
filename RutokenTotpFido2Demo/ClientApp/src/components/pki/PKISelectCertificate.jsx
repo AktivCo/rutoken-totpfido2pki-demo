@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { dateToLocaleWithoutTime } from "../../utils/utils";
@@ -8,13 +8,24 @@ import { setPkiAuthData } from "../../redux/actionCreators";
 import PKINoDevicesFound from "./PKINoDevicesFound";
 import { Status } from "../../utils/constants";
 import ErrorContent from "../../common/ErrorContent";
+import { getUserInfo } from "../../redux/actions";
 
 const PKISelectCertificate = ({ onSelect }) => {
     const dispatch = useDispatch();
     const { operationStatus, devices } = useSelector(state => state.plugin);
+    const twoFactorType = useSelector(state => state.twoFactorType);
+    const userInfo = useSelector(state => state.userInfo);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         dispatch(getPkiDevices());
+
+        if (twoFactorType === "PKI") {
+            setIsLoading(true);
+            dispatch(getUserInfo())
+                .then(() => setIsLoading(false));
+        };
     }, []);
     
     const handleSelectCert = (device, certId) => {
@@ -40,7 +51,7 @@ const PKISelectCertificate = ({ onSelect }) => {
                 onClick={() => handleSelectCert(device, cert.certId)}
             >
                 {
-                    idx == 0 && !!cert.lastLoginDate &&
+                    idx === 0 && !!cert.lastLoginDate && twoFactorType === "PKINoLoginBefore" &&
                         <span className="text-surfie fw-bolder fs-1rem">Использовали ранее</span>
                 }
                 <div className="d-flex">
@@ -58,18 +69,38 @@ const PKISelectCertificate = ({ onSelect }) => {
         ))
     };
 
-    if (operationStatus === Status.Loading)
+    const getFilteredDevices = () => {
+        if (twoFactorType === "PKINoLoginBefore") return devices;
+
+        if (!userInfo) return [];
+
+        for (let device of devices) {
+            for (let pkiKey of userInfo.pkiKeys) {
+                const found = device.certs.find(cert => cert.serial === pkiKey.serialNumber)
+
+                if (found) {
+                    return [{ ...device, certs: [found]}];
+                }
+            }
+        }
+
+        return [];
+    }
+
+    if (operationStatus === Status.Loading || isLoading)
         return <LoadingContent />
 
     if (operationStatus === Status.Error)
         return <ErrorContent />
 
-    if (devices.length === 0)
-        return <PKINoDevicesFound />;
+    const filteredDevices = getFilteredDevices();
+
+    if (filteredDevices.length === 0)
+        return <PKINoDevicesFound {...(twoFactorType === "PKI" && {text: 'Не удалось найти устройство с соответствующим сертификатом'})} />;
 
     return (
         <div className="d-flex flex-column gap-4">
-            {devices.map((device) => (
+            {filteredDevices.map((device) => (
                 <div key={device.serial} className="w-100">
                     <div className="d-flex justify-content-between mb-2">
                         <span className="text-charcoal fw-600">{device.modelName}</span>

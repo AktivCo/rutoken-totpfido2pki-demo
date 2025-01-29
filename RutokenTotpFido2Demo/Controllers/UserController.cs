@@ -41,7 +41,7 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("info")]
-    [Authorize(Policy = "twoFactor")]
+    [Authorize]
     public async Task<IActionResult> Info()
     {
         var userInfo = await _userService.GetUserInfo(User.UserId());
