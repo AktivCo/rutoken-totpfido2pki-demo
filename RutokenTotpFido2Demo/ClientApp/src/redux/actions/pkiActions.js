@@ -68,8 +68,8 @@ export const getPkiDevices = () => {
                                     isPinCached: tokenInfos[4].isPinCached
                                 };
 
-                                const modelName = getRutokenModelName(device, plugin);
-                                return {...device, modelName };    
+                                const modelInfo = getRutokenModelName(device, plugin);
+                                return {...device, ...modelInfo };    
                             })
                             .then((device) => {
                                 return plugin.enumerateCertificates(device.deviceId, plugin.CERT_CATEGORY_USER)

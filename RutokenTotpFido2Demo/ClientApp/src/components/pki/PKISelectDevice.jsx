@@ -37,12 +37,17 @@ const PKISelectDevice = ({ onSelect }) => {
         <div className="d-flex flex-column gap-0_75rem w-100">
             {
                 devices.map(device =>
-                    <div key={device.serial} className="border rounded p-3 cursor-pointer" onClick={() => handleSelect(device)}>
+                    <div key={device.serial}
+                        className={`border rounded p-3 ${device.isSupported ? 'cursor-pointer' : 'cursor-disabled'} `} 
+                        onClick={() => device.isSupported ? handleSelect(device) : null}>
                         <div className="d-flex gap-0_75rem">
                             <Rutoken3Image />
                             <div className="d-flex flex-column justify-content-center">
                                 <span className="fw-600 text-charcoal">{device.modelName}</span>
                                 <span className="text-charcoal opacity-0_68 fs-1rem">{device.serial}</span>
+                                {!device.isSupported &&
+                                    <span className="text-orange fs-0_875rem">Не поддерживается</span>
+                                }
                             </div>
                         </div>
                     </div>

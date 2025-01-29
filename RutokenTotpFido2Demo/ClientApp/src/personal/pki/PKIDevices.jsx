@@ -11,6 +11,7 @@ import { dateToLocaleWithoutTime } from "../../utils/utils";
 const PKIDevices = () => {
     const dispatch = useDispatch();
     const { operationStatus, devices } = useSelector(state => state.plugin);
+    const { pkiKeys } = useSelector(state => state.userInfo);
 
     useEffect(() => {
         if (devices.length === 0) dispatch(getPkiDevices());

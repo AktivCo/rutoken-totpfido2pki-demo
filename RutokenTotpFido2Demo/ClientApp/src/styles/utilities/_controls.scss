@@ -16,6 +16,10 @@
   cursor: pointer;
 }
 
+.cursor-disabled {
+  cursor: not-allowed;
+}
+
 .modal-footer-link {
   @include font-bolder;
   color: $surfie-green;

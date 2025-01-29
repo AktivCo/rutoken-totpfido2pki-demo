@@ -22,13 +22,16 @@ const PKISelectCertificate = ({ onSelect }) => {
         onSelect?.(device);
     }
 
-    const renderNoCertsFound = () => (
-        <span className="fs-1rem text-charcoal opacity-0_68 text-center">Нет сертификатов</span>
+    const renderDeviceText = (text) => (
+        <span className="fs-1rem text-charcoal opacity-0_68 text-center">{text}</span>
     );
 
     const renderCerts = (device) => {
+        if (!device.isSupported)
+            return renderDeviceText("Устройство не поддерживается");
+
         if (device.certs.length === 0)
-            return renderNoCertsFound();
+            return renderDeviceText("Нет сертификатов");
 
         return device.certs.map((cert, idx) => (
             <div

@@ -95,6 +95,7 @@ function knownDeviceModels(plugin) {
         };
 
         this.name = "Рутокен ЭЦП 3.0";
+        this.isSupported = true;
     }
     RutokenEcp3_0.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcp3_0());
@@ -109,6 +110,7 @@ function knownDeviceModels(plugin) {
         this.speed = 3;
 
         this.name = "Рутокен ЭЦП 2.0";
+        this.isSupported = true;
     }
     RutokenEcp2_0.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcp2_0());
@@ -121,7 +123,8 @@ function knownDeviceModels(plugin) {
             "flashDrive": true
         };
 
-        this.name = "Рутокен ЭЦП 2.0 Flash"
+        this.name = "Рутокен ЭЦП 2.0 Flash";
+        this.isSupported = true;
     }
     RutokenEcpFlash2_0.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcpFlash2_0());
@@ -135,7 +138,8 @@ function knownDeviceModels(plugin) {
             "visualization": false
         };
 
-        this.name = "Рутокен ЭЦП 2.0"
+        this.name = "Рутокен ЭЦП 2.0";
+        this.isSupported = true;
     }
     RutokenEcpTouch2_0.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcpTouch2_0());
@@ -150,7 +154,8 @@ function knownDeviceModels(plugin) {
             "visualization": false
         };
 
-        this.name = "Рутокен ЭЦП 2.0 Flash"
+        this.name = "Рутокен ЭЦП 2.0 Flash";
+        this.isSupported = true;
     }
     RutokenEcpFlashTouch2_0.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcpFlashTouch2_0());
@@ -164,7 +169,8 @@ function knownDeviceModels(plugin) {
 
         this.speed = 1;
 
-        this.name = "Рутокен ЭЦП 2.0"
+        this.name = "Рутокен ЭЦП 2.0";
+        this.isSupported = true;
     }
     RutokenEcpPki2_0.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcpPki2_0());
@@ -177,7 +183,8 @@ function knownDeviceModels(plugin) {
             "bio": 1
         };
 
-        this.name = "Рутокен 2151"
+        this.name = "Рутокен 2151";
+        this.isSupported = false;
     }
     RutokenEcp2151.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcp2151());
@@ -189,7 +196,8 @@ function knownDeviceModels(plugin) {
             "sm": true
         };
 
-        this.name = "Рутокен Bluethooth"
+        this.name = "Рутокен Bluethooth";
+        this.isSupported = false;
     }
     RutokenEcp2_0Bluetooth.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcp2_0Bluetooth());
@@ -204,7 +212,8 @@ function knownDeviceModels(plugin) {
             "visualization": true
         };
 
-        this.name = "Рутокен PINPad"
+        this.name = "Рутокен PINPad";
+        this.isSupported = false;
     }
     RutokenPinpad2_0.prototype = new RutokenModel();
     knownDevices.push(new RutokenPinpad2_0());
@@ -214,7 +223,8 @@ function knownDeviceModels(plugin) {
 
         this.speed = 3;
 
-        this.name = "Рутокен ЭЦП"
+        this.name = "Рутокен ЭЦП";
+        this.isSupported = false;
     }
     RutokenEcp.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcp());
@@ -226,7 +236,8 @@ function knownDeviceModels(plugin) {
             "sm": true
         };
 
-        this.name = "Рутокен Bluethooth"
+        this.name = "Рутокен Bluethooth";
+        this.isSupported = false;
     }
     RutokenEcpBluetooth.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcpBluetooth());
@@ -236,7 +247,8 @@ function knownDeviceModels(plugin) {
 
         this.speed = 1;
 
-        this.name = "Рутокен PKI"
+        this.name = "Рутокен PKI";
+        this.isSupported = false;
     }
     RutokenEcpPki.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcpPki());
@@ -248,7 +260,8 @@ function knownDeviceModels(plugin) {
             "flashDrive": true
         };
 
-        this.name = "Рутокен ЭЦП Flash"
+        this.name = "Рутокен ЭЦП Flash";
+        this.isSupported = false;
     }
     RutokenEcpFlash.prototype = new RutokenModel();
     knownDevices.push(new RutokenEcpFlash());
@@ -281,7 +294,7 @@ export function getRutokenModelName(device, plugin) {
 
     for (var i in knownModels)
         if (knownModels[i].has(device.mechanisms, device.features, device.speed))
-            return knownModels[i].name;
+            return {modelName: knownModels[i].name, isSupported: knownModels[i].isSupported};
 
-    return "Неизвестная модель";
+    return {modelName: "Неизвестная модель", isSupported: false};
 }
