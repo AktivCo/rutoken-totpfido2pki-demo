@@ -37,15 +37,10 @@ const PKIEnterPinCode = ({ onSuccess }) => {
             });
     }
 
-    const handleAlreadyLoggedIn = () => {
-        plugin.logout(deviceId)
-            .then(onSubmit);
-    }
-
     const handleErrorLogin = (error) => {
         switch (error.code) {
             case plugin?.errorCodes?.ALREADY_LOGGED_IN:
-                handleAlreadyLoggedIn();
+                handleSuccessLogin();
                 break;
             case plugin?.errorCodes?.PIN_INCORRECT:
                 getPinRetriesLeft();

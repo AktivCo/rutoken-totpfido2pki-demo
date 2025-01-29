@@ -46,12 +46,20 @@ const LoginPKI = () => {
         if (step === 4) return "Измените PIN-код по умолчанию";
     }
 
+    const onDeviceSelected = (device) => {
+        if(device.isPinCached) {
+            handleCorrectNotDefaultPinCode();
+            return;
+        } 
+        setStep(3);
+    }
+
     const renderBody = () => {
         if (loadStatus === Status.Loading) return <LoadingContent />;
         if (loadStatus === Status.Error && !(loadError instanceof NoInstalledPluginError)) return <ErrorContent />;
 
         if (step === 1) return <PKICheckPlugins onInstalled={() => setStep(2)} />;
-        if (step === 2) return <PKISelectCertificate onSelect={() => setStep(3)} />;
+        if (step === 2) return <PKISelectCertificate onSelect={onDeviceSelected} />;
         if (step === 3) return <PKIEnterPinCode onSuccess={(isDefaultPin) => isDefaultPin ? setStep(4) : handleCorrectNotDefaultPinCode()}/>;
         if (step === 4) return <PKIChangePinCode onSuccess={handleCorrectNotDefaultPinCode} />;
         

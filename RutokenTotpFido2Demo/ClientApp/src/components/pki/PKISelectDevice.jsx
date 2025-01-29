@@ -18,13 +18,13 @@ const PKISelectDevice = ({ onSelect }) => {
 
     useEffect(() => {
         if (devices.length == 1) {
-            handleSelect(devices[0].deviceId);
+            handleSelect(devices[0]);
         };
     }, [devices])
 
-    const handleSelect = (id) => {
-        onSelect?.();
-        dispatch(setPkiAuthData(id));
+    const handleSelect = (device) => {
+        dispatch(setPkiAuthData(device.deviceId));
+        onSelect?.(device);
     }
 
     if (operationStatus === Status.Loading) return <LoadingContent />
@@ -37,7 +37,7 @@ const PKISelectDevice = ({ onSelect }) => {
         <div className="d-flex flex-column gap-0_75rem w-100">
             {
                 devices.map(device =>
-                    <div key={device.serial} className="border rounded p-3 cursor-pointer" onClick={() => handleSelect(device.deviceId)}>
+                    <div key={device.serial} className="border rounded p-3 cursor-pointer" onClick={() => handleSelect(device)}>
                         <div className="d-flex gap-0_75rem">
                             <Rutoken3Image />
                             <div className="d-flex flex-column justify-content-center">

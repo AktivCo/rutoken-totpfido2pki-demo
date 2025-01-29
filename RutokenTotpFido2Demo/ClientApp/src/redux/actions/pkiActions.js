@@ -52,6 +52,7 @@ export const getPkiDevices = () => {
                     plugin.TOKEN_INFO_SUPPORTED_MECHANISMS,
                     plugin.TOKEN_INFO_FEATURES,
                     plugin.TOKEN_INFO_SPEED,
+                    Plugin.TOKEN_INFO_PINS_INFO,
                 ];
 
                 return plugin.enumerateDevices()
@@ -63,7 +64,8 @@ export const getPkiDevices = () => {
                                     serial: tokenInfos[0],
                                     mechanisms: tokenInfos[1],
                                     features: tokenInfos[2],
-                                    speed: tokenInfos[3]
+                                    speed: tokenInfos[3],
+                                    isPinCached: tokenInfos[4].isPinCached
                                 };
 
                                 const modelName = getRutokenModelName(device, plugin);

@@ -28,8 +28,17 @@ const PKIBindModal = ({ onSuccess }) => {
         if (step === 4) return 'Измените PIN‑код по умолчанию';
     }
 
+    
+    const onDeviceSelected = (device) => {
+        if(device.isPinCached) {
+            handleCorrectNotDefaultPinCode();
+            return;
+        } 
+        setStep(3)
+    }
+
     const renderBody = () => {
-        if (step === 2) return <PKISelectDevice onSelect={() => setStep(3)} />;
+        if (step === 2) return <PKISelectDevice onSelect={onDeviceSelected} />;
         if (step === 3) return <PKIEnterPinCode onSuccess={(isDefaultPin) => isDefaultPin ? setStep(4) : handleCorrectNotDefaultPinCode()}/>;
         if (step === 4) return <PKIChangePinCode onSuccess={() => handleCorrectNotDefaultPinCode()} />;
 

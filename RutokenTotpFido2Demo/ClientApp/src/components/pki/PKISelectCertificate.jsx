@@ -16,10 +16,10 @@ const PKISelectCertificate = ({ onSelect }) => {
     useEffect(() => {
         dispatch(getPkiDevices());
     }, []);
-
-    const handleSelectCert = (deviceId, certId) => {
-        dispatch(setPkiAuthData(deviceId, certId));
-        onSelect?.();
+    
+    const handleSelectCert = (device, certId) => {
+        dispatch(setPkiAuthData(device.deviceId, certId));
+        onSelect?.(device);
     }
 
     const renderNoCertsFound = () => (
@@ -34,7 +34,7 @@ const PKISelectCertificate = ({ onSelect }) => {
             <div
                 className="p-3 border rounded d-flex flex-column cursor-pointer gap-0_25rem"
                 key={cert.certId}
-                onClick={() => handleSelectCert(device.deviceId, cert.certId)}
+                onClick={() => handleSelectCert(device, cert.certId)}
             >
                 {
                     idx == 0 && !!cert.lastLoginDate &&
