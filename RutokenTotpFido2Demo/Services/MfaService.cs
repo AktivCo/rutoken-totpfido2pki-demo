@@ -44,8 +44,7 @@ public class MfaService
         var authenticatorSelection = new AuthenticatorSelection
         {
             RequireResidentKey = isPasswordLess,
-            UserVerification =
-                isPasswordLess ? UserVerificationRequirement.Required : UserVerificationRequirement.Preferred
+            UserVerification = UserVerificationRequirement.Preferred
         };
 
         if (!string.IsNullOrEmpty(attestation.AuthType))
@@ -111,7 +110,7 @@ public class MfaService
             Extensions = true
         };
 
-        var uv = isPasswordLess ? UserVerificationRequirement.Required : UserVerificationRequirement.Preferred;
+        var uv = UserVerificationRequirement.Preferred;
 
         var options = GetAssertionOptions(
             credentials,
