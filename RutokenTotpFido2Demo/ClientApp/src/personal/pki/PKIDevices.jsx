@@ -57,6 +57,8 @@ const PKIDevices = () => {
 
         const bindedDevices = getBindedDevices();
 
+        if (bindedDevices.length === 0) return "Устройство не подключено или на нем отсутствует привязанный сертификат";
+
         return bindedDevices.map((device) =>
             <div className="border rounded px-1_25rem py-4" key={device.serial}>
                 <div className="d-flex">
