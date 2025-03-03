@@ -69,7 +69,7 @@ const PKIChangePinCode = ({ onSuccess }) => {
             <PasswordInput
                 maxLength='32'
                 className='form-control pe-2_25rem w-100' 
-                placeholder='PIN-код'
+                placeholder='Новый PIN-код'
                 value={newPin}
                 style={{backgroundImage: 'none'}}
                 invalid={!!newPin && !!errorNewPin}
@@ -79,7 +79,7 @@ const PKIChangePinCode = ({ onSuccess }) => {
             <PasswordInput
                 maxLength='32'
                 className='form-control pe-2_25rem w-100' 
-                placeholder='Повторите PIN-код'
+                placeholder='Повторите новый PIN-код'
                 value={repeatPin}
                 style={{backgroundImage: 'none'}}
                 invalid={!!repeatPin && !!errorRepeatPin}
