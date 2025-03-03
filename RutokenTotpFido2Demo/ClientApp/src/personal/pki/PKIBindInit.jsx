@@ -17,6 +17,8 @@ const PKIBindInit = () => {
         dispatch(loadPlugin(false));
     }, []);
 
+    const buttonIsDisabled = loadStatus === Status.Error && loadError instanceof NoInstalledPluginError;
+
     return (
         <>
             <div className='d-flex flex-column mt-3'>
@@ -30,13 +32,23 @@ const PKIBindInit = () => {
                 </div>
             </div>
             <PKICheckPlugins />
-            <CommonButton
-                className={'mt-0_5rem'}
-                onClick={() => dispatch(showModal(PKIBindModal, {onSuccess: () => dispatch(hideModal())}))}
-                disabled={loadStatus === Status.Error && loadError instanceof NoInstalledPluginError}
-            >
-                Добавить Рутокен
-            </CommonButton>
+
+            <div className="d-flex gap-3 mt-0_5rem">
+                <CommonButton
+                    className="text-nowrap"
+                    onClick={() => dispatch(showModal(PKIBindModal, { onSuccess: () => dispatch(hideModal()) }))}
+                    disabled={buttonIsDisabled}
+                >
+                    Добавить Рутокен
+                </CommonButton>
+                {
+                    buttonIsDisabled &&
+                    <span className="text-arsenic opacity-0_7 fs-1rem ml-2 my-auto">
+                        Для проверки наличия установленных компонентов, перезагрузите страницу
+                    </span>
+                }
+            </div>
+
         </>
     );
 }
