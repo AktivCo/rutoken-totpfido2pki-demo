@@ -19,6 +19,35 @@ const PKIBindInit = () => {
 
     const buttonIsDisabled = loadStatus === Status.Error && loadError instanceof NoInstalledPluginError;
 
+    const renderSafariError = () => (
+        <>
+            <div className='d-flex flex-column mt-3'>
+                <Step step={1} />
+                <div className='personal-add-device-header'>Адаптер «Рутокен Плагин»</div>
+            </div>
+            <div className='d-flex flex-column gap-3 mt-0_375rem mb-4'>
+                <div className='brief-mfa'>
+                    <div>Расширение недоступно в браузере Safari</div>
+                </div>
+            </div>
+            <div className="personal-safari-error px-1_5rem py-1_5rem">
+                <div className="mb-0_375rem text-arsenic opacity-0_7">Выберите другой браузер:</div>
+                
+                <div>
+                    <a className="link-text" href="https://www.opera.com/ru" target="_blank">Opera</a>,&nbsp;
+                    <a className="link-text" href="https://www.mozilla.org/ru/firefox/new" target="_blank">Firefox</a>,&nbsp;
+                    <a className="link-text" href="https://www.google.com/intl/ru_ru/chrome" target="_blank">Chrome</a>,&nbsp;
+                    <a className="link-text" href="https://www.chromium.org/getting-involved/download-chromium" target="_blank">Chromium</a>,
+                    или&nbsp;
+                    <a className="link-text" href="https://browser.yandex.ru" target="_blank">Yandex Browser</a>
+                </div>
+            </div>
+        </>
+    );
+    
+    if (loadError?.browser?.name == "Safari")
+        return renderSafariError();
+
     return (
         <>
             <div className='d-flex flex-column mt-3'>

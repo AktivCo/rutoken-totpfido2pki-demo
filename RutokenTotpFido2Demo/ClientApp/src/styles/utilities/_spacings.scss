@@ -1,11 +1,11 @@
 @include class-generator('gap', 'gap', (0.25, 0.375, 0.75, 1.25), 'rem');
-@include class-generator('px', ('padding-left', 'padding-right'), (1.25), 'rem');
-@include class-generator('py', ('padding-bottom', 'padding-top'), (0.875, 2), 'rem');
+@include class-generator('px', ('padding-left', 'padding-right'), (1.25, 1.5), 'rem');
+@include class-generator('py', ('padding-bottom', 'padding-top'), (0.875, 1.5, 2), 'rem');
 @include class-generator('pe', 'padding-right', (2.25), 'rem');
 @include class-generator('pb', 'padding-bottom', (6.125), 'rem');
 @include class-generator('pt', 'padding-top', (5.75), 'rem');
 @include class-generator('my', ('margin-bottom', 'margin-top'), (0.75, 3.5, 6), 'rem');
-@include class-generator('mb', 'margin-bottom', (2.875, 4.125), 'rem');
+@include class-generator('mb', 'margin-bottom', (0.375, 2.875, 4.125), 'rem');
 @include class-generator('mt', 'margin-top', (0.375, 0.5, 0.75, 1.5, 4.375, 5.625, 5.75), 'rem');
 @include class-generator('w', 'width', (2.5), 'rem');
 @include class-generator('h', 'height', (2.5), 'rem');

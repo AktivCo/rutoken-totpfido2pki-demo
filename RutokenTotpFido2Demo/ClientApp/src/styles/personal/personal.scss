@@ -195,6 +195,11 @@
     height: 171px;
 }
 
+.personal-safari-error {
+    border: $border;
+    border-radius: $border-radius;
+}
+
 div[disabled]
 {
     pointer-events: none;
