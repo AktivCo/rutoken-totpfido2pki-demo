@@ -9,10 +9,11 @@ import InitFido from "./fido/InitFido";
 import InitTotp from "./totp/InitTotp";
 import RenderFidoKeysList from "./fido/RenderFidoKeysList";
 import RenderTotpKeysList from "./totp/RenderTotpKeysList";
-import {LogoutIcon} from "../controls/LogoutIcon"
-import { Factor } from "../utils/constants";
+import { LogoutIcon } from "../controls/LogoutIcon"
+import { Factor, Status } from "../utils/constants";
 import PKIDevices from "./pki/PKIDevices";
 import PKIBindInit from "./pki/PKIBindInit";
+import RenderTwoFactorInit from "./RenderTwoFactorInit";
 
 
 const RenderTwoFactor = ({fidoKeys, totpKeys, pkiKeys}) => {
@@ -41,64 +42,22 @@ const RenderTwoFactor = ({fidoKeys, totpKeys, pkiKeys}) => {
     );
 }
 
-const RenderDeviceInit = ({factor}) => {
-    if (factor === Factor.FIDO) return <InitFido/>;
-    if (factor === Factor.TOTP) return <InitTotp/>;
-    if (factor === Factor.PKI) return <PKIBindInit/>;
-    return null;
-}
 
-const RenderTwoFactorInit = () => {
-    const [selectedFactor, setSelectedFactor] = useState(null);
 
-    const renderFactorBlock = (factor) => {
-        return (
-            <div
-                key={factor}
-                className="personal-two-factor-block cursor-pointer"
-                onClick={() => setSelectedFactor(factor)}
-            >
-                {factor}
-                {factor == selectedFactor && <span className="personal-two-factor-block--done"/>}
-            </div>
-        )
-    }
+const DevicesContainer = ({ fidoKeys, totpKeys, pkiKeys }) => {
 
-    return (
-        <>
-            <div className="d-flex align-items-center justify-content-between mb-2">
-                <div className="personal-two-factor-heading">Добавить второй фактор защиты</div>
-                {
-                    selectedFactor && (
-                        <div className="personal-logout personal-logout__text"
-                                onClick={() => setSelectedFactor(null)}
-                        >
-                            Отменить
-                        </div>
-                    )
-                }
-            </div>
-
-            <div className="personal-two-factor-blocks">
-                {Object.values(Factor).map(factor => renderFactorBlock(factor))}
-            </div>
-
-            <RenderDeviceInit factor={selectedFactor}></RenderDeviceInit>
-        </>
-    );
-}
-
-const DevicesContainer = ({fidoKeys, totpKeys, pkiKeys}) => {
     if (fidoKeys.length) {
-        return <RenderFidoKeysList keys={fidoKeys}/>;
+        return <RenderFidoKeysList keys={fidoKeys} />;
     }
 
     if (totpKeys.length) {
-        return <RenderTotpKeysList keys={totpKeys}/>;
+        return <RenderTotpKeysList keys={totpKeys} />;
     }
 
     if (pkiKeys.length) {
-        return <PKIDevices />;
+        return (
+            <PKIDevices />
+        );
     }
 
     return <RenderTwoFactorInit></RenderTwoFactorInit>;
@@ -119,7 +78,7 @@ const Personal = () => {
         if (userInfo.hoursLeft == 0) return `${userInfo.minutesLeft} м.`;
         return `${userInfo.hoursLeft} ч. ${userInfo.minutesLeft} м.`;
     }
-    
+
     return (
         <Layout>
             <div className="personal">

@@ -25,18 +25,20 @@ const PKISelectDevice = ({ onSelect }) => {
     const handleSelect = (device) => {
         dispatch(setPkiAuthData(device.deviceId));
         onSelect?.(device);
-    }
+    };
+
+    const filteredDevices = devices.filter(d => d.certs.length == 0);
 
     if (operationStatus === Status.Loading) return <LoadingContent />
 
     if (operationStatus === Status.Error) return <ErrorContent />
 
-    if (devices.length === 0) return <PKINoDevicesFound />
+    if (filteredDevices.length === 0) return <PKINoDevicesFound />
 
     return (
         <div className="d-flex flex-column gap-0_75rem w-100">
             {
-                devices.map(device =>
+                filteredDevices.map(device =>
                     <div key={device.serial}
                         className={`border rounded p-3 ${device.isSupported ? 'cursor-pointer' : 'cursor-disabled'} `} 
                         onClick={() => device.isSupported ? handleSelect(device) : null}>

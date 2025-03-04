@@ -1,17 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BucketIcon } from "../../controls/BucketIcon";
 import DeleteDeviceModal from "../DeleteDeviceModal";
 import { useDispatch, useSelector } from "react-redux";
 import { hideModal, showModal } from "../../redux/actionCreators";
 import { deletePki, getPkiDevices } from "../../redux/actions/pkiActions";
-import { Status } from "../../utils/constants";
+import { Factor, Status } from "../../utils/constants";
 import LoadingContent from "../../common/LoadingContent";
 import { dateToLocaleWithoutTime } from "../../utils/utils";
+import RenderTwoFactorInit from "../RenderTwoFactorInit";
 
 const PKIDevices = () => {
     const dispatch = useDispatch();
     const { operationStatus, devices } = useSelector(state => state.plugin);
     const { pkiKeys } = useSelector(state => state.userInfo);
+    const [addPKI, setAddPKI] = useState(false);
 
     useEffect(() => {
         if (devices.length === 0) dispatch(getPkiDevices());
@@ -33,7 +35,7 @@ const PKIDevices = () => {
 
     const getBindedDevices = () => {
         const bindedDevices = [];
-        
+
         for (let device of devices) {
             for (let cert of device.certs) {
                 if (pkiKeys.some(pkiKey => pkiKey.serialNumber === cert.serial)) {
@@ -87,9 +89,19 @@ const PKIDevices = () => {
     return (
         <div className="mt-2rem">
             <span className="fw-600 fs-1_75rem">Добавленные устройства</span>
-            <div className="mt-3">
+            <div className="mt-3 mb-2rem">
                 {renderBindedDevicesWithCerts()}
             </div>
+
+            {!addPKI && operationStatus != Status.Loading &&
+                <div className="text-center mt-1_5rem">
+                    <span className="modal-footer-link cursor-pointer" onClick={() => setAddPKI(true)}>Добавить Рутокен</span>
+                </div>
+            }
+
+            {addPKI &&
+                <RenderTwoFactorInit initialFactor={Factor.PKI} closeAddPki={() => setAddPKI(false)}></RenderTwoFactorInit>
+            }
         </div>
     );
 }
