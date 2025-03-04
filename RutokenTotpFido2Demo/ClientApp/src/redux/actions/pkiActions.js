@@ -65,7 +65,8 @@ export const getPkiDevices = () => {
                                     mechanisms: tokenInfos[1],
                                     features: tokenInfos[2],
                                     speed: tokenInfos[3],
-                                    isPinCached: tokenInfos[4].isPinCached
+                                    isPinCached: tokenInfos[4].isPinCached,
+                                    isSmartCard: tokenInfos[2].interfaces.some(i => i === plugin.INTERFACE_TYPE_ISO)
                                 };
 
                                 const modelInfo = getRutokenModelName(device, plugin);

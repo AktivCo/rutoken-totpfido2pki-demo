@@ -7,6 +7,7 @@ import ErrorContent from "../../common/ErrorContent";
 import { getPkiDevices } from "../../redux/actions/pkiActions";
 import { setPkiAuthData } from "../../redux/actionCreators";
 import PKINoDevicesFound from "./PKINoDevicesFound";
+import RutokenSmartCardImage from "../../images/RutokenSmartCardImage";
 
 const PKISelectDevice = ({ onSelect }) => {
     const dispatch = useDispatch();
@@ -43,7 +44,10 @@ const PKISelectDevice = ({ onSelect }) => {
                         className={`border rounded p-3 ${device.isSupported ? 'cursor-pointer' : 'cursor-disabled'} `} 
                         onClick={() => device.isSupported ? handleSelect(device) : null}>
                         <div className="d-flex gap-0_75rem">
-                            <Rutoken3Image />
+                            {device.isSmartCard ? 
+                            <RutokenSmartCardImage /> : <Rutoken3Image />   
+                        }
+                            
                             <div className="d-flex flex-column justify-content-center">
                                 <span className="fw-600 text-charcoal">{device.modelName}</span>
                                 <span className="text-charcoal opacity-0_68 fs-1rem">{device.serial}</span>
