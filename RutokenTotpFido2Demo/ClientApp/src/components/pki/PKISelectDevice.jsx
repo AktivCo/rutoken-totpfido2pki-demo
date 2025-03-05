@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Status } from "../../utils/constants";
 import Rutoken3Image from "../../images/Rutoken3Image";
@@ -18,8 +18,9 @@ const PKISelectDevice = ({ onSelect }) => {
     }, []);
 
     useEffect(() => {
-        if (devices.length == 1) {
-            handleSelect(devices[0]);
+        const filteredDevices = devices.filter(d => d.certs.length == 0);
+        if (filteredDevices.length == 1 && filteredDevices[0].isSupported) {
+            handleSelect(filteredDevices[0]);
         };
     }, [devices])
 
@@ -28,35 +29,39 @@ const PKISelectDevice = ({ onSelect }) => {
         onSelect?.(device);
     };
 
-    const filteredDevices = devices.filter(d => d.certs.length == 0);
-
     if (operationStatus === Status.Loading) return <LoadingContent />
 
     if (operationStatus === Status.Error) return <ErrorContent />
 
-    if (filteredDevices.length === 0) return <PKINoDevicesFound />
+    if (devices.length === 0) return <PKINoDevicesFound />
 
     return (
         <div className="d-flex flex-column gap-0_75rem w-100">
             {
-                filteredDevices.map(device =>
-                    <div key={device.serial}
-                        className={`border rounded p-3 ${device.isSupported ? 'cursor-pointer' : 'cursor-disabled'} `} 
-                        onClick={() => device.isSupported ? handleSelect(device) : null}>
-                        <div className="d-flex gap-0_75rem">
-                            {device.isSmartCard ? 
-                            <RutokenSmartCardImage /> : <Rutoken3Image />   
-                        }
-                            
-                            <div className="d-flex flex-column justify-content-center">
-                                <span className="fw-600 text-charcoal">{device.modelName}</span>
-                                <span className="text-charcoal opacity-0_68 fs-1rem">{device.serial}</span>
-                                {!device.isSupported &&
-                                    <span className="text-orange fs-0_875rem">Не поддерживается</span>
+                devices.map(device => {
+                    const deviceIsAvailable = device.isSupported && device.certs.length == 0;
+                    return (
+                        <div key={device.serial}
+                            className={`border rounded p-3 ${deviceIsAvailable ? 'cursor-pointer' : 'cursor-disabled'} `}
+                            onClick={() => deviceIsAvailable ? handleSelect(device) : null}>
+                            <div className="d-flex gap-0_75rem">
+                                {device.isSmartCard ? 
+                                    <RutokenSmartCardImage /> : <Rutoken3Image />   
                                 }
+                                <div className="d-flex flex-column justify-content-center">
+                                    <span className="fw-600 text-charcoal">{device.modelName}</span>
+                                    <span className="text-charcoal opacity-0_68 fs-1rem">{device.serial}</span>
+                                    {!device.isSupported &&
+                                        <span className="text-orange fs-0_875rem">Не поддерживается</span>
+                                    }
+                                    {device.certs.length > 0 &&
+                                        <span className="text-orange fs-0_875rem">Устройство добавлено</span>
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )
+                }
                 )
             }
         </div>
