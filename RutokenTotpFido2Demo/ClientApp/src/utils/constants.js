@@ -10,3 +10,7 @@ export const Factor = Object.freeze({
     TOTP:   'OTP',
     PKI:    'ЭЦП',
 });
+
+export const OperationErrorType = Object.freeze({
+    InvalidCertDate: 0
+});

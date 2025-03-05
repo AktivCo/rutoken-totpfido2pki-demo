@@ -4,15 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { dateToLocaleWithoutTime } from "../../utils/utils";
 import { getPkiDevices,  } from '../../redux/actions/pkiActions'
 import LoadingContent from "../../common/LoadingContent";
-import { setPkiAuthData } from "../../redux/actionCreators";
+import { setPkiAuthData, setPluginOperationError } from "../../redux/actionCreators";
 import PKINoDevicesFound from "./PKINoDevicesFound";
-import { Status } from "../../utils/constants";
+import { OperationErrorType, Status } from "../../utils/constants";
 import ErrorContent from "../../common/ErrorContent";
 import { getUserInfo } from "../../redux/actions";
+import RedErrorContent from "../../common/RedErrorContent";
 
 const PKISelectCertificate = ({ onSelect }) => {
     const dispatch = useDispatch();
-    const { operationStatus, devices } = useSelector(state => state.plugin);
+    const { operationStatus, operationError, devices } = useSelector(state => state.plugin);
     const twoFactorType = useSelector(state => state.twoFactorType);
     const userInfo = useSelector(state => state.userInfo);
 
@@ -28,10 +29,26 @@ const PKISelectCertificate = ({ onSelect }) => {
         };
     }, []);
     
-    const handleSelectCert = (device, certId) => {
-        dispatch(setPkiAuthData(device.deviceId, certId));
+    const handleSelectCert = (device, cert) => {
+        const certIsValid = validateCert(cert);
+        if (!certIsValid) return;
+
+        dispatch(setPkiAuthData(device.deviceId, cert.certId));
         onSelect?.(device);
     }
+
+    const validateCert = (cert) => {
+        const now = Date.now();
+        const notAfter = new Date(cert.validNotAfter).getTime();
+        const notBefore = new Date(cert.validNotBefore).getTime();
+
+        if (now < notBefore || now > notAfter) {
+            dispatch(setPluginOperationError({type: OperationErrorType.InvalidCertDate, message: "Срок действия сертификата истек или еще не наступил"}));
+            return false;
+        }
+
+        return true;
+    };
 
     const renderDeviceText = (text) => (
         <span className="fs-1rem text-charcoal opacity-0_68 text-center">{text}</span>
@@ -48,7 +65,7 @@ const PKISelectCertificate = ({ onSelect }) => {
             <div
                 className="p-3 border rounded d-flex flex-column cursor-pointer gap-0_25rem"
                 key={cert.certId}
-                onClick={() => handleSelectCert(device, cert.certId)}
+                onClick={() => handleSelectCert(device, cert)}
             >
                 {
                     idx === 0 && !!cert.lastLoginDate && twoFactorType === "PKINoLoginBefore" &&
@@ -90,8 +107,9 @@ const PKISelectCertificate = ({ onSelect }) => {
     if (operationStatus === Status.Loading || isLoading)
         return <LoadingContent />
 
-    if (operationStatus === Status.Error)
-        return <ErrorContent />
+    if (operationStatus === Status.Error) {
+        return operationError.type == OperationErrorType.InvalidCertDate ? <RedErrorContent text={operationError.message}/> : <ErrorContent />;
+    }
 
     const filteredDevices = getFilteredDevices();
 
