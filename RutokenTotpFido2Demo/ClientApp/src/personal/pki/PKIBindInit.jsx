@@ -45,7 +45,7 @@ const PKIBindInit = () => {
         </>
     );
     
-    if (loadError?.browser?.name == "Safari")
+    if (loadError?.browser == "Safari")
         return renderSafariError();
 
     return (
