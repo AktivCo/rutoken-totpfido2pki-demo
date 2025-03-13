@@ -20,8 +20,8 @@ const DeleteDeviceModal = ({title, body, action, id}) => {
             className={'custom-modal'}
             title={title}
             onSubmit={confirm}
-            submitButtonText="Подтвердить"
-            footerLinks={[{onClick: close, label: 'Отменить'}]}
+            submitButtonText="Удалить"
+            footerLinks={[{onClick: close, label: 'Оставить'}]}
         >
             {body}
         </ModalComponent>
