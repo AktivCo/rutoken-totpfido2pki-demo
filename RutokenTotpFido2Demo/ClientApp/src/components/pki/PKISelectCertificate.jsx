@@ -91,17 +91,19 @@ const PKISelectCertificate = ({ onSelect }) => {
 
         if (!userInfo) return [];
 
+        const result = [];
+
         for (let device of devices) {
             for (let pkiKey of userInfo.pkiKeys) {
                 const found = device.certs.find(cert => cert.serial === pkiKey.serialNumber)
 
                 if (found) {
-                    return [{ ...device, certs: [found]}];
+                    result.push({ ...device, certs: [found]});
                 }
             }
         }
 
-        return [];
+        return result;
     }
 
     if (operationStatus === Status.Loading || isLoading)
