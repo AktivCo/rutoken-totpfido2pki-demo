@@ -34,8 +34,6 @@ const RenderFidoKeysList = ({keys}) => {
 
     const deleteDevice = (id) => {
         dispatch(showModal(DeleteDeviceModal, {
-            title: 'Удаление устройства FIDO2',
-            body: <div className="my-3_5rem text-center">Вы уверены, что хотите удалить FIDO2 устройство?</div>,
             action: deleteDeviceCredential,
             id: id
         }));

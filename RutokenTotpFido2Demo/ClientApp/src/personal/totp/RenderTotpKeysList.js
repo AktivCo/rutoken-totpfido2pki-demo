@@ -12,8 +12,6 @@ const TotpKeyRow = ({totpkey}) => {
 
     const deleteDevice = (id) => {
         dispatch(showModal(DeleteDeviceModal, {
-            title: 'Удаление устройства OTP',
-            body: <div className="my-3_5rem text-center">Вы уверены, что хотите удалить OTP устройство?</div>,
             action: removeDevice,
             id: id
         }));

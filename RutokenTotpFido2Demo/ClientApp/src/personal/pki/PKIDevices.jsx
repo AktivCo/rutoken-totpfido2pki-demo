@@ -21,8 +21,6 @@ const PKIDevices = () => {
 
     const showDeleteDeviceModal = (serial) => {
         dispatch(showModal(DeleteDeviceModal, {
-            title: 'Удаление Рутокена',
-            body: <div className="my-3_5rem text-center">Уверены, что хотите удалить устройство Рутокен?</div>,
             action: deleteDevice,
             id: serial
         }));

@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import ModalComponent from "../modal/ModalComponent";
 import { hideModal } from "../redux/actionCreators";
 
-const DeleteDeviceModal = ({title, body, action, id}) => {
+const DeleteDeviceModal = ({action, id}) => {
     const dispatch = useDispatch();
 
     const close = () => {
@@ -18,12 +18,12 @@ const DeleteDeviceModal = ({title, body, action, id}) => {
     return (
         <ModalComponent
             className={'custom-modal'}
-            title={title}
+            title='Удаление Рутокена'
             onSubmit={confirm}
             submitButtonText="Удалить"
             footerLinks={[{onClick: close, label: 'Оставить'}]}
         >
-            {body}
+            <div className="my-3_5rem text-center">Уверены, что хотите удалить устройство Рутокен?</div>
         </ModalComponent>
     )
 }
