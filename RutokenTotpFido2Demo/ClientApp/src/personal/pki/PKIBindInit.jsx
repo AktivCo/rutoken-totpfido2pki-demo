@@ -37,8 +37,8 @@ const PKIBindInit = () => {
                     <a className="link-text" href="https://www.opera.com/ru" target="_blank">Opera</a>,&nbsp;
                     <a className="link-text" href="https://www.mozilla.org/ru/firefox/new" target="_blank">Firefox</a>,&nbsp;
                     <a className="link-text" href="https://www.google.com/intl/ru_ru/chrome" target="_blank">Chrome</a>,&nbsp;
-                    <a className="link-text" href="https://www.chromium.org/getting-involved/download-chromium" target="_blank">Chromium</a>,
-                    или&nbsp;
+                    <a className="link-text" href="https://www.chromium.org/getting-involved/download-chromium" target="_blank">Chromium</a>
+                    &nbsp;или&nbsp;
                     <a className="link-text" href="https://browser.yandex.ru" target="_blank">Yandex Browser</a>
                 </div>
             </div>
