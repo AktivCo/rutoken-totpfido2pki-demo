@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {useState, forwardRef} from "react";
 import cn from "classnames";
 import {FormFeedback, Input} from "reactstrap";
 
-const PasswordInput = (props) => {
+const PasswordInput = forwardRef((props, ref) => {
     
     const [fieldType, setFieldType] = useState("password");
 
@@ -21,6 +21,7 @@ const PasswordInput = (props) => {
             <Input {...props}
                    type={fieldType}
                    autoComplete="new-password"
+                   innerRef={ref}
             />
             <FormFeedback className="ps-3">
                 {props.feedback}
@@ -34,6 +35,6 @@ const PasswordInput = (props) => {
         </div>
     );
     
-}
+});
 
 export default PasswordInput;

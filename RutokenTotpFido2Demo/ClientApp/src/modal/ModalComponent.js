@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import RutokenLabel from '../images/RutokenLabel';
 import cn from 'classnames';
@@ -6,7 +6,7 @@ import Step from '../common/Step';
 import CommonButton from '../common/CommonButton';
 import { Tooltip } from 'react-tooltip';
 
-const ModalComponent = ({
+const ModalComponent = forwardRef(({
     title,
     children,
     backdrop,
@@ -20,7 +20,7 @@ const ModalComponent = ({
     footerLinks,
     footerError,
     fade,
-}) => {
+}, ref) => {
     return (
         <Modal
             contentClassName={cn('px-5 py-2rem shadow-lg border-0', className)}
@@ -54,7 +54,7 @@ const ModalComponent = ({
                     <ModalFooter className='d-flex flex-column justify-content-center p-0 w-100 border-0 gap-0_75rem'>
                         {
                             !!onSubmit &&
-                                <CommonButton onClick={onSubmit} disabled={submitButtonDisabled} fullWidth>
+                                <CommonButton onClick={onSubmit} disabled={submitButtonDisabled} fullWidth ref={ref}>
                                     {submitButtonText}
                                 </CommonButton>
                         }
@@ -82,6 +82,6 @@ const ModalComponent = ({
             <Tooltip id="cert-name-tooltip" />
         </Modal>
     )
-}
+});
 
 export default ModalComponent;

@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from "react";
+import React, {useState, useRef, useMemo} from "react";
 import {useDispatch} from 'react-redux';
 
 
@@ -15,6 +15,13 @@ const Login = () => {
     const [repeatPassword, setRepeatPassword] = useState('');
     const [error, setError] = useState(null);
 
+
+    const formRefs= {
+        password: useRef(null),
+        repeatPassword: useRef(null),
+        submit: useRef(null),
+    }
+
     const dispatch = useDispatch();
 
     const registerViewToggle = () => {
@@ -26,7 +33,10 @@ const Login = () => {
     }
 
     const handleSubmit = (evt) => {
-        evt.preventDefault();
+        if(evt) {
+            evt.preventDefault();
+        }
+
         setError(null);
 
         dispatch(signInOrUp(isRegisterView, userName, password, repeatPassword))
@@ -46,6 +56,36 @@ const Login = () => {
     const handlePasswordChange = (evt) => setPassword(evt.target.value);
     const handleRepeatPasswordChange = (evt) => setRepeatPassword(evt.target.value);
 
+    const focusRef = (inputId) => {
+        if (formRefs[inputId]) {
+            formRefs[inputId].current.focus();
+        }
+    }
+
+    const handleKeyDown = (event) => {
+        const isTab = event.key === 'Tab';
+        if (event.key !== 'Enter' && !isTab) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        const id = event.target.id
+        
+        if (id === 'login') {
+            focusRef('password');
+        }    
+        else if (isRegisterView && id === 'password') {
+            focusRef('repeatPassword');
+        }
+        else if ((!isRegisterView && id === 'password') || id === 'repeatPassword') { //last input in form
+            if(isTab) {
+                focusRef('submit');
+            }
+            else if(!isContinueDisable) {
+                handleSubmit();
+            }
+        }
+    };
+
     const renderBody = () => {
         return (
             <form className="w-100">
@@ -59,6 +99,8 @@ const Login = () => {
                         invalid={error && error.payload && error.payload.name === 'login'}
                         onChange={handleUserNameChange}
                         style={{backgroundImage: "none"}}
+                        id='login'
+                        onKeyDown={handleKeyDown}
                     />
                     <FormFeedback className="ps-3">
                         {error && error.payload && error.message}
@@ -75,6 +117,9 @@ const Login = () => {
                         invalid={error && error.payload && error.payload.name === 'password'}
                         onChange={handlePasswordChange}
                         feedback={error && error.payload && error.message}
+                        ref={formRefs['password']}
+                        id='password'
+                        onKeyDown={handleKeyDown}
                     />
                 </div>
     
@@ -101,6 +146,9 @@ const Login = () => {
                                 invalid={error && error.payload && error.payload.name === 'repeatPassword'}
                                 onChange={handleRepeatPasswordChange}
                                 feedback={error && error.payload && error.message}
+                                id='repeatPassword'
+                                onKeyDown={handleKeyDown}
+                                ref={formRefs['repeatPassword']}
                             />
                         </div>
                         <div className="form-group mt-4">
@@ -143,6 +191,7 @@ const Login = () => {
             withLabel
             onSubmit={handleSubmit}
             submitButtonText={isRegisterView ? 'Зарегистрироваться' : 'Продолжить'}
+            ref={formRefs['submit']}
             submitButtonDisabled={isContinueDisable}
             withDelimeter={!isRegisterView}
             footerLinks={getFooterLinks()}
