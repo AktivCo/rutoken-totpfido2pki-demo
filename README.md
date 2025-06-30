@@ -54,7 +54,7 @@
 
 Взаимодействие с модулем сертификации осуществляется через API.
 
-Перед запуском необходимо указать соответствующий URL в разделе `CAConfig` файла `RutokenTotpFido2Demo/appsettings.json`.
+Перед запуском необходимо указать соответствующие URL и API-ключ в разделе `CAConfig` файла `RutokenTotpFido2Demo/appsettings.json`.
 
 
 ## FIDO2

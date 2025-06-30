@@ -66,6 +66,7 @@ builder.Services
     .AddHttpClient<ICAApiService, CAApiService>(httpClient =>
     {
         httpClient.BaseAddress = builder.Configuration.GetValue<Uri>("CAConfig:URL");
+        httpClient.DefaultRequestHeaders.Add("X-API-Key", builder.Configuration.GetValue<string>("CAConfig:ApiKey"));
     });
 
 var app = builder.Build();
