@@ -6,6 +6,6 @@ namespace RutokenTotpFido2Demo.Models
     public class IdLabelDTO
     {
         public int Id { get; set; }
-        public string Label { get; set; }
+        public string? Label { get; set; }
     }
 }

@@ -103,9 +103,9 @@ namespace RutokenTotpFido2Demo.Services.Pki
 
         public async Task<int> VerifyLoginRequest(CmsRequestDTO cmsRequest, byte[] originalString)
         {
-            var cms = GetCMS(cmsRequest.Cms);
+            if (cmsRequest.Cms is null) throw new RTFDException("Ошибка в проверке подлинности подписи");
 
-            byte[] randomArrayFromCms;
+            var cms = GetCMS(cmsRequest.Cms);
 
             var cert = await VerifySignature(cms, originalString);
 

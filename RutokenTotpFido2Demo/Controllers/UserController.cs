@@ -1,10 +1,7 @@
 using System.Net;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RutokenTotpFido2Demo.Entities;
 using RutokenTotpFido2Demo.Extensions;
 using RutokenTotpFido2Demo.Models;
 using RutokenTotpFido2Demo.Services;
@@ -33,7 +30,7 @@ public class UserController : ControllerBase
     [HttpGet]
     [Route("logout")]
     [Authorize(Policy = "twoFactor")]
-    public async Task<IActionResult> SignOut()
+    public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync();
         return Ok();
@@ -67,9 +64,9 @@ public class UserController : ControllerBase
 
         var userInfo = await _userService.GetUserInfo(user.Id);
 
-        var fidoKeys = userInfo.FidoKeys.Any();
-        var totpKeys = userInfo.TotpKeys.Any();
-        var pkiKeys = userInfo.PkiKeys.Any();
+        var fidoKeys = userInfo.FidoKeys?.Any() ?? false;
+        var totpKeys = userInfo.TotpKeys?.Any() ?? false;
+        var pkiKeys = userInfo.PkiKeys?.Any() ?? false;
 
         if (fidoKeys || totpKeys || pkiKeys)
         {

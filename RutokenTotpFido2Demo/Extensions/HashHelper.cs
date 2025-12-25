@@ -9,7 +9,7 @@ public static class HashHelper
     {
         var builder = new StringBuilder();
 
-        using (var hash = SHA256Managed.Create())
+        using (var hash = SHA256.Create())
         {
             var enc = Encoding.UTF8;
             var result = hash.ComputeHash(enc.GetBytes(value));

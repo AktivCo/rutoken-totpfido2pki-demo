@@ -12,8 +12,9 @@ public class TotpSecretVerifier
 
     private readonly string _secret;
 
-    public TotpSecretVerifier(string secret)
+    public TotpSecretVerifier(string? secret)
     {
+        if(secret == null) throw new RTFDException("Ключ неверного формата");
         _secret = secret;
     }
 

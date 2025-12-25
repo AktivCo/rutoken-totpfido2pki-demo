@@ -65,6 +65,8 @@ public class MfaService
     public async Task<CredentialMakeResult> MakeCredential(int userId, LabelData labelData, string? jsonOptions,
         CancellationToken cancellationToken)
     {
+        if (string.IsNullOrWhiteSpace(labelData.Label)) throw new RTFDException("Название ключа не может быть пустым");
+
         var options = CredentialCreateOptions.FromJson(jsonOptions);
 
         IsCredentialIdUniqueToUserAsyncDelegate callback = async (args, cancellationToken) =>
@@ -72,17 +74,17 @@ public class MfaService
             return await GetUsersByCredentialIdAsync(args.CredentialId);
         };
 
-        var success = await MakeNewCredentialAsync(labelData.AttestationResponse, options, callback,
+        var success = await MakeNewCredentialAsync(labelData?.AttestationResponse, options, callback,
             cancellationToken: cancellationToken);
 
         var credentialId = AddCredentialToUser(new FidoKey
         {
             UserId = userId,
-            CredentialId = success?.Result.CredentialId.ByteArrayToHexString(),
-            PublicKey = success?.Result.PublicKey.ByteArrayToHexString(),
+            CredentialId = success!.Result!.CredentialId.ByteArrayToHexString(),
+            PublicKey = success!.Result!.PublicKey.ByteArrayToHexString(),
             SignatureCounter = success.Result.Counter,
             RegDate = DateTime.UtcNow,
-            Label = labelData.Label,
+            Label = labelData!.Label,
             LastLogin = DateTime.UtcNow,
             IsPasswordLess = labelData.IsWithoutLogin
         });
@@ -168,7 +170,7 @@ public class MfaService
     }
 
     public async Task<CredentialMakeResult> MakeNewCredentialAsync(
-        AuthenticatorAttestationRawResponse attestationResponse,
+        AuthenticatorAttestationRawResponse? attestationResponse,
         CredentialCreateOptions origChallenge,
         IsCredentialIdUniqueToUserAsyncDelegate isCredentialIdUniqueToUser,
         byte[]? requestTokenBindingId = null,
@@ -181,6 +183,7 @@ public class MfaService
             isCredentialIdUniqueToUser,
             _metadataService,
             requestTokenBindingId, cancellationToken);
+
         return new CredentialMakeResult(
             status: "ok",
             errorMessage: string.Empty,
@@ -221,13 +224,14 @@ public class MfaService
         return result;
     }
 
-    public void ValidateLabelFidoKey(int userId, string label)
+    public void ValidateLabelFidoKey(int userId, string? label)
     {
-        var findFidoKey = _context.FidoKeys.FirstOrDefault(x => x.UserId == userId && x.Label.Equals(label.Trim()));
-
         var errorMsg = string.Empty;
+        if (string.IsNullOrWhiteSpace(label)) errorMsg = "Название ключа не может быть пустым";
+
+        var findFidoKey = _context.FidoKeys.FirstOrDefault(x => x.UserId == userId && x.Label.Equals(label!.Trim()));
+
         if (findFidoKey != null) errorMsg = "Ключ с таким названием уже создан";
-        else if (string.IsNullOrWhiteSpace(label)) errorMsg = "Название ключа не может быть пустым";
 
         if (!errorMsg.IsNullOrEmpty())
             throw new RTFDException(errorMsg);
@@ -294,12 +298,17 @@ public class MfaService
 
     public bool RenameFidoKey(IdLabelDTO data)
     {
+        if(string.IsNullOrEmpty(data?.Label))
+        {
+            throw new RTFDException("Название ключа не может быть пустым");
+        }
+
         var fidoKey = _context.FidoKeys
             .SingleOrDefault(x => x.Id == data.Id);
         
         if (fidoKey != null)
         {
-            fidoKey.Label = data.Label;
+            fidoKey.Label = data!.Label;
         }
 
         return _context.SaveChanges() > 0;

@@ -5,6 +5,6 @@ namespace RutokenTotpFido2Demo.Models
     public class PemContainerDTO
     {
         [Required]
-        public string Pem { get; set; }
+        public required string Pem { get; set; }
     }
 }

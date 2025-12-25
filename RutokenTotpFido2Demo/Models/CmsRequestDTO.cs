@@ -2,6 +2,6 @@
 {
     public class CmsRequestDTO
     {
-        public string Cms { get; set; }
+        public string? Cms { get; set; }
     }
 }

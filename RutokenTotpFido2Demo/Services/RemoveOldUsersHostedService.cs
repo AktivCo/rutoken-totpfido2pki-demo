@@ -38,7 +38,7 @@ public class RemoveOldUsersHostedService : IHostedService, IDisposable
                 dbService.Users.RemoveRange(users);
                 dbService.SaveChanges();
             }
-            catch (Exception e)
+            catch
             {
                 // ignored
             }

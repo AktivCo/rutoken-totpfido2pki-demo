@@ -93,7 +93,7 @@ namespace RutokenTotpFido2Demo.Services
             return CheckTotp(false, totpCheck.TotpPassword, totpCheck.Secret, totpCheck.TimeStep, totpCheck.HashMode, out _);
         }
 
-        private bool CheckTotp(bool isDrift, string code, string secret, int timeStep, OtpHashMode hashMode, out long timeStepMatched)
+        private bool CheckTotp(bool isDrift, string? code, string? secret, int timeStep, OtpHashMode hashMode, out long timeStepMatched)
         {
             var verifier = new TotpSecretVerifier(secret);
 

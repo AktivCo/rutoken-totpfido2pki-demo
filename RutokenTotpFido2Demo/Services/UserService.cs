@@ -118,7 +118,7 @@ public class UserService
                 })
                 .FirstOrDefaultAsync();
 
-        if (user == null) return null;
+        if (user == null) throw new Exception();
 
         var endOfRegistrations = user.RegisterDate.AddDays(2);
 
