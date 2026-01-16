@@ -1,19 +1,21 @@
 #version: '2'  
 services:
-  demoauth.rutoken.ru-dev:
+  demoauth.rutoken.ru-prod:
     container_name: ${APP_CONTAINER_NAME}
     image: mcr.microsoft.com/dotnet/aspnet:6.0
+    network_mode: "shared"
     restart: always
     volumes:
       - ${APP_FOLDER}:/app
-    ports:
-      - ${APP_OUT_PORT}:5000
-    command: sh -c "apt update && cd /app && dotnet RutokenTotpFido2Demo.dll --urls='http://0.0.0.0:5000' "
+    expose:
+      - ${APP_OUT_PORT}
+    command: sh -c "apt update && cd /app && dotnet RutokenTotpFido2Demo.dll --urls='http://0.0.0.0:${APP_OUT_PORT}' "
     links:
       - demoauth.rutoken.ru-psql
   demoauth.rutoken.ru-psql:
     container_name: ${DB_CONTAINER_NAME}
     image: postgres
+    network_mode: "shared"
     environment:
       POSTGRES_PASSWORD: ${DB_PSWD}
       POSTGRES_USER: ${DB_USER}
@@ -21,5 +23,5 @@ services:
     restart: always
     volumes:
       - ${DB_FOLDER}:/var/lib/postgresql/data
-    ports:
-      - ${DB_PORT}:5432
+    expose:
+      - ${DB_PORT}
