@@ -14,8 +14,8 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "react-tooltip": "^5.28.0",
-    "react-transition-group": "^1.2.1",
-    "reactstrap": "^9.1.1",
+    "react-transition-group": "^4.4.5",
+    "reactstrap": "^9.1.5",
     "rimraf": "^3.0.2",
     "sass": "^1.67.0",
     "workbox-background-sync": "^6.5.3",
@@ -47,7 +47,8 @@
     "typescript": "^4.7.4"
   },
   "overrides": {
-    "autoprefixer": "10.4.5"
+    "autoprefixer": "10.4.5",
+    "nth-check": "^2.0.1"
   },
   "resolutions": {
     "css-what": "^5.0.1",
