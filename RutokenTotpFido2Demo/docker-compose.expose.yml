@@ -2,7 +2,7 @@
 services:
   demoauth.rutoken.ru-prod:
     container_name: ${APP_CONTAINER_NAME}
-    image: mcr.microsoft.com/dotnet/aspnet:6.0
+    image: mcr.microsoft.com/dotnet/aspnet:8.0
     network_mode: "shared"
     restart: always
     volumes:
