@@ -6,21 +6,21 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: normal;
-    src: local('Roboto'), url('../fonts/Roboto-Regular.ttf') format('truetype');
+    src: local('Roboto'), url('./fonts/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
-    src: local('Roboto'), url('../fonts/Roboto-Medium.ttf') format('truetype');
+    src: local('Roboto'), url('./fonts/Roboto-Medium.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
-    src: local('Roboto'), url('../fonts/Roboto-Bold.ttf') format('truetype');
+    src: local('Roboto'), url('./fonts/Roboto-Bold.ttf') format('truetype');
 }
 
 @mixin font-normal(){
