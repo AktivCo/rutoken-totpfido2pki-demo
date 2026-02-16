@@ -25,7 +25,7 @@
     "@babel/core": "7.26.0",
     "@babel/preset-env": "7.26.0",
     "@babel/preset-react": "7.26.3",
-    "@eslint/js": "^9.24.0",
+    "@eslint/js": "^9.39.4",
     "babel-loader": "9.2.1",
     "css-loader": "7.1.2",
     "eslint": "^9.39.2",
@@ -42,11 +42,6 @@
     "style-loader": "4.0.0",
     "webpack": "5.105.2",
     "webpack-cli": "6.0.1"
-  },
-  "overrides": {
-    "minimatch": "10.2.1",
-    "@eslint/config-array": "0.22.0",
-    "@eslint/eslintrc": "3.3.1"
   },
   "engines": {
     "node": ">=22.22.0"

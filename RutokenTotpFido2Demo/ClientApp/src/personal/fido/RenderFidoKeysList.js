@@ -41,7 +41,7 @@ const RenderFidoKeysList = ({keys}) => {
 
     const deleteDeviceCredential = async (id) => {
         dispatch(deleteDeviceFido(id))
-            .then((response) => {
+            .then(() => {
                 const newKeys = list.filter((item) => item.id !== id);
                 setList(newKeys);
                 dispatch(hideModal());

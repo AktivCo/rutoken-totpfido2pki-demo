@@ -26,7 +26,7 @@ const RegisterFidoModal = ({isWithoutLogin}) => {
                     dispatch(showModal(EditDeviceNameModal, {isCreate: true, credential: response, isWithoutLogin: isWithoutLogin}))
                 }, 1000);
             })
-            .catch(err => {
+            .catch(() => {
                 setStatus(Status.Error);
             });
     }

@@ -1,3 +1,5 @@
+import React from "react";
+
 export const BucketIcon = () => {
     return (
         <div className="bucket-icon-hover">

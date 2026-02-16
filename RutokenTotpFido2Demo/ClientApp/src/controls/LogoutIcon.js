@@ -1,3 +1,5 @@
+import React from "react";
+
 export const LogoutIcon = () => {
     return (
         <div className="logout-icon-hover">
