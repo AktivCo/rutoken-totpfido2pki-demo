@@ -1,18 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import cn from "classnames";
 
 import {getUserInfo, signOut} from "../redux/actions";
 
 import Layout from "../common/Layout";
-import InitFido from "./fido/InitFido";
-import InitTotp from "./totp/InitTotp";
 import RenderFidoKeysList from "./fido/RenderFidoKeysList";
 import RenderTotpKeysList from "./totp/RenderTotpKeysList";
 import { LogoutIcon } from "../controls/LogoutIcon"
-import { Factor, Status } from "../utils/constants";
 import PKIDevices from "./pki/PKIDevices";
-import PKIBindInit from "./pki/PKIBindInit";
 import RenderTwoFactorInit from "./RenderTwoFactorInit";
 
 

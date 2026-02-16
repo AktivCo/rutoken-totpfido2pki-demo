@@ -116,7 +116,7 @@ const InitTotpStepFour = ({currentStep}) => {
                         <div className="d-block mt-2">
                             <a className="fw-bolder cursor-pointer"
                                href="https://dev.rutoken.ru/x/Q4D0C"
-                               target="_blank"
+                               target="_blank" rel="noreferrer"
                             >
                                 Подробнее о возможных ошибках
                             </a>

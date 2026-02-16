@@ -1,15 +1,15 @@
 import React from 'react';
 import { Input } from 'reactstrap';
-import cl from './CustomSwitch.module.scss'
+import './CustomSwitch.scss';
 
 const CustomSwitch = ({checked, setChecked}) => {
     return (
-        <label className={cl.Switch}>
+        <label className="Switch">
             <Input type="checkbox"
                 checked={checked}
                 onChange={() => setChecked(!checked)}>
             </Input>
-            <span className={[cl.Slider, cl.Round].join(' ')}></span>
+            <span className="Slider Round"></span>
         </label>
     );
 };

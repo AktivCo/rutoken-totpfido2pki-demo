@@ -47,7 +47,7 @@ const LoginTOTP = () => {
                 <div className="text-center text-secondary mb-4">
                     <small>Нажмите кнопку на корпусе Рутокен<br />OTP и введите отобразившиеся<br />цифры в поле</small>
                 </div>
-                <Form className="w-100">
+                <Form className="w-100" onSubmit={handleSubmit}>
                     {status == Status.Error && !errorMsg && <div className='invalid-feedback d-block mb-2 mx-3'>Внутренняя ошибка.<br/>Повторите запрос позже</div>}
                     <FormGroup>
                         <Label for="totpCode" className="ps-3 text-secondary">

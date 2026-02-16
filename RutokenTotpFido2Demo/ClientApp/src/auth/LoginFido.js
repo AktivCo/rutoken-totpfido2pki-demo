@@ -20,10 +20,10 @@ const LoginFIDO = () => {
         setStatus(Status.Loading);
 
         dispatch(loginFido())
-            .then((response) => {
+            .then(() => {
                 setStatus(Status.Success);
             })
-            .catch(err => {
+            .catch(() => {
                 setStatus(Status.Error);
             });
     }

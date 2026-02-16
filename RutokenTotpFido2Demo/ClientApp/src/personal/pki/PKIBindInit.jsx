@@ -34,12 +34,12 @@ const PKIBindInit = () => {
                 <div className="mb-0_375rem text-arsenic opacity-0_7">Выберите другой браузер:</div>
                 
                 <div>
-                    <a className="link-text" href="https://www.opera.com/ru" target="_blank">Opera</a>,&nbsp;
-                    <a className="link-text" href="https://www.mozilla.org/ru/firefox/new" target="_blank">Firefox</a>,&nbsp;
-                    <a className="link-text" href="https://www.google.com/intl/ru_ru/chrome" target="_blank">Chrome</a>,&nbsp;
-                    <a className="link-text" href="https://www.chromium.org/getting-involved/download-chromium" target="_blank">Chromium</a>
+                    <a className="link-text" href="https://www.opera.com/ru" target="_blank" rel="noreferrer">Opera</a>,&nbsp;
+                    <a className="link-text" href="https://www.mozilla.org/ru/firefox/new" target="_blank" rel="noreferrer">Firefox</a>,&nbsp;
+                    <a className="link-text" href="https://www.google.com/intl/ru_ru/chrome" target="_blank" rel="noreferrer">Chrome</a>,&nbsp;
+                    <a className="link-text" href="https://www.chromium.org/getting-involved/download-chromium" target="_blank" rel="noreferrer">Chromium</a>
                     &nbsp;или&nbsp;
-                    <a className="link-text" href="https://browser.yandex.ru" target="_blank">Yandex Browser</a>
+                    <a className="link-text" href="https://browser.yandex.ru" target="_blank" rel="noreferrer">Yandex Browser</a>
                 </div>
             </div>
         </>

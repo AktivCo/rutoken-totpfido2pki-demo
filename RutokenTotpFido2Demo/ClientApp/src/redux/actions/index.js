@@ -92,7 +92,7 @@ const registerTotp = () => {
         sequense = sequense.then(() => axios.post('/totp/register', getState().totpParams));
 
         sequense = sequense
-            .then((response) => getUserInfo()(dispatch));
+            .then(() => getUserInfo()(dispatch));
 
         return sequense;
     };
@@ -105,14 +105,14 @@ const removeTotp = (key) => {
         sequense = sequense.then(() => axios.get(`/totp/remove/${key.id}`));
 
         sequense = sequense
-            .then((response) => getUserInfo()(dispatch));
+            .then(() => getUserInfo()(dispatch));
 
         return sequense;
     };
 }
 
 const getSecret = () => {
-    return (dispatch) => {
+    return () => {
         let sequense = Promise.resolve();
 
         sequense = sequense.then(() => axios.get(`/totp/getsecret`));
@@ -169,7 +169,7 @@ const verifyTotp = (code) => {
 }
 
 const registerFido = (isWithoutLogin) => {
-    return (dispatch) => {
+    return () => {
         let sequense = Promise.resolve();
 
         sequense =
@@ -248,8 +248,7 @@ const loginFido = () => {
             return axios.post('/mfa/makeassertion', data);
         });
 
-        sequense = sequense.then((result) => {
-
+        sequense = sequense.then(() => {
             setTimeout(() => dispatch(setLoginState(true)), 1000);
         });
 
@@ -309,7 +308,7 @@ const confirmRegisterFido = (credential, label, isWithoutLogin) => {
             return result;
         });
 
-        sequense = sequense.then((response) => getUserInfo()(dispatch));
+        sequense = sequense.then(() => getUserInfo()(dispatch));
 
         return sequense;
     };
@@ -321,7 +320,7 @@ const renameDeviceFido = (id, label) => {
 
         sequense = sequense.then(() => axios.post('/mfa/renamedevice', {id, label}));
 
-        sequense = sequense.then((response) => getUserInfo()(dispatch));
+        sequense = sequense.then(() => getUserInfo()(dispatch));
 
         return sequense;
     };
@@ -333,7 +332,7 @@ const deleteDeviceFido = (id) => {
 
         sequense = sequense.then(() => axios.post('/mfa/deletefidokey', null, {params: {id: id}}));
 
-        sequense = sequense.then((response) => getUserInfo()(dispatch));
+        sequense = sequense.then(() => getUserInfo()(dispatch));
 
         return sequense;
     };

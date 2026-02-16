@@ -44,7 +44,7 @@ const PKICheckPlugins = ({ onInstalled }) => {
                 <span className="text-secondary mt-0_375rem">Расширение для браузера</span>
                 {
                     isExtensionNotInstalled &&
-                        <span>Установите <a href={extensionLink} target="_blank" className="text-link mt-0_375rem">расширение</a> или убедитесь, что оно включено</span>
+                        <span>Установите <a href={extensionLink} target="_blank" className="text-link mt-0_375rem" rel="noreferrer">расширение</a> или убедитесь, что оно включено</span>
                 }
                 
             </div>
@@ -58,7 +58,7 @@ const PKICheckPlugins = ({ onInstalled }) => {
                 <span className="text-secondary mt-0_375rem">Приложение для компьютера</span>
                 {
                     isPluginNotInstalled &&
-                        <span>Установите <a href={pluginLink} target="_blank" className="text-link mt-0_375rem">приложение</a></span>
+                        <span>Установите <a href={pluginLink} target="_blank" className="text-link mt-0_375rem" rel="noreferrer">приложение</a></span>
                 }
             </div>
         </div>

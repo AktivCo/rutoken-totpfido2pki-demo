@@ -15,7 +15,7 @@ import { getUserInfo } from '.';
 import { getRutokenModelName } from '../../utils/getRutokenModelName';
 
 const hexToBigIntString = (hexString) => {
-    const hex = hexString.replaceAll(':', '');
+    let hex = hexString.replaceAll(':', '');
     if (hex.length % 2) { hex = '0' + hex; }
 
     const bn = BigInt('0x' + hex);

@@ -15,7 +15,7 @@ const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin}) => {
 
     const registerNewCredential = () => {
         dispatch(createOrUpdate())
-            .then((response) => {
+            .then(() => {
                 dispatch(hideModal());
             })
             .catch(err => {
