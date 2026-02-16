@@ -23,7 +23,7 @@
 | <!-- -->            | <!-- -->              | 
 | ---                 | ---                   | 
 | Веб-сервер          | [.NET SDK 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)           |
-| Среда исполнения JS | Node.js v18.0.0       |
+| Среда исполнения JS | Node.js v22.22.0      |
 | Фронтенд            | React                 |
 | База данных         | PostgreSQL            |
 | Библиотеки          | [Passwordless - FIDO2 for .NET](https://github.com/passwordless-lib/fido2-net-lib)<br> [OTP .NET](https://github.com/kspearrin/Otp.NET)<br> [QrCoder](https://github.com/codebude/QRCoder)<br> [Bouncy Castle Cryptography Library For .NET](https://github.com/bcgit/bc-csharp)   |
@@ -89,15 +89,37 @@
 Для сборки фронтенд части системы необходимо установить [Node.js](https://nodejs.org/ru) v18.0.0. Для переключения между версиями можно использовать NVM (Node Version Manager).
 
 ```sh
-nvm install 18.0.0 # Если не была установлена версия ранее 
+nvm install 22.22.0 # Если не была установлена версия ранее 
 
-nvm use 18.0.0 # Если на текущий момент использовалась другая версия Node.js, но необходимая была установлена ранее
+nvm use 22.22.0 # Если на текущий момент использовалась другая версия Node.js, но необходимая была установлена ранее
 ```
 
 В качестве хранилища данных сервис использует СУБД PostgreSQL.  
 `ConnectionString` к базе данных укажите в файле `RutokenTotpFido2Demo/appsettings.json`.
 
-Сборка запускается следующей командой — `dotnet publish -c Release`.
+### 1. Сборка Frontend части
+
+Для сборки клиентской части приложения выполните следующие действия в терминале.
+
+**Для Linux / macOS:**
+
+```bash
+cd RutokenTotpFido2Demo/ClientApp
+npm install
+npm run build
+```
+
+**Для Windows:**
+
+```powershell
+cd RutokenTotpFido2Demo\ClientApp
+npm install
+npm run build
+```
+
+### 2. Сборка Backend части
+Выполните команду в корневой директории проекта (где находится файл решения .sln или проект .csproj):
+`dotnet publish -c Release`.
 
 ### Запуск сервиса локально
 
