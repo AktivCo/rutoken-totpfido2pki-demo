@@ -25,7 +25,7 @@ const PKIBindModal = ({ onSuccess }) => {
     const getTitle = () => {
         if (step === 2) return 'Выберите Рутокен';
         if (step === 3) return 'Введите PIN‑код';
-        if (step === 4) return 'Измените PIN‑код по умолчанию';
+        if (step === 4) return 'Измените PIN‑код по умолчанию';
     }
 
     

@@ -9,5 +9,6 @@ public class UserInfoDTO
     public required string UserName { get; set; }
     public IEnumerable<TotpKey>? TotpKeys { get; set; }
     public IEnumerable<FidoKey>? FidoKeys { get; set; }
+    public IEnumerable<FidoKey>? PassKeys { get; set; }
     public IEnumerable<CertificateData>? PkiKeys { get; set; }
 }

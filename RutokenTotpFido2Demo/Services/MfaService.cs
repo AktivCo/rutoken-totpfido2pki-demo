@@ -27,10 +27,8 @@ public class MfaService
 
     public string MakeCredentialOptions(int userId, bool isPasswordLess)
     {
-        var user = _context.Users.FirstOrDefault(usr => usr.Id == userId);
-
-        if (user == null)
-            throw new RTFDException("Пользователь не найден");
+        var user = _context.Users.FirstOrDefault(usr => usr.Id == userId)
+            ?? throw new RTFDException("Пользователь не найден");
 
         var fidoUser = new Fido2User
             { Id = BitConverter.GetBytes(user.Id), DisplayName = user.UserName, Name = user.UserName };
@@ -77,7 +75,7 @@ public class MfaService
         var success = await MakeNewCredentialAsync(labelData?.AttestationResponse, options, callback,
             cancellationToken: cancellationToken);
 
-        var credentialId = AddCredentialToUser(new FidoKey
+        AddCredentialToUser(new FidoKey
         {
             UserId = userId,
             CredentialId = success!.Result!.CredentialId.ByteArrayToHexString(),
@@ -86,7 +84,8 @@ public class MfaService
             RegDate = DateTime.UtcNow,
             Label = labelData!.Label,
             LastLogin = DateTime.UtcNow,
-            IsPasswordLess = labelData.IsWithoutLogin
+            IsPasswordLess = labelData.IsWithoutLogin,
+            FactorType = FidoFactorType.Normalize(labelData.FactorType),
         });
 
         return success;

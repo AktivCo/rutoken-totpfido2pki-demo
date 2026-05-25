@@ -6,6 +6,7 @@ import LoginPKI from "./LoginPKI";
 
 const TwoFactorContainer = ({type}) => {
     if (type === 'FIDO') return <LoginFIDO/>;
+    if (type === 'PASS') return <LoginFIDO/>;
     if (type === 'TOTP') return <LoginTOTP/>;
     if (type === 'PKI' || type === 'PKINoLoginBefore') return <LoginPKI/>;
 

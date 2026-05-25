@@ -121,6 +121,10 @@ public class UserService
         if (user == null)
             return null;
 
+        var fidoKeys = user.FidoKeys.ToList();
+        var mfaKeys = fidoKeys.Where(key => !FidoFactorType.IsPass(key.FactorType)).ToList();
+        var passKeys = fidoKeys.Where(key => FidoFactorType.IsPass(key.FactorType)).ToList();
+
         var endOfRegistrations = user.RegisterDate.AddDays(2);
 
         var diff = endOfRegistrations - DateTime.UtcNow;
@@ -137,7 +141,8 @@ public class UserService
         return new UserInfoDTO
         {
             UserName = user.UserName,
-            FidoKeys = user.FidoKeys,
+            FidoKeys = mfaKeys,
+            PassKeys = passKeys,
             TotpKeys = user.TotpKeys,
             PkiKeys = user.PkiKeys,
             HoursLeft = hours,

@@ -13,4 +13,5 @@ public class FidoKey
     public required string Label { get; set; }
     public DateTime LastLogin { get; set; }
     public bool IsPasswordLess { get; set; }
+    public string FactorType { get; set; } = FidoFactorType.Mfa;
 }

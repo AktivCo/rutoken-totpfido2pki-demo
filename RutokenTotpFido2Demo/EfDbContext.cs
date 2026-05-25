@@ -28,6 +28,11 @@ public class EfDbContext : DbContext
         modelBuilder
             .Entity<FidoKey>()
             .HasKey(el => el.Id);
+
+        modelBuilder
+            .Entity<FidoKey>()
+            .Property(el => el.FactorType)
+            .HasDefaultValue(FidoFactorType.Mfa);
         
         modelBuilder
             .Entity<TotpKey>()

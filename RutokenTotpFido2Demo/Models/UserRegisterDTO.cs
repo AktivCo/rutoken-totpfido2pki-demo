@@ -23,5 +23,6 @@ public class LabelData
 {
     public string? Label { get; set; }
     public bool IsWithoutLogin { get; set; }
+    public string? FactorType { get; set; }
     public AuthenticatorAttestationRawResponse? AttestationResponse { get; set; }
 }

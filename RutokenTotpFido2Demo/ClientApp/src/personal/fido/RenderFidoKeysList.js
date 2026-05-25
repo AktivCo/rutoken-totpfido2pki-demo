@@ -1,16 +1,19 @@
 import React, {useEffect, useState, useRef} from "react";
 import {useDispatch} from 'react-redux';
 
-import {deleteDeviceFido} from "../../redux/actions";
-import InitFido from "./InitFido";
 import EditDeviceNameModal from "./EditDeviceNameModal";
 import DeleteDeviceModal from "../DeleteDeviceModal";
+import InitPass from "../pass/InitPass";
+import InitFido from "./InitFido";
+
+import { hideModal, showModal } from "../../redux/actionCreators";
+import {deleteDeviceFido} from "../../redux/actions";
 import {dateToLocale} from "../../utils/utils";
+import { Factor } from "../../utils/constants";
 
 import {BucketIcon} from "../../controls/BucketIcon"
-import { hideModal, showModal } from "../../redux/actionCreators";
 
-const RenderFidoKeysList = ({keys}) => {
+const RenderFidoKeysList = ({keys, type}) => {
     const dispatch = useDispatch();
 
     const [list, setList] = useState([]);
@@ -66,10 +69,12 @@ const RenderFidoKeysList = ({keys}) => {
                             <span className="personal-expiration__text">Последняя активность: </span>
                             <span className="fw-normal">{dateToLocale(item.lastLogin)}</span>
                         </div>
-                        <div>
-                            <span className="personal-expiration__text">Вход без логина и пароля: </span>
-                            <span className="fw-normal">{item.isPasswordLess ? "Включен" : "Выключен"}</span>
-                        </div>
+                        {type == Factor.FIDO ? (
+                            <div>
+                                <span className="personal-expiration__text">Вход без логина и пароля: </span>
+                                <span className="fw-normal">{item.isPasswordLess ? "Включен" : "Выключен"}</span>
+                            </div>
+                        ) : null}
                     </div>
 
                     <div className="bucket-block" onClick={() => deleteDevice(item.id)}>
@@ -88,14 +93,15 @@ const RenderFidoKeysList = ({keys}) => {
                             cursor-pointer"
                         onClick={() => registerViewToggle()}
                     >
-                        Добавить Рутокен MFA
+                        Добавить Рутокен {type == Factor.FIDO ? 'MFA' : ''}
                     </div>
                 </div>
             }
             {
                 visible &&
                 <div ref={initFidoRef}>
-                    <InitFido setVisible={setVisible}/>
+                    {type == Factor.FIDO ? <InitFido setVisible={setVisible}/> : null}
+                    {type == Factor.PASS ? <InitPass setVisible={setVisible}/> : null}
                 </div>
             }
         </div>

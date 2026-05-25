@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 
 import Login from "./Login";
 import TwoFactorContainer from "./TwoFactor";
+import AuthHeader from "./AuthHeader";
 
 const AuthRenderer = ({twoFactorType}) =>
     (twoFactorType && <TwoFactorContainer type={twoFactorType}/>) || <Login/>;
@@ -14,6 +15,7 @@ const Auth = () => {
     return (
         <div className="register-background">
             <div className="layout-container layout-container--auth">
+                <AuthHeader />
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-2"></div>

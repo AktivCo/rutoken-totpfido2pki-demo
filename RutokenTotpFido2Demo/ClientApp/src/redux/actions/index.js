@@ -1,6 +1,7 @@
 import axios from "axios";
 import {coerceToArrayBuffer, coerceToBase64Url} from "../../utils/utils";
 import { setLoginState, setTotpParams, setTwoFactorType, setUserInfo } from "../actionCreators";
+import { Factor } from "../../utils/constants";
 
 
 const checkLoginState = () => {
@@ -168,12 +169,12 @@ const verifyTotp = (code) => {
     return () => axios.post('/totp/verify', {code});
 }
 
-const registerFido = (isWithoutLogin) => {
+const registerFido = (isWithoutLogin, factor = Factor.FIDO) => {
     return () => {
         let sequense = Promise.resolve();
 
         sequense =
-            sequense.then(() => axios.post('/mfa/makecredentialoptions', {isWithoutLogin}));
+            sequense.then(() => axios.post('/mfa/makecredentialoptions', {isWithoutLogin, factor}));
 
         sequense = sequense.then((response) => {
 
@@ -279,7 +280,7 @@ const loginWithoutTwoFactor = () => {
     }
 }
 
-const confirmRegisterFido = (credential, label, isWithoutLogin) => {
+const confirmRegisterFido = (credential, label, isWithoutLogin, factorType = 'MFA') => {
     return (dispatch) => {
         let sequense = Promise.resolve();
 
@@ -298,7 +299,7 @@ const confirmRegisterFido = (credential, label, isWithoutLogin) => {
             }
         };
 
-        sequense = sequense.then(() => axios.post('/mfa/makecredential', {attestationResponse, label, isWithoutLogin}));
+        sequense = sequense.then(() => axios.post('/mfa/makecredential', {attestationResponse, label, isWithoutLogin, factorType}));
 
         sequense = sequense.then((response) => {
             let result = response.data;

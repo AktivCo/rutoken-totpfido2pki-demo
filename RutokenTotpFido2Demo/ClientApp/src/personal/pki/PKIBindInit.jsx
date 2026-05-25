@@ -21,11 +21,11 @@ const PKIBindInit = () => {
 
     const renderSafariError = () => (
         <>
-            <div className='d-flex flex-column mt-3'>
+            <div className='d-flex flex-column mt-4'>
                 <Step step={1} />
                 <div className='personal-add-device-header'>Адаптер «Рутокен Плагин»</div>
             </div>
-            <div className='d-flex flex-column gap-3 mt-0_375rem mb-4'>
+            <div className='d-flex flex-column gap-3 mb-4'>
                 <div className='brief-mfa'>
                     <div>Расширение недоступно в браузере Safari</div>
                 </div>
@@ -50,14 +50,14 @@ const PKIBindInit = () => {
 
     return (
         <>
-            <div className='d-flex flex-column mt-3'>
+            <div className='d-flex flex-column mt-4'>
                 <Step step={1} />
                 <div className='personal-add-device-header'>Установите компоненты</div>
             </div>
-            <div className='d-flex flex-column gap-3 mt-0_375rem mb-4'>
+            <div className='d-flex flex-column gap-3 mb-4'>
                 <div className='brief-mfa'>
-                    <div>Они необходимы для получения доступа к хранилищу</div>
-                    <div>устройства Рутокен и работы с сертификатами и ключами.</div>
+                    <div>Они необходимы для получения доступа к хранилищу</div>
+                    <div>устройства Рутокен и работы с сертификатами и ключами.</div>
                 </div>
             </div>
             <PKICheckPlugins />

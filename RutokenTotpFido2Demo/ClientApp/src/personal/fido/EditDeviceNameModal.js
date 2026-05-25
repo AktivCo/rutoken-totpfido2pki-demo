@@ -5,8 +5,9 @@ import {Input} from 'reactstrap';
 import ModalComponent from "../../modal/ModalComponent";
 import {confirmRegisterFido, renameDeviceFido} from "../../redux/actions";
 import { hideModal } from '../../redux/actionCreators';
+import { Factor } from '../../utils/constants';
 
-const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin}) => {
+const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin, factor}) => {
     const dispatch = useDispatch();
 
     const [error, setError] = useState('');
@@ -19,12 +20,12 @@ const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin}) => {
                 dispatch(hideModal());
             })
             .catch(err => {
-                setError(err.response.data.message);
+                setError(err.response?.data?.message || err.message || 'Произошла ошибка');
             });
     }
 
     const createOrUpdate = () => {
-        return isCreate ? confirmRegisterFido(credential, mfaName, isWithoutLogin)
+        return isCreate ? confirmRegisterFido(credential, mfaName, isWithoutLogin, factor)
                         : renameDeviceFido(credential, mfaName)
     }
 
@@ -48,10 +49,16 @@ const EditDeviceNameModal = ({isCreate, credential, isWithoutLogin}) => {
         );
     }
 
+    const getTitle = () => {
+        if (!isCreate) return "Название устройства";
+        if (factor === Factor.PASS) return "Назовите Рутокен Pass";
+        return "Назовите Рутокен MFA";
+    };
+
     return (
         <ModalComponent
             className={'custom-modal' + (isCreate ? ' fade-modal' : '')}
-            title={"Назовите Рутокен MFA"}
+            title={getTitle()}
             {...(isCreate && {step: 3})}
             onSubmit={() => registerNewCredential()}
             submitButtonText='Готово'

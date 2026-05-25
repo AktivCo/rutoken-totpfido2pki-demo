@@ -10,7 +10,7 @@ import FidoSuccessContent from "../../components/fido/FidoSuccessContent";
 import LoadingContent from "../../common/LoadingContent";
 import { hideModal, showModal } from '../../redux/actionCreators';
 
-const RegisterFidoModal = ({isWithoutLogin}) => {
+const RegisterFidoModal = ({isWithoutLogin, factor}) => {
     const dispatch = useDispatch();
 
     const [status, setStatus] = useState(null);
@@ -19,11 +19,16 @@ const RegisterFidoModal = ({isWithoutLogin}) => {
 
     const register = () => {
         setStatus(Status.Loading);
-        dispatch(registerFido(isWithoutLogin))
+        dispatch(registerFido(isWithoutLogin, factor))
             .then((response) => {
                 setStatus(Status.Success);
                 setTimeout(() => {
-                    dispatch(showModal(EditDeviceNameModal, {isCreate: true, credential: response, isWithoutLogin: isWithoutLogin}))
+                    dispatch(showModal(EditDeviceNameModal, {
+                        isCreate: true,
+                        credential: response,
+                        isWithoutLogin: isWithoutLogin,
+                        factor: factor
+                    }))
                 }, 1000);
             })
             .catch(() => {

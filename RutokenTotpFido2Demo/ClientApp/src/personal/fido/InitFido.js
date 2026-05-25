@@ -23,7 +23,7 @@ const InitFido = ({setVisible}) => {
     }
 
     return (
-        <div className='mfa-step-one gap-3'>
+        <div className='mfa-step-one gap-3 mt-4'>
             {
                 fidoKeys.length > 0 &&
                 <div className='d-flex align-items-center justify-content-between gap-0_25rem'>
@@ -41,7 +41,7 @@ const InitFido = ({setVisible}) => {
             </div>
             <div className='d-flex flex-column gap-3'>
                 <div className='image-mfa'></div>
-                <div className='brief-mfa'>
+                <div>
                     <div>Подключите Рутокен MFA к компьютеру и нажмите <b>«Добавить»</b>.</div>
                     <div>Когда появится индикация, нажмите кнопку на корпусе устройства.</div>
                 </div>

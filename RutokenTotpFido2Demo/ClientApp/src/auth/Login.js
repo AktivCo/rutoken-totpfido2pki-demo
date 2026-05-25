@@ -176,11 +176,11 @@ const Login = () => {
         return [
             {
                 onClick: () => dispatch(loginPasswordLess()),
-                label: 'Без логина и пароля (MFA)'
+                labels: ['Без логина и пароля', '(Рутокен MFA и Рутокен Pass)']
             }, 
             {
                 onClick: () => dispatch(loginPki()),
-                label: 'По сертификату'
+                labels: ['По сертификату', '(Рутокен ЭЦП)']
             }
         ];
     }

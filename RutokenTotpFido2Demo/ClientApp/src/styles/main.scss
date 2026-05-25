@@ -13,6 +13,7 @@
 @import "personal/personal";
 @import "personal/fido";
 @import "personal/totp";
+@import "personal/pass";
 
 * {
     font-family: "Roboto", sans-serif;
@@ -37,11 +38,11 @@ html {
 
 .register-background {
     background: $background-image no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-color: rgba(0, 0, 0, .25);
+    -webkit-background-size: inherit;
+    -moz-background-size: inherit;
+    -o-background-size: inherit;
+    background-size: inherit;
+    background-color: #eeeff0;
 }
 
 .register-form-container {
@@ -50,6 +51,46 @@ html {
     width: 100%;
     padding: 2rem 3rem;
     border-radius: 1rem;
+}
+
+.auth-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    box-shadow: 0px -8px 15px 20px #eeeff0;
+    background: #eeeff0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem 0 2rem 0;
+    border-radius: 1.5rem;
+}
+
+.auth-header__logo {
+    flex: 0 0 auto;
+}
+
+.auth-header__links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.auth-header__link {
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 1rem;
+    line-height: 1.3125rem;
+    text-decoration: none;
+
+    &:hover {
+        color: $surfie-green;
+        text-decoration: underline;
+    }
 }
 
 .btn:disabled, .btn.disabled, fieldset:disabled .btn {
@@ -104,6 +145,12 @@ html {
         min-width: 350px;
         min-height: 100%;
     }
+}
+
+@media screen and (max-width: 854px) {
+  .auth-header {
+    display: none;
+  }
 }
 
 .modal-content {

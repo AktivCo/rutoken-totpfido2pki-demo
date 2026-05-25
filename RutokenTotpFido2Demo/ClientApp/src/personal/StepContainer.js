@@ -11,7 +11,7 @@ const StepContainer = ({currentStep, stepId, header, toNextStep, btnTitle, child
     });
 
     return (
-        <div className="mt-4">
+        <div className="d-flex flex-column mt-4">
             <Step step={stepId} />
             <div className={renderClass()}>{header}</div>
             {

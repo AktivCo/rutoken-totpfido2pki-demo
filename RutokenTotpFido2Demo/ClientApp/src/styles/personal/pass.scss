@@ -1,0 +1,108 @@
+.pass-download-list,
+.pass-connection-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.pass-download-card,
+.pass-connection-card {
+    border: 1px solid rgba(100, 100, 100, 0.16);
+    border-radius: 8px;
+    background-color: $white;
+}
+
+.pass-download-card {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+    padding: 1.5rem;
+}
+
+.pass-download-card__label {
+    @include font-w-600;
+    color: rgba(60, 60, 67, 0.64);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-transform: uppercase;
+}
+
+.pass-download-card__title,
+.pass-connection-card__title {
+    @include font-w-600;
+    color: $black;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+}
+
+.pass-download-card__text,
+.pass-connection-card__text {
+    @include font-normal;
+    color: #000000a3;
+    font-size: 1rem;
+    line-height: 150%;
+}
+
+.pass-download-card__action {
+    @include font-bolder;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 10rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: 999px;
+    background-color: rgba(100, 100, 100, 0.16);
+    color: $black;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+        color: $black;
+        text-decoration: none;
+        background-color: rgba(100, 100, 100, 0.22);
+    }
+}
+
+.pass-download-card__action--disabled {
+    color: rgba(0, 0, 0, 0.48);
+    pointer-events: none;
+}
+
+.pass_appstore_qr {
+    background: $appstore-pass-qr;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 160px;
+    height: 160px;
+}
+
+.pass_rustore_qr {
+    background: $rustore-pass-qr;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 160px;
+    height: 160px;
+}
+
+.pass_img_1 {
+    display: flex;
+    flex: 1;
+    height: 250px;
+    background-image: $pass-img-1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 9px;
+}
+.pass_img_2 {
+    display: flex;
+    flex: 1;
+    height: 250px;
+    background-image: $pass-img-2;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 9px;
+}

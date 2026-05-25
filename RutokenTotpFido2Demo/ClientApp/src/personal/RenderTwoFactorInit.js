@@ -3,6 +3,7 @@ import { Factor } from "../utils/constants";
 import InitFido from "./fido/InitFido";
 import InitTotp from "./totp/InitTotp";
 import PKIBindInit from "./pki/PKIBindInit";
+import InitPass from "./pass/InitPass";
 
 const RenderTwoFactorInit = ({ initialFactor = null, closeAddPki = null }) => {
     const [selectedFactor, setSelectedFactor] = useState(initialFactor);
@@ -47,6 +48,7 @@ const RenderTwoFactorInit = ({ initialFactor = null, closeAddPki = null }) => {
 }
 
 const RenderDeviceInit = ({ factor }) => {
+    if (factor === Factor.PASS) return <InitPass />;
     if (factor === Factor.FIDO) return <InitFido />;
     if (factor === Factor.TOTP) return <InitTotp />;
     if (factor === Factor.PKI) return <PKIBindInit />;

@@ -23,27 +23,60 @@
 .modal-footer-link {
   @include font-bolder;
   color: $surfie-green;
-  position:relative;
-}
+  display: inline-block; // важно, чтобы псевдоэлементы не выпадали
+  position: relative;    // для однострочного ::before
 
-.modal-footer-link::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  border-radius: 2px;
-  background-color: $surfie-green;
-  bottom: 0;
-  left: 0;
-  top: 20px;
-  transform-origin: center;
-  transform: scaleX(0);
-  transition: transform .3s ease-in-out;
-}
+  // ----- Однострочный режим (нет вложенных .line) -----
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background-color: $surfie-green;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease-in-out;
+  }
 
-.modal-footer-link:hover::before {
-  transform-origin: center;
-  transform: scaleX(1);
+  &:hover::before {
+    transform: scaleX(1);
+  }
+
+  // ----- Многострочный режим (если есть хотя бы один .line) -----
+  // Отключаем родительскую полосу
+  &:has(.line)::before {
+    display: none;
+  }
+
+  // Каждой строке даём свой анимированный псевдоэлемент
+  .line {
+    position: relative;
+    display: inline-block;  // чтобы псевдоэлемент работал именно под строкой
+    // небольшая защита от склеивания строк (опционально)
+    // margin-bottom: 2px;
+  }
+
+  .line::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background-color: $surfie-green;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  // При наведении на родителя анимация запускается у всех .line одновременно
+  &:hover .line::before {
+    transform: scaleX(1);
+  }
 }
 
 a {

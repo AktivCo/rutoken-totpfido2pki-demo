@@ -89,11 +89,11 @@ const InitTotpStepTwo = ({currentStep, toNextStep}) => {
                         </FormGroup>
                         <FormGroup className="col-md-6 d-flex align-items-center mb-none">
                             <div className="text-center d-block mt-4">
-                            <span className="modal-footer-link fw-bolder cursor-pointer"
-                                  onClick={() => generateSecret()}
-                            >
-                                Сгенерировать
-                            </span>
+                                <span className="modal-footer-link fw-bolder cursor-pointer"
+                                    onClick={() => generateSecret()}
+                                >
+                                    Сгенерировать
+                                </span>
                             </div>
                         </FormGroup>
                     </div>
@@ -108,7 +108,7 @@ const InitTotpStepTwo = ({currentStep, toNextStep}) => {
             {
                 stepId !== currentStep && (
                     <div className="d-block mt-4">
-                        <span className="modal-footer-link fw-bolder cursor-pointer"
+                        <span className="modal-footer-link line fw-bolder cursor-pointer"
                               onClick={() => navigateBack()}
                         >
                             Изменить настройки

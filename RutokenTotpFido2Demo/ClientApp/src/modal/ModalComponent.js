@@ -65,12 +65,20 @@ const ModalComponent = forwardRef(({
                         }
                         {
                             footerLinks?.map((fl, index) =>
-                                <span key={index}
-                                    className="modal-footer-link fw-bolder cursor-pointer m-0"
+                                <div key={index}
+                                    className={cn(
+                                        "d-flex flex-column justify-content-center align-items-center",
+                                        "modal-footer-link fw-bolder cursor-pointer m-0"
+                                    )}
                                     onClick={fl.onClick}
                                 >
-                                    {fl.label}
-                                </span>
+                                    {
+                                        fl.label && fl.label
+                                    }
+                                    {
+                                        fl.labels && fl.labels.map((x) => <span key={x} className="line">{x}</span>)
+                                    }
+                                </div>
                             )
                         }
                         {

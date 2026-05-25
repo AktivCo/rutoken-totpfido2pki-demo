@@ -65,10 +65,11 @@ public class UserController : ControllerBase
         var userInfo = await _userService.GetUserInfo(user.Id);
 
         var fidoKeys = userInfo.FidoKeys?.Any() ?? false;
+        var passKeys = userInfo.PassKeys?.Any() ?? false;
         var totpKeys = userInfo.TotpKeys?.Any() ?? false;
         var pkiKeys = userInfo.PkiKeys?.Any() ?? false;
 
-        if (fidoKeys || totpKeys || pkiKeys)
+        if (fidoKeys || passKeys || totpKeys || pkiKeys)
         {
             await HttpContext.SignInByUserHandleAsync(user.Id);
         }
@@ -81,6 +82,11 @@ public class UserController : ControllerBase
         if (fidoKeys)
         {
             return Ok(new { twoFactorType = "FIDO" });
+        }
+
+        if (passKeys)
+        {
+            return Ok(new { twoFactorType = "PASS" });
         }
 
         if (totpKeys)
