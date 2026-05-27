@@ -103,7 +103,7 @@ public class UserService
     }
 
 
-    public async Task<UserInfoDTO> GetUserInfo(int userId)
+    public async Task<UserInfoDTO?> GetUserInfo(int userId)
     {
         var user =
             await _context.Users
@@ -118,7 +118,8 @@ public class UserService
                 })
                 .FirstOrDefaultAsync();
 
-        if (user == null) throw new Exception();
+        if (user == null)
+            return null;
 
         var endOfRegistrations = user.RegisterDate.AddDays(2);
 
