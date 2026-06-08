@@ -70,7 +70,6 @@ const LoginPKI = () => {
     return (
         <ModalComponent
             title={getTitle()}
-            withLabel
             footerLinks={[{ onClick: () => dispatch(loginWithoutTwoFactor(null)), label: 'Назад' }]}
             backdrop={false}
             fade={false}

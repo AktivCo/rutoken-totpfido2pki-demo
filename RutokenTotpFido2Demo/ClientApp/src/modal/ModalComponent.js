@@ -5,6 +5,7 @@ import cn from 'classnames';
 import Step from '../common/Step';
 import CommonButton from '../common/CommonButton';
 import { Tooltip } from 'react-tooltip';
+import useIsMobile from '../utils/hooks/useIsMobile';
 
 const ModalComponent = forwardRef(({
     title,
@@ -20,7 +21,11 @@ const ModalComponent = forwardRef(({
     footerLinks,
     footerError,
     fade,
+    isAnimateLabel,
 }, ref) => {
+    const isMobile = useIsMobile();
+    const effectiveWithLabel = withLabel || isMobile;
+
     return (
         <Modal
             contentClassName={cn('px-5 py-2rem shadow-lg border-0', className)}
@@ -30,10 +35,10 @@ const ModalComponent = forwardRef(({
             centered
         >
             {
-                (title || withLabel) &&
+                (title || effectiveWithLabel) &&
                     <ModalHeader className='d-flex justify-content-center border-0 p-0'>
                         <div className="w-100 d-flex flex-column align-items-center gap-4">
-                            {!!withLabel && <RutokenLabel />}
+                            {!!effectiveWithLabel && <RutokenLabel />}
                             <div className='d-flex flex-column gap-0_25rem'>
                                 <Step step={step}/>
                                 {!!title && <h4 className="text-center m-0">{title}</h4>}
@@ -68,7 +73,8 @@ const ModalComponent = forwardRef(({
                                 <div key={index}
                                     className={cn(
                                         "d-flex flex-column justify-content-center align-items-center",
-                                        "modal-footer-link fw-bolder cursor-pointer m-0"
+                                        "fw-bolder cursor-pointer m-0",
+                                        isAnimateLabel ? "modal-footer-link" : "modal-footer-link-default"
                                     )}
                                     onClick={fl.onClick}
                                 >

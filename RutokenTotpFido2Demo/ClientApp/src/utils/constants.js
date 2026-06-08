@@ -9,7 +9,7 @@ export const Factor = Object.freeze({
     FIDO:   'MFA',
     TOTP:   'OTP',
     PKI:    'ЭЦП',
-    PASS:   'PASS',
+    PASS:   'Pass',
 });
 
 export const ExternalLinks = Object.freeze({
@@ -26,4 +26,8 @@ export const ExternalLinks = Object.freeze({
 
 export const OperationErrorType = Object.freeze({
     InvalidCertDate: 0
+});
+
+export const Breakpoints = Object.freeze({
+    Mobile: 720,
 });

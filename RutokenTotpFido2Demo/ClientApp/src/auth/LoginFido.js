@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginFido, loginWithoutTwoFactor } from "../redux/actions";
 import { Status } from "../utils/constants";
 import ModalComponent from "../modal/ModalComponent";
-import ErrorContent from "../common/ErrorContent";
+import ErrorTokenContent from "../common/ErrorTokenContent";
 import FidoSuccessContent from "../components/fido/FidoSuccessContent";
 import LoadingContent from "../common/LoadingContent";
 
@@ -29,15 +29,14 @@ const LoginFIDO = () => {
     }
 
     const renderBody = () => {
-        if (status === Status.Error) return <ErrorContent />;
+        if (status === Status.Error) return <ErrorTokenContent />;
         if (status === Status.Loading) return <LoadingContent />;
         if (status === Status.Success) return <FidoSuccessContent />;
     }
 
     return (
         <ModalComponent
-            title={"Подключение к токену"}
-            withLabel
+            title={"Подключение к Рутокену"}
             backdrop={false}
             fade={false}
             {...(status === Status.Error && {onSubmit: () => loginFIDO(), submitButtonText: 'Повторить'})}

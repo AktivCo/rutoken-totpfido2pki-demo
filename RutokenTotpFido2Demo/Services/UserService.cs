@@ -85,7 +85,7 @@ public class UserService
 
         if (user != null)
         {
-            throw new RTFDException("Пользователь с таким логином уже зарегистрирован", new { name = "login" });
+            throw new RTFDException("Учетная запись с таким логином уже зарегистрирована", new { name = "login" });
         }
 
         var hashedPassword = model.Password.GenerateSHA256Hash();

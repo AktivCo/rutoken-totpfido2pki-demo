@@ -43,6 +43,11 @@
     text-decoration-line: underline;
 }
 
+.link-text-default {
+    color: $surfie-green;
+    text-decoration-line: underline;
+}
+
 .credential-name {
     @include font-bolder;
 }

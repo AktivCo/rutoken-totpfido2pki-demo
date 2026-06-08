@@ -5,7 +5,7 @@ import ModalComponent from "../../modal/ModalComponent";
 import EditDeviceNameModal from "./EditDeviceNameModal";
 import {registerFido} from "../../redux/actions";
 import { Status } from '../../utils/constants';
-import ErrorContent from "../../common/ErrorContent";
+import ErrorTokenContent from "../../common/ErrorTokenContent";
 import FidoSuccessContent from "../../components/fido/FidoSuccessContent";
 import LoadingContent from "../../common/LoadingContent";
 import { hideModal, showModal } from '../../redux/actionCreators';
@@ -41,7 +41,7 @@ const RegisterFidoModal = ({isWithoutLogin, factor}) => {
     }
 
     const renderBody = () => {
-        if (status === Status.Error) return <ErrorContent />;
+        if (status === Status.Error) return <ErrorTokenContent />;
         if (status === Status.Loading) return <LoadingContent />;
         if (status === Status.Success) return <FidoSuccessContent />;
     }

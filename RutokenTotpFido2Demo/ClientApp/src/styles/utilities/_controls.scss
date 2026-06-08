@@ -20,6 +20,13 @@
   cursor: not-allowed;
 }
 
+.modal-footer-link-default {
+  @include font-bolder;
+  color: $surfie-green;
+  display: inline-block; // важно, чтобы псевдоэлементы не выпадали
+  position: relative;    // для однострочного ::before
+}
+
 .modal-footer-link {
   @include font-bolder;
   color: $surfie-green;

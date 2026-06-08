@@ -155,7 +155,7 @@ const Login = () => {
                             <small className="text-secondary">
                                 Через <span className="fw-bolder">48 часов</span> личный
                                 кабинет будет удален,
-                                потребуется новая регистрация
+                                потребуется новая регистрация.
                             </small>
                         </div>
                     </>
@@ -188,7 +188,6 @@ const Login = () => {
     return (
         <ModalComponent
             title={isRegisterView ? 'Регистрация' : 'Вход в личный кабинет'}
-            withLabel
             onSubmit={handleSubmit}
             submitButtonText={isRegisterView ? 'Зарегистрироваться' : 'Продолжить'}
             ref={formRefs['submit']}

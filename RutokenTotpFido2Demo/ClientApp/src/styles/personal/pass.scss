@@ -48,8 +48,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 10rem;
-    padding: 0.875rem 1.25rem;
+    font-size: 1rem;
+    max-width: 150px;
+    width: 150px;
+    min-height: 50px;
+    height: 50px;
+    padding: 0 20px;
     border-radius: 999px;
     background-color: rgba(100, 100, 100, 0.16);
     color: $black;
@@ -63,13 +67,17 @@
     }
 }
 
+.pass-download-card__item {
+    display: flex;
+}
+
 .pass-download-card__action--disabled {
     color: rgba(0, 0, 0, 0.48);
     pointer-events: none;
 }
 
 .pass_appstore_qr {
-    background: $appstore-pass-qr;
+    background: $pass-appstore-qr;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -78,7 +86,7 @@
 }
 
 .pass_rustore_qr {
-    background: $rustore-pass-qr;
+    background: $pass-rustore-qr;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -105,4 +113,17 @@
     background-size: cover;
     background-position: center;
     border-radius: 9px;
+}
+
+
+@media (max-width: 720px) {
+    .pass-download-card {
+        flex-direction: column;
+    }
+
+    .pass-download-card__item {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
 }

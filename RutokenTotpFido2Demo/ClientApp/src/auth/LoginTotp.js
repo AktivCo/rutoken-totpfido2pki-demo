@@ -82,7 +82,6 @@ const LoginTOTP = () => {
     return (
         <ModalComponent
             title={"Двухфакторная аутентификация"}
-            withLabel
             onSubmit={handleSubmit}
             footerLinks={[{onClick: () => dispatch(loginWithoutTwoFactor(null)), label: 'Назад'}]}
             backdrop={false}

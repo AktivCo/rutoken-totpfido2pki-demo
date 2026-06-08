@@ -143,9 +143,17 @@
 }
 
 .personal-two-factor-blocks {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
 }
+
+@media (max-width: 992px) {
+    .personal-two-factor-blocks {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 
 .personal-two-factor-block {
     flex: 1 1 auto;

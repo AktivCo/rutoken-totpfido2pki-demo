@@ -14,14 +14,14 @@ const PassStepOne = ({currentStep, toNextStep}) => {
         {
             label: 'App Store',
             title: 'Рутокен Pass для iOS/iPadOS 18+',
-            textLink: 'Скачайте по QR-коду или воспользуйтесь ссылкой',
+            textLink: 'Скачайте по QR-коду или воспользуйтесь',
             link: ExternalLinks.PassAppStroe,
             img: 'pass_appstore_qr'
         },
         {
             label: 'RUStore',
             title: 'Рутокен Pass для Android 14+',
-            textLink: 'Скачайте по QR-коду или воспользуйтесь ссылкой',
+            textLink: 'Скачайте по QR-коду или воспользуйтесь',
             link: ExternalLinks.PassRustore,
             img: 'pass_rustore_qr'
         },
@@ -48,7 +48,7 @@ const PassStepOne = ({currentStep, toNextStep}) => {
 
             <div className="pass-download-list my-4">
                 {passStores.map((item) => (
-                    <div className="pass-download-card" key={item.title}>
+                    <div className="w-100 pass-download-card" key={item.title}>
                         <div className={cn(
                                 "d-flex flex-column",
                                 item.textLink ? "justify-content-between" : "justify-content-center"
@@ -62,7 +62,7 @@ const PassStepOne = ({currentStep, toNextStep}) => {
                                 item.textLink && 
                                 <div className="pass-download-card__text">
                                     {item.textLink}{' '}
-                                    <a href={item.link} target="_blank" rel="noreferrer" className="link-text">
+                                    <a href={item.link} target="_blank" rel="noreferrer" className="link-text-default">
                                         ссылкой
                                     </a>
                                 </div>
@@ -70,20 +70,24 @@ const PassStepOne = ({currentStep, toNextStep}) => {
                         </div>
 
                         {
-                            item.download &&
-                            <a
-                                className="pass-download-card__action gap-0_5rem"
-                                href={item.download}
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                <DownloadIcon/>
-                                Скачать
-                            </a>
+                            item.download && 
+                            <div className="pass-download-card__item">
+                                <a
+                                    className="pass-download-card__action gap-0_5rem"
+                                    href={item.download}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    <DownloadIcon/>
+                                    Скачать
+                                </a>
+                            </div>
                         }
                         {
                             item.img &&
-                            <div className={item.img}></div>
+                            <div className="pass-download-card__item">
+                                <div className={item.img}></div>
+                            </div>
                         }
                     </div>
                 ))}
@@ -91,7 +95,7 @@ const PassStepOne = ({currentStep, toNextStep}) => {
 
             <div>
                 Для настройки окружения следуйте подсказкам в приложении. Подробнее в{' '}
-                <a href={ExternalLinks.PassUserGuide1} target="_blank" rel="noreferrer" className="link-text">
+                <a href={ExternalLinks.PassUserGuide2} target="_blank" rel="noreferrer" className="link-text-default">
                     Руководстве пользователя Рутокен Pass
                 </a>
                 .
