@@ -14,6 +14,7 @@ export const Factor = Object.freeze({
 
 export const ExternalLinks = Object.freeze({
     RutokenUserGuide: 'https://dev.rutoken.ru/pages/viewpage.action?pageId=150241345',
+    RutokenPassGuide: 'https://dev.rutoken.ru/pages/viewpage.action?pageId=150241345#id-НастройкадвухэтапнойибеспарольнойаутентификациинаПорталеdemoauth.rutoken.ru-ДобавлениеРутокенPass',
     PassUserGuide1: 'https://dev.rutoken.ru/pages/viewpage.action?pageId=220135504',
     PassUserGuide2: 'https://dev.rutoken.ru/pages/viewpage.action?pageId=220135502',
     DemoPortal: 'https://demo.rutoken.ru/',

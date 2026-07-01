@@ -30,7 +30,7 @@ const PassStepThree = ({currentStep}) => {
             <div className="d-flex flex-column gap-0_5rem">
                 <div>
                     Нажмите «Продолжить» и следуйте шагам согласно{' '}
-                    <a href={ExternalLinks.RutokenUserGuide} target="_blank" rel="noreferrer" className="link-text-default">
+                    <a href={ExternalLinks.RutokenPassGuide} target="_blank" rel="noreferrer" className="link-text-default">
                         инструкции
                     </a>
                 </div>
