@@ -215,7 +215,8 @@ namespace RutokenTotpFido2Demo.Migrations
                 {
                     b.HasOne("RutokenTotpFido2Demo.Entities.TotpKey", "TotpKey")
                         .WithMany("TimeStepLogined")
-                        .HasForeignKey("TotpKeyId");
+                        .HasForeignKey("TotpKeyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("TotpKey");
                 });

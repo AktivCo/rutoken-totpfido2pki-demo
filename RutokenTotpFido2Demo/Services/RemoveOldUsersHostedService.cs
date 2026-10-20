@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace RutokenTotpFido2Demo;
 
 public class RemoveOldUsersHostedService : IHostedService, IDisposable
@@ -34,13 +36,27 @@ public class RemoveOldUsersHostedService : IHostedService, IDisposable
             var date = DateTime.UtcNow.AddDays(-2);
             try
             {
-                var users = dbService.Users.Where(c => c.RegisterDate <= date);
-                dbService.Users.RemoveRange(users);
-                dbService.SaveChanges();
+                var expiredUserIds = dbService.Users
+                    .Where(c => c.RegisterDate <= date)
+                    .Select(c => c.Id)
+                    .ToList();
+
+                // Each user is removed separately so that one failure doesn't block the others.
+                foreach (var userId in expiredUserIds)
+                {
+                    try
+                    {
+                        dbService.Users.Where(c => c.Id == userId).ExecuteDelete();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to remove expired user {UserId}", userId);
+                    }
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                // ignored
+                _logger.LogError(ex, "Failed to load expired users");
             }
         }
 

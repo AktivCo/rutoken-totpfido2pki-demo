@@ -60,6 +60,13 @@ public class EfDbContext : DbContext
             .HasForeignKey(e => e.UserId)
             .IsRequired();
 
+        // Without an explicit cascade the FK becomes NO ACTION (TotpKey is nullable),
+        // and deleting a user with TOTP logins fails on the database side.
+        modelBuilder.Entity<TotpKey>()
+            .HasMany(e => e.TimeStepLogined)
+            .WithOne(e => e.TotpKey)
+            .OnDelete(DeleteBehavior.Cascade);
+
         base.OnModelCreating(modelBuilder);
     }
 

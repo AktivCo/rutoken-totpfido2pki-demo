@@ -1,3 +1,6 @@
 .idea/*
 .vs/
 RutokenTotpFido2Demo/wwwroot/
+
+# Personal developer files
+.local/
